@@ -2,9 +2,8 @@ package org.quaternions.ipddump;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
+import java.util.HashSet;
 
 import org.quaternions.ipddump.data.Database;
 import org.quaternions.ipddump.data.Record;
@@ -66,8 +65,6 @@ public class Main
          {
             data[ i ] = input.read();
          }
-
-         input.close();
 
          ReadingState state = ReadingState.HEADER;
          for ( int index = 0; index < data.length; )
@@ -135,17 +132,22 @@ public class Main
                   break;
 
                case DATABASEID:
-                  dbID = data[ index++ ];
-                  dbID |= data[ index++ ] << 8;
-                  recordRead = 2;
+                  int tmp0 = data[ index++ ];
+                  dbID = tmp0;
+                  int tmp1 = data[ index++ ];
+                  dbID |=  tmp1 << 8;
                   state = ReadingState.RECORDLENGTH;
                   break;
 
                case RECORDLENGTH:
-                  recordLength = data[ index++ ];
-                  recordLength |= data[ index++ ] << 8;
-                  recordLength |= data[ index++ ] << 16;
-                  recordLength |= data[ index++ ] << 24;
+                  int tmp2 = data[ index++ ];
+                  recordLength = tmp2;
+                  int tmp3 = data[ index++ ];
+                  recordLength |= tmp3 << 8;
+                  int tmp4 = data[ index++ ];
+                  recordLength |= tmp4 << 16;
+                  int tmp5 = data[ index++ ];
+                  recordLength |= tmp5<< 24;
                   recordRead = 0;
                   state = ReadingState.RECORDDBEVERSION;
                   break;
@@ -196,6 +198,11 @@ public class Main
                      }
                   }
 
+                  if ( index > 2926944)
+                  {
+                     new HashSet<Object>();
+                  }
+
                   record.addField( fieldType, dataBuffer );
                   recordRead += fieldLength;
 
@@ -211,6 +218,7 @@ public class Main
             }
          }
 
+         input.close();
          return database;
       }
       catch ( IOException exception )
