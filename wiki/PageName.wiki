@@ -1,5 +1,0 @@
-#summary Explanation of 0.1.0
-
-= Introduction =
-
-Please be patient as I start this project.  I still haven't migrated my source to the svn repository on code.google.com.  So if you want to wait to download the ipddump-0.1.0.jar until then, please do.
