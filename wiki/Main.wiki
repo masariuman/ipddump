@@ -1,0 +1,19 @@
+#summary ipddump project information
+
+= ipddump =
+
+ipddump is a project aimed at providing a library for reading the [http://na.blackberry.com/eng/developers/resources/journals/jan_2006/ipd_file_format.jsp Inter@ctive Pager Backup] (IPD) file format commonly used by RIM on the [http://blackberry.com/ Blackberry] smartphones.
+
+== History ==
+
+I started ipddump because I wanted to pull my SMS messages off my phone and back them up in an open format.  But there are no good free solutions out there.  The only ones I've found are [http://www.blackberryforums.com/aftermarket-software/38695-sms_borer-export-sms-data-backup-file-ipd.html SMS Borer] which has significant limitations, and [http://www.processtext.com/abcblackberry.html ABC Amber] which has many features, but is not free.
+
+As I was working on 0.1.0 I realized that it would make a lot of sense and be useful to create a library to read in an IPD, in addition to the immediate goals of dumping SMS message.  So that's what this project aims to provide with 1.0.0, a complete library that can read any type of record in an IPD.
+
+== Goals/Roadmap ==
+=== 0.2.0 ===
+  * Implement a "correct" program structure with a parser class and a record object factory
+  * Support exporting to XML or CSV
+  * Support more records than just SMS (FeatureRequests)
+=== Long Term ===
+  * FeatureRequests
