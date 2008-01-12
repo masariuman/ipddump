@@ -1,11 +1,9 @@
 package org.quaternions.ipddump.data;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,23 +15,22 @@ public class Database
    /**
     * The character used as the line feed.
     */
-   protected char                           lineFeed;
+   protected char                  lineFeed;
 
    /**
     * The version of the database.
     */
-   protected final int                      version;
+   protected final int             version;
 
    /**
     * The list of databases, or rather the names of the databases.
     */
-   protected final List<String>             databases;
+   protected final List<String>    databases;
 
    /**
-    * The records - this simulates a database by providing a mapping from each
-    * database name to a set of records.
+    * The set of SMS messages.
     */
-   protected final Map<String, Set<Record>> records;
+   protected final Set<SMSMessage> smsRecords;
 
    /**
     * Creates a new database.
@@ -48,7 +45,7 @@ public class Database
       this.version = version;
       this.lineFeed = lineFeed;
       databases = new LinkedList<String>();
-      records = new HashMap<String, Set<Record>>();
+      smsRecords = new HashSet<SMSMessage>();
    }
 
    /**
@@ -73,25 +70,6 @@ public class Database
    }
 
    /**
-    * Adds a new record to the database.
-    *
-    * @param record
-    *           The record to add
-    */
-   public void add( Record record )
-   {
-      Set<Record> set = records.get( databases.get( record.getDatabaseID() ) );
-
-      if ( set == null )
-      {
-         set = new HashSet<Record>();
-         records.put( databases.get( record.getDatabaseID() ), set );
-      }
-
-      set.add( record );
-   }
-
-   /**
     * Creates a new {@link Record} to represent the type of data for the
     * database given by the dbIndex value.
     *
@@ -107,23 +85,23 @@ public class Database
    {
       if ( "SMS Messages".equals( databases.get( dbIndex ) ) )
       {
-         return new SMSMessage( dbIndex, version, uid, length );
+         SMSMessage record = new SMSMessage( dbIndex, version, uid, length );
+         smsRecords.add( record );
+         return record;
       }
       else
       {
-         return null;
+         return new DummyRecord( dbIndex, version, uid, length );
       }
    }
 
    /**
-    * Gets the set of records for the given database.
+    * Gets the set of SMS records.
     *
-    * @param name
-    *           The name of the database
-    * @return An unmodifiable set of records in the database
+    * @return An unmodifiable set of SMS records
     */
-   public Set<Record> records( String name )
+   public Set<SMSMessage> smsRecords()
    {
-      return Collections.<Record> unmodifiableSet( records.get( name ) );
+      return Collections.<SMSMessage> unmodifiableSet( smsRecords );
    }
 }

@@ -11,7 +11,7 @@ import java.util.Map;
  * @author borkholder
  * @date Jan 1, 2008
  */
-public class SMSMessage extends Record
+public class SMSMessage extends Record implements Comparable<SMSMessage>
 {
    /**
     * The map from the name of the field to the field value.
@@ -22,6 +22,31 @@ public class SMSMessage extends Record
     * The list of field names this record keeps.
     */
    protected static final List<String> fieldNames;
+
+   /**
+    * The date the SMS was sent;
+    */
+   protected Date                      sent;
+
+   /**
+    * The date the SMS was received.
+    */
+   protected Date                      received;
+
+   /**
+    * Was the SMS sent from the phone, or received?
+    */
+   protected Boolean                   wasSent;
+
+   /**
+    * The far number.
+    */
+   protected String                    number;
+
+   /**
+    * The text of the SMS.
+    */
+   protected String                    text;
 
    static
    {
@@ -52,6 +77,56 @@ public class SMSMessage extends Record
    }
 
    /**
+    * Gets the date the SMS was sent.
+    *
+    * @return The sent date
+    */
+   public Date getSent()
+   {
+      return sent;
+   }
+
+   /**
+    * Gets the date the SMS was received.
+    *
+    * @return The received date
+    */
+   public Date getReceived()
+   {
+      return received;
+   }
+
+   /**
+    * Was the SMS sent from the phone or received.
+    *
+    * @return True if sent
+    */
+   public boolean wasSent()
+   {
+      return wasSent;
+   }
+
+   /**
+    * Gets the far phone number.
+    *
+    * @return The phone number
+    */
+   public String getNumber()
+   {
+      return number;
+   }
+
+   /**
+    * Gets the text of the SMS.
+    *
+    * @return The SMS text
+    */
+   public String getText()
+   {
+      return text;
+   }
+
+   /**
     * {@inheritDoc}
     */
    @Override
@@ -62,7 +137,8 @@ public class SMSMessage extends Record
       switch ( type )
       {
          case 4:
-            fields.put( "text", new StringBuilder().append( data ).toString() );
+            text = new StringBuilder().append( data ).toString();
+            fields.put( "text", text );
             break;
 
          case 2:
@@ -75,7 +151,8 @@ public class SMSMessage extends Record
                }
             }
 
-            fields.put( "number", builder.toString() );
+            number = builder.toString();
+            fields.put( "number", number );
             break;
 
          case 9:
@@ -109,16 +186,20 @@ public class SMSMessage extends Record
 
             if ( data[ 0 ] == 0 )
             {
-               fields.put( "sent", new Date( val0 ).toString() );
-               fields.put( "received", new Date( val1 ).toString() );
-               fields.put( "sent?", "true" );
+               sent = new Date( val0 );
+               received = new Date( val1 );
+               wasSent = true;
             }
             else
             {
-               fields.put( "sent", new Date( val1 ).toString() );
-               fields.put( "received", new Date( val0 ).toString() );
-               fields.put( "sent?", "false" );
+               sent = new Date( val1 );
+               received = new Date( val0 );
+               wasSent = false;
             }
+
+            fields.put( "sent", sent.toString() );
+            fields.put( "received", received.toString() );
+            fields.put( "sent?", wasSent.toString() );
 
             break;
 
@@ -153,5 +234,21 @@ public class SMSMessage extends Record
    public static List<String> getFieldNames()
    {
       return Collections.<String> unmodifiableList( fieldNames );
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   @Override
+   public int compareTo( SMSMessage o )
+   {
+      if ( sent.compareTo( o.sent ) != 0 )
+      {
+         return sent.compareTo( o.sent );
+      }
+      else
+      {
+         return received.compareTo( o.received );
+      }
    }
 }
