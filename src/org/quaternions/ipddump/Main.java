@@ -2,7 +2,6 @@ package org.quaternions.ipddump;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 
 import org.quaternions.ipddump.data.Database;
 import org.quaternions.ipddump.data.Record;
@@ -31,7 +30,12 @@ public class Main
 
    public static void main( String[] args )
    {
-      dump( parse( "data/Sample2.ipd" ), "data/sample.csv" );
+      Database db = parse( args[ 0 ] );
+
+      if ( db != null )
+      {
+         dump( db, null );
+      }
    }
 
    static Database parse( String fileName )
@@ -121,8 +125,8 @@ public class Main
                   break;
 
                case DATABASEID:
-                  dbID = value << 8;
-                  dbID |= input.read();
+                  dbID = value;
+                  dbID |= input.read() << 8;
                   recordRead = 2;
                   state = ReadingState.RECORDLENGTH;
                   break;
@@ -189,7 +193,6 @@ public class Main
                   else
                   {
                      state = ReadingState.DATABASEID;
-                     database.add( record );
                   }
                   break;
             }
@@ -201,22 +204,17 @@ public class Main
       }
       catch ( IOException exception )
       {
+         System.err.println( "File not found!" );
          return null;
       }
    }
 
    public static void dump( Database database, String fileName )
    {
-      List<String> order = SMSMessage.getFieldNames();
-
-      for ( Record record : database.records( "SMS Messages" ) )
+      for ( SMSMessage record : database.smsRecords() )
       {
-         for ( String name : order )
-         {
-            System.out.print( record.fields().get( name ) + "," );
-         }
-
-         System.out.println();
+         System.out.println( "" + record.getSent() + "," + record.getReceived() + "," + record.wasSent() + "," + record.getNumber() + "," +
+                             record.getText() );
       }
    }
 }
