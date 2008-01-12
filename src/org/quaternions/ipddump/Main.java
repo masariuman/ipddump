@@ -3,7 +3,6 @@ package org.quaternions.ipddump;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.HashSet;
 
 import org.quaternions.ipddump.data.Database;
 import org.quaternions.ipddump.data.Record;
@@ -60,51 +59,46 @@ public class Main
       {
          FileInputStream input = new FileInputStream( fileName );
          FileChannel fc = input.getChannel();
-         int[] data = new int[ (int) ( fc.size() ) ];
-         for ( int i = 0; i < data.length; i++ )
-         {
-            data[ i ] = input.read();
-         }
 
          ReadingState state = ReadingState.HEADER;
-         for ( int index = 0; index < data.length; )
+         while ( fc.position() < fc.size() )
          {
             switch ( state )
             {
                case HEADER:
                   for ( int i = 0; i < "Inter@ctive Pager Backup/Restore File".length(); i++ )
                   {
-                     index++;
+                     input.read();
                   }
                   state = ReadingState.LINEFEED;
                   break;
 
                case LINEFEED:
-                  linefeed = (char) data[ index++ ];
+                  linefeed = (char) input.read();
                   state = ReadingState.VERSION;
                   break;
 
                case VERSION:
-                  database = new Database( data[ index++ ], linefeed );
+                  database = new Database( input.read(), linefeed );
                   state = ReadingState.DATABASECOUNT;
                   break;
 
                case DATABASECOUNT:
-                  numdatabases = data[ index++ ] << 8;
-                  numdatabases |= data[ index++ ];
+                  numdatabases = input.read() << 8;
+                  numdatabases |= input.read();
                   state = ReadingState.DATABASENAMESEPARATOR;
                   break;
 
                case DATABASENAMESEPARATOR:
                   // Just eat it
-                  index++;
+                  input.read();
                   state = ReadingState.DATABASENAMELENGTH;
                   break;
 
                case DATABASENAMELENGTH:
-                  dbNameLength = data[ index++ ];
+                  dbNameLength = input.read();
                   // Eat the null
-                  index++;
+                  input.read();
                   state = ReadingState.DATABASENAME;
                   break;
 
@@ -113,13 +107,13 @@ public class Main
                   // Eat everything but the terminating null
                   for ( int i = 0; i < dbNameLength - 1; i++ )
                   {
-                     buffer.append( (char) data[ index++ ] );
+                     buffer.append( (char) input.read() );
                   }
 
                   database.addDatabase( buffer.toString() );
 
                   // Eat null/separator
-                  index++;
+                  input.read();
 
                   if ( database.databaseNames().size() < numdatabases )
                   {
@@ -132,76 +126,69 @@ public class Main
                   break;
 
                case DATABASEID:
-                  int tmp0 = data[ index++ ];
+                  int tmp0 = input.read();
                   dbID = tmp0;
-                  int tmp1 = data[ index++ ];
-                  dbID |=  tmp1 << 8;
+                  int tmp1 = input.read();
+                  dbID |= tmp1 << 8;
                   state = ReadingState.RECORDLENGTH;
                   break;
 
                case RECORDLENGTH:
-                  int tmp2 = data[ index++ ];
+                  int tmp2 = input.read();
                   recordLength = tmp2;
-                  int tmp3 = data[ index++ ];
+                  int tmp3 = input.read();
                   recordLength |= tmp3 << 8;
-                  int tmp4 = data[ index++ ];
+                  int tmp4 = input.read();
                   recordLength |= tmp4 << 16;
-                  int tmp5 = data[ index++ ];
-                  recordLength |= tmp5<< 24;
+                  int tmp5 = input.read();
+                  recordLength |= tmp5 << 24;
                   recordRead = 0;
                   state = ReadingState.RECORDDBEVERSION;
                   break;
 
                case RECORDDBEVERSION:
                   recordRead++;
-                  index++;
+                  input.read();
                   state = ReadingState.DATABASERECORDHANDLE;
                   break;
 
                case DATABASERECORDHANDLE:
                   // Just toss this
-                  index += 2;
+                  input.read();
+                  input.read();
                   recordRead += 2;
                   state = ReadingState.RECORDUNIQUEID;
                   break;
 
                case RECORDUNIQUEID:
-                  uid = data[ index++ ] << 24;
-                  uid |= data[ index++ ] << 16;
-                  uid |= data[ index++ ] << 8;
-                  uid |= data[ index++ ];
+                  uid = input.read() << 24;
+                  uid |= input.read() << 16;
+                  uid |= input.read() << 8;
+                  uid |= input.read();
                   recordRead += 4;
                   record = database.createRecord( dbID, uid, recordLength );
                   state = ReadingState.FIELDLENGTH;
                   break;
 
                case FIELDLENGTH:
-                  fieldLength = data[ index++ ];
-                  fieldLength |= data[ index++ ] << 8;
+                  fieldLength = input.read();
+                  fieldLength |= input.read() << 8;
                   recordRead += 2;
                   state = ReadingState.FIELDTYPE;
                   break;
 
                case FIELDTYPE:
-                  fieldType = data[ index++ ];
+                  fieldType = input.read();
                   recordRead++;
                   state = ReadingState.FIELDDATA;
                   break;
 
                case FIELDDATA:
                   char[] dataBuffer = new char[ fieldLength ];
-                  if ( fieldLength > 0 )
-                  {
                      for ( int i = 0; i < fieldLength; i++ )
                      {
-                        dataBuffer[ i ] = (char) data[ index++ ];
+                        dataBuffer[ i ] = (char) input.read();
                      }
-                  }
-
-                  if ( index > 2926944)
-                  {
-                     new HashSet<Object>();
-                  }
 
                   record.addField( fieldType, dataBuffer );
                   recordRead += fieldLength;
@@ -232,8 +219,8 @@ public class Main
    {
       for ( SMSMessage record : database.smsRecords() )
       {
-         System.out.println( "" + record.getSent() + "," + record.getReceived() + "," + record.wasSent() + "," + record.getNumber() + "," +
-                             record.getText() );
+         System.out.println( "" + record.getSent() + "," + record.getReceived() + "," + record.wasSent() + "," + record.getNumber() + ",\"" +
+                             record.getText() + "\"" );
       }
    }
 }
