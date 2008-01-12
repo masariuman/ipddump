@@ -1,10 +1,9 @@
 package org.quaternions.ipddump.data;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author borkholder
@@ -15,22 +14,22 @@ public class Database
    /**
     * The character used as the line feed.
     */
-   protected char                  lineFeed;
+   protected char                   lineFeed;
 
    /**
     * The version of the database.
     */
-   protected final int             version;
+   protected final int              version;
 
    /**
     * The list of databases, or rather the names of the databases.
     */
-   protected final List<String>    databases;
+   protected final List<String>     databases;
 
    /**
     * The set of SMS messages.
     */
-   protected final Set<SMSMessage> smsRecords;
+   protected final List<SMSMessage> smsRecords;
 
    /**
     * Creates a new database.
@@ -45,7 +44,7 @@ public class Database
       this.version = version;
       this.lineFeed = lineFeed;
       databases = new LinkedList<String>();
-      smsRecords = new HashSet<SMSMessage>();
+      smsRecords = new LinkedList<SMSMessage>();
    }
 
    /**
@@ -96,12 +95,12 @@ public class Database
    }
 
    /**
-    * Gets the set of SMS records.
+    * Gets the collection of SMS records.
     *
-    * @return An unmodifiable set of SMS records
+    * @return An unmodifiable collection of SMS records
     */
-   public Set<SMSMessage> smsRecords()
+   public Collection<SMSMessage> smsRecords()
    {
-      return Collections.<SMSMessage> unmodifiableSet( smsRecords );
+      return Collections.<SMSMessage> unmodifiableCollection( smsRecords );
    }
 }
