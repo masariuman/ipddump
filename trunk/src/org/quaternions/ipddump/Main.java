@@ -31,11 +31,19 @@ public class Main
 
    public static void main( String[] args )
    {
-      Database db = parse( args[ 0 ] );
-
-      if ( db != null )
+      if ( args.length > 0 )
       {
-         dump( db, null );
+         Database db = parse( args[ 0 ] );
+
+         if ( db != null )
+         {
+            dump( db, null );
+         }
+      }
+      else
+      {
+         System.out.println( "Usage: java -jar ipdump.jar <path to ipd>" );
+         System.out.println( "  Dumps a csv to stdout." );
       }
    }
 
@@ -185,10 +193,10 @@ public class Main
 
                case FIELDDATA:
                   char[] dataBuffer = new char[ fieldLength ];
-                     for ( int i = 0; i < fieldLength; i++ )
-                     {
-                        dataBuffer[ i ] = (char) input.read();
-                     }
+                  for ( int i = 0; i < fieldLength; i++ )
+                  {
+                     dataBuffer[ i ] = (char) input.read();
+                  }
 
                   record.addField( fieldType, dataBuffer );
                   recordRead += fieldLength;
@@ -217,6 +225,7 @@ public class Main
 
    public static void dump( Database database, String fileName )
    {
+      System.out.println( "sent,received,sent?,far number,text" );
       for ( SMSMessage record : database.smsRecords() )
       {
          System.out.println( "" + record.getSent() + "," + record.getReceived() + "," + record.wasSent() + "," + record.getNumber() + ",\"" +
