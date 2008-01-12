@@ -1,5 +1,6 @@
 package org.quaternions.ipddump.data;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ import java.util.Map;
  */
 public class DummyRecord extends Record
 {
+   List<String> fields = new ArrayList<String>();
+
    /**
     * Creates a new record with all provided data.
     *
@@ -34,7 +37,9 @@ public class DummyRecord extends Record
     */
    @Override
    public void addField( int type, char[] data )
-   {}
+   {
+      fields.add( "" + type + "|" + data.length );
+   }
 
    /**
     * {@inheritDoc}
