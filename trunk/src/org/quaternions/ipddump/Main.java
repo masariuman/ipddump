@@ -2,6 +2,9 @@ package org.quaternions.ipddump;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.channels.FileChannel;
 
 import org.quaternions.ipddump.data.Database;
 import org.quaternions.ipddump.data.Record;
@@ -57,62 +60,69 @@ public class Main
       try
       {
          FileInputStream input = new FileInputStream( fileName );
+         FileChannel fc = input.getChannel();
+         int[] data = new int[ (int) ( fc.size() ) ];
+         for ( int i = 0; i < data.length; i++ )
+         {
+            data[ i ] = input.read();
+         }
+
+         input.close();
 
          ReadingState state = ReadingState.HEADER;
-         int value = input.read();
-         while ( value >= 0 )
+         for ( int index = 0; index < data.length; )
          {
             switch ( state )
             {
                case HEADER:
-                  for ( int i = 1; i < "Inter@ctive Pager Backup/Restore File".length(); i++ )
+                  for ( int i = 0; i < "Inter@ctive Pager Backup/Restore File".length(); i++ )
                   {
-                     input.read();
+                     index++;
                   }
                   state = ReadingState.LINEFEED;
                   break;
 
                case LINEFEED:
-                  linefeed = (char) value;
+                  linefeed = (char) data[ index++ ];
                   state = ReadingState.VERSION;
                   break;
 
                case VERSION:
-                  database = new Database( value, linefeed );
+                  database = new Database( data[ index++ ], linefeed );
                   state = ReadingState.DATABASECOUNT;
                   break;
 
                case DATABASECOUNT:
-                  numdatabases = value << 8;
-                  numdatabases |= input.read();
+                  numdatabases = data[ index++ ] << 8;
+                  numdatabases |= data[ index++ ];
                   state = ReadingState.DATABASENAMESEPARATOR;
                   break;
 
                case DATABASENAMESEPARATOR:
                   // Just eat it
+                  index++;
                   state = ReadingState.DATABASENAMELENGTH;
                   break;
 
                case DATABASENAMELENGTH:
-                  dbNameLength = value;
+                  dbNameLength = data[ index++ ];
                   // Eat the null
-                  input.read();
+                  index++;
                   state = ReadingState.DATABASENAME;
                   break;
 
                case DATABASENAME:
                   StringBuffer buffer = new StringBuffer();
-                  buffer.append( (char) value );
                   // Eat everything but the terminating null
-                  for ( int i = 1; i < dbNameLength - 1; i++ )
+                  for ( int i = 0; i < dbNameLength - 1; i++ )
                   {
-                     buffer.append( (char) input.read() );
+                     buffer.append( (char) data[ index++ ] );
                   }
 
                   database.addDatabase( buffer.toString() );
 
                   // Eat null/separator
-                  input.read();
+                  index++;
 
                   if ( database.databaseNames().size() < numdatabases )
                   {
@@ -125,62 +135,65 @@ public class Main
                   break;
 
                case DATABASEID:
-                  dbID = value;
-                  dbID |= input.read() << 8;
+                  dbID = data[ index++ ];
+                  dbID |= data[ index++ ] << 8;
                   recordRead = 2;
                   state = ReadingState.RECORDLENGTH;
                   break;
 
                case RECORDLENGTH:
-                  recordLength = value;
-                  recordLength |= input.read() << 8;
-                  recordLength |= input.read() << 16;
-                  recordLength |= input.read() << 24;
+                  recordLength = data[ index++ ];
+                  recordLength |= data[ index++ ] << 8;
+                  recordLength |= data[ index++ ] << 16;
+                  recordLength |= data[ index++ ] << 24;
                   recordRead = 0;
                   state = ReadingState.RECORDDBEVERSION;
                   break;
 
                case RECORDDBEVERSION:
                   recordRead++;
+                  index++;
                   state = ReadingState.DATABASERECORDHANDLE;
                   break;
 
                case DATABASERECORDHANDLE:
                   // Just toss this
-                  input.read();
+                  index += 2;
                   recordRead += 2;
                   state = ReadingState.RECORDUNIQUEID;
                   break;
 
                case RECORDUNIQUEID:
-                  uid = value << 24;
-                  uid |= input.read() << 16;
-                  uid |= input.read() << 8;
-                  uid |= input.read();
+                  uid = data[ index++ ] << 24;
+                  uid |= data[ index++ ] << 16;
+                  uid |= data[ index++ ] << 8;
+                  uid |= data[ index++ ];
                   recordRead += 4;
                   record = database.createRecord( dbID, uid, recordLength );
                   state = ReadingState.FIELDLENGTH;
                   break;
 
                case FIELDLENGTH:
-                  fieldLength = value;
-                  fieldLength |= input.read() << 8;
+                  fieldLength = data[ index++ ];
+                  fieldLength |= data[ index++ ] << 8;
                   recordRead += 2;
                   state = ReadingState.FIELDTYPE;
                   break;
 
                case FIELDTYPE:
-                  fieldType = value;
+                  fieldType = data[ index++ ];
                   recordRead++;
                   state = ReadingState.FIELDDATA;
                   break;
 
                case FIELDDATA:
                   char[] dataBuffer = new char[ fieldLength ];
-                  dataBuffer[ 0 ] = (char) value;
-                  for ( int i = 1; i < fieldLength; i++ )
+                  if ( fieldLength > 0 )
                   {
-                     dataBuffer[ i ] = (char) input.read();
+                     for ( int i = 0; i < fieldLength; i++ )
+                     {
+                        dataBuffer[ i ] = (char) data[ index++ ];
+                     }
                   }
 
                   record.addField( fieldType, dataBuffer );
@@ -196,8 +209,6 @@ public class Main
                   }
                   break;
             }
-
-            value = input.read();
          }
 
          return database;
