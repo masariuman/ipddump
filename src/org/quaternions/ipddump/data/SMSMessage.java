@@ -1,6 +1,11 @@
 package org.quaternions.ipddump.data;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author borkholder
@@ -9,29 +14,24 @@ import java.util.Date;
 public class SMSMessage extends Record
 {
    /**
-    * The date the sms was sent.
+    * The map from the name of the field to the field value.
     */
-   protected Date    sent;
+   protected final Map<String, String> fields;
 
    /**
-    * The date the sms was received.
+    * The list of field names this record keeps.
     */
-   protected Date    received;
+   protected static final List<String> fieldNames;
 
-   /**
-    * The sending/receiving number on the other end of the sms.
-    */
-   protected String  number;
-
-   /**
-    * True if the sms was sent, false if received.
-    */
-   protected Boolean sentSMS;
-
-   /**
-    * The string of the SMS data.
-    */
-   protected String  text;
+   static
+   {
+      fieldNames = new LinkedList<String>();
+      fieldNames.add( "sent" );
+      fieldNames.add( "received" );
+      fieldNames.add( "sent?" );
+      fieldNames.add( "number" );
+      fieldNames.add( "text" );
+   }
 
    /**
     * Creates a new record with all provided data.
@@ -45,9 +45,10 @@ public class SMSMessage extends Record
     * @param recordLength
     *           The length of the record
     */
-   public SMSMessage( int dbID, int dbVersion, int uid, int recordLength )
+   SMSMessage( int dbID, int dbVersion, int uid, int recordLength )
    {
       super( dbID, dbVersion, uid, recordLength );
+      fields = new HashMap<String, String>();
    }
 
    /**
@@ -61,7 +62,7 @@ public class SMSMessage extends Record
       switch ( type )
       {
          case 4:
-            text = new StringBuilder().append( data ).toString();
+            fields.put( "text", new StringBuilder().append( data ).toString() );
             break;
 
          case 2:
@@ -74,7 +75,7 @@ public class SMSMessage extends Record
                }
             }
 
-            number = builder.toString();
+            fields.put( "number", builder.toString() );
             break;
 
          case 9:
@@ -108,15 +109,15 @@ public class SMSMessage extends Record
 
             if ( data[ 0 ] == 0 )
             {
-               sent = new Date( val0 );
-               received = new Date( val1 );
-               sentSMS = true;
+               fields.put( "sent", new Date( val0 ).toString() );
+               fields.put( "received", new Date( val1 ).toString() );
+               fields.put( "sent?", "true" );
             }
             else
             {
-               sent = new Date( val1 );
-               received = new Date( val0 );
-               sentSMS = false;
+               fields.put( "sent", new Date( val1 ).toString() );
+               fields.put( "received", new Date( val0 ).toString() );
+               fields.put( "sent?", "false" );
             }
 
             break;
@@ -130,8 +131,27 @@ public class SMSMessage extends Record
     * {@inheritDoc}
     */
    @Override
-   public String toString()
+   public Map<String, String> fields()
    {
-      return "(Number: " + number + /* ", Text: " + text + */", Sent: " + sent + ", Received: " + received + ")";
+      return Collections.<String, String> unmodifiableMap( fields );
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   @Override
+   public List<String> fieldNames()
+   {
+      return getFieldNames();
+   }
+
+   /**
+    * Gets the list of field names that may be assigned by this record.
+    *
+    * @return An unmodifiable list of field names
+    */
+   public static List<String> getFieldNames()
+   {
+      return Collections.<String> unmodifiableList( fieldNames );
    }
 }
