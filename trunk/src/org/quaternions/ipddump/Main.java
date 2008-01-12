@@ -2,9 +2,9 @@ package org.quaternions.ipddump;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
+import org.quaternions.ipddump.data.Database;
 import org.quaternions.ipddump.data.Record;
 import org.quaternions.ipddump.data.SMSMessage;
 
@@ -21,7 +21,7 @@ public class Main
       DATABASENAME,
       DATABASEID,
       RECORDLENGTH,
-      DATABASEVERSION,
+      RECORDDBEVERSION,
       DATABASERECORDHANDLE,
       RECORDUNIQUEID,
       FIELDLENGTH,
@@ -31,28 +31,24 @@ public class Main
 
    public static void main( String[] args )
    {
-      parse( "data/Sample2.ipd" );
+      dump( parse( "data/Sample2.ipd" ), "data/sample.csv" );
    }
 
-   static boolean parse( String fileName )
+   static Database parse( String fileName )
    {
-      int linefeed;
-      int version;
+      char linefeed = 0;
       int numdatabases = 0;
-      int dbNameSeparator;
       int dbNameLength = 0;
       int recordRead = 0;
       int fieldLength = 0;
       int fieldType = 0;
 
       int dbID = 0;
-      int dbVersion = 0;
       int recordLength = 0;
       int uid = 0;
 
       Record record = null;
-      List<String> databaseNames = new LinkedList<String>();
-      List<Record> records = new LinkedList<Record>();
+      Database database = null;
 
       try
       {
@@ -73,12 +69,12 @@ public class Main
                   break;
 
                case LINEFEED:
-                  linefeed = value;
+                  linefeed = (char) value;
                   state = ReadingState.VERSION;
                   break;
 
                case VERSION:
-                  version = value;
+                  database = new Database( value, linefeed );
                   state = ReadingState.DATABASECOUNT;
                   break;
 
@@ -89,7 +85,7 @@ public class Main
                   break;
 
                case DATABASENAMESEPARATOR:
-                  dbNameSeparator = value;
+                  // Just eat it
                   state = ReadingState.DATABASENAMELENGTH;
                   break;
 
@@ -109,12 +105,12 @@ public class Main
                      buffer.append( (char) input.read() );
                   }
 
-                  databaseNames.add( buffer.toString() );
+                  database.addDatabase( buffer.toString() );
 
-                  // Eat terminating null
+                  // Eat null/separator
                   input.read();
 
-                  if ( databaseNames.size() < numdatabases )
+                  if ( database.databaseNames().size() < numdatabases )
                   {
                      state = ReadingState.DATABASENAMELENGTH;
                   }
@@ -137,11 +133,10 @@ public class Main
                   recordLength |= input.read() << 16;
                   recordLength |= input.read() << 24;
                   recordRead = 0;
-                  state = ReadingState.DATABASEVERSION;
+                  state = ReadingState.RECORDDBEVERSION;
                   break;
 
-               case DATABASEVERSION:
-                  dbVersion = value;
+               case RECORDDBEVERSION:
                   recordRead++;
                   state = ReadingState.DATABASERECORDHANDLE;
                   break;
@@ -159,7 +154,7 @@ public class Main
                   uid |= input.read() << 8;
                   uid |= input.read();
                   recordRead += 4;
-                  record = new SMSMessage( dbID, dbVersion, uid, recordLength );
+                  record = database.createRecord( dbID, uid, recordLength );
                   state = ReadingState.FIELDLENGTH;
                   break;
 
@@ -194,21 +189,34 @@ public class Main
                   else
                   {
                      state = ReadingState.DATABASEID;
-                     records.add( record );
+                     database.add( record );
                   }
                   break;
             }
 
             value = input.read();
          }
+
+         return database;
       }
       catch ( IOException exception )
       {
-         return false;
+         return null;
       }
+   }
 
-      System.out.println( records );
+   public static void dump( Database database, String fileName )
+   {
+      List<String> order = SMSMessage.getFieldNames();
 
-      return true;
+      for ( Record record : database.records( "SMS Messages" ) )
+      {
+         for ( String name : order )
+         {
+            System.out.print( record.fields().get( name ) + "," );
+         }
+
+         System.out.println();
+      }
    }
 }

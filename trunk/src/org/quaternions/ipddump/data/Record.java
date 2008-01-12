@@ -1,5 +1,8 @@
 package org.quaternions.ipddump.data;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author borkholder
  * @date Jan 1, 2008
@@ -57,6 +60,21 @@ public abstract class Record
    public abstract void addField( int type, char[] data );
 
    /**
+    * Gets the fields contained by this record.
+    *
+    * @return An unmodifiable map from the name of the field to the field data
+    */
+   public abstract Map<String, String> fields();
+
+   /**
+    * Gets the names of the fields contained by this record. The names of the
+    * fields are up to the records.
+    *
+    * @return An unmodifiable list of field names
+    */
+   public abstract List<String> fieldNames();
+
+   /**
     * Gets the 0-based index of the database to which this field belongs.
     *
     * @return The database index
@@ -92,5 +110,30 @@ public abstract class Record
    public int getLength()
    {
       return length;
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   @Override
+   public boolean equals( Object obj )
+   {
+      if ( obj instanceof Record )
+      {
+         return uniqueID == ( (Record) obj ).uniqueID;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   @Override
+   public int hashCode()
+   {
+      return uniqueID;
    }
 }
