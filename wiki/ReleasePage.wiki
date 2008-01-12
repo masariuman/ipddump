@@ -4,4 +4,4 @@
 
 Release 0.1.0 is basically just the release I wanted when I started this project.  It takes any IPD Blackberry dump and outputs a CSV formatted list of your SMS messages.
 
-Please note that I'm not packaging up the source until I start hitting major releases.  You can easily access the subversion repository at [http://ippdump.googlecode.com/svn/trunk/ http://ippdump.googlecode.com/svn/trunk/].
+Please note that I'm not packaging up the source until I start hitting major releases.  You can easily access the subversion repository at [http://ipddump.googlecode.com/svn/trunk/ http://ipddump.googlecode.com/svn/trunk/].
