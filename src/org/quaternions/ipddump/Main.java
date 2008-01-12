@@ -2,10 +2,11 @@ package org.quaternions.ipddump;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+
+import org.quaternions.ipddump.data.Record;
+import org.quaternions.ipddump.data.SMSMessage;
 
 public class Main
 {
@@ -30,7 +31,7 @@ public class Main
 
    public static void main( String[] args )
    {
-      parse( "C:\\Documents and Settings\\borkhobs\\Desktop\\Sample2.ipd" );
+      parse( "data/Sample.ipd" );
    }
 
    static boolean parse( String fileName )
@@ -43,6 +44,11 @@ public class Main
       int recordRead = 0;
       int fieldLength = 0;
       int fieldType = 0;
+
+      int dbID = 0;
+      int dbVersion = 0;
+      int recordLength = 0;
+      int uid = 0;
 
       Record record = null;
       List<String> databaseNames = new LinkedList<String>();
@@ -119,24 +125,23 @@ public class Main
                   break;
 
                case DATABASEID:
-                  record = new Record();
-                  record.databaseID = value << 8;
-                  record.databaseID |= input.read();
+                  dbID = value << 8;
+                  dbID |= input.read();
                   recordRead = 2;
                   state = ReadingState.RECORDLENGTH;
                   break;
 
                case RECORDLENGTH:
-                  record.recordLength = value;
-                  record.recordLength |= input.read() << 8;
-                  record.recordLength |= input.read() << 16;
-                  record.recordLength |= input.read() << 24;
+                  recordLength = value;
+                  recordLength |= input.read() << 8;
+                  recordLength |= input.read() << 16;
+                  recordLength |= input.read() << 24;
                   recordRead = 0;
                   state = ReadingState.DATABASEVERSION;
                   break;
 
                case DATABASEVERSION:
-                  record.databaseVersion = value;
+                  dbVersion = value;
                   recordRead++;
                   state = ReadingState.DATABASERECORDHANDLE;
                   break;
@@ -149,11 +154,12 @@ public class Main
                   break;
 
                case RECORDUNIQUEID:
-                  record.recordUniqueID = value << 24;
-                  record.recordUniqueID |= input.read() << 16;
-                  record.recordUniqueID |= input.read() << 8;
-                  record.recordUniqueID |= input.read();
+                  uid = value << 24;
+                  uid |= input.read() << 16;
+                  uid |= input.read() << 8;
+                  uid |= input.read();
                   recordRead += 4;
+                  record = new SMSMessage( dbID, dbVersion, uid, recordLength );
                   state = ReadingState.FIELDLENGTH;
                   break;
 
@@ -171,17 +177,17 @@ public class Main
                   break;
 
                case FIELDDATA:
-                  StringBuffer dataBuffer = new StringBuffer();
-                  dataBuffer.append( (char) value );
+                  char[] dataBuffer = new char[ fieldLength ];
+                  dataBuffer[ 0 ] = (char) value;
                   for ( int i = 1; i < fieldLength; i++ )
                   {
-                     dataBuffer.append( (char) input.read() );
+                     dataBuffer[ i ] = (char) input.read();
                   }
 
-                  record.fields.add( new Pair<Integer, String>( fieldType, dataBuffer.toString() ) );
+                  record.addField( fieldType, dataBuffer );
                   recordRead += fieldLength;
 
-                  if ( recordRead < record.recordLength )
+                  if ( recordRead < record.getLength() )
                   {
                      state = ReadingState.FIELDLENGTH;
                   }
@@ -204,46 +210,5 @@ public class Main
       System.out.println( records );
 
       return true;
-   }
-
-   static class Record
-   {
-      int                        databaseID;
-      int                        recordLength;
-      int                        databaseVersion;
-      int                        databaseRecordHandle;
-      int                        recordUniqueID;
-
-      Set<Pair<Integer, String>> fields = new HashSet<Pair<Integer, String>>();
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public String toString()
-      {
-         return fields.toString();
-      }
-   }
-
-   static class Pair<T, U>
-   {
-      T first;
-      U second;
-
-      public Pair( T first, U second )
-      {
-         this.first = first;
-         this.second = second;
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public String toString()
-      {
-         return "(" + first.toString() + ", " + second.toString() + ")";
-      }
    }
 }
