@@ -31,7 +31,7 @@ public class Main
 
    public static void main( String[] args )
    {
-      parse( "data/Sample.ipd" );
+      parse( "data/Sample2.ipd" );
    }
 
    static boolean parse( String fileName )

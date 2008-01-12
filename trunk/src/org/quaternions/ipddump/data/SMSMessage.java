@@ -78,24 +78,51 @@ public class SMSMessage extends Record
             break;
 
          case 9:
-         case 7:
-         case 1:
-            long val = 0;
-            for ( int i = 0; i < data.length; i++ )
-            {
-               val |= (long) data[ i ] << ( ( i ) * 8 );
-            }
-            System.out.println( "-" + type + "-" + val );
+            // This is a sequence number and we don't care about it for now.
+            // The sequence number seems to apply only if it was sent from the
+            // phone in the IPD.
+            break;
 
-         default:
-            System.out.println( type );
-            for ( char c : data )
+         case 7:
+            // This is some fixed number for my phone, I probably don't care
+            // about it
+            break;
+
+         case 11:
+            // This is also inconsequential, for me it's 0000 for the first sms,
+            // 1000 for all the rest
+            break;
+
+         case 1:
+            long val0 = 0;
+            for ( int i = 13; i < 21; i++ )
             {
-               System.out.print( (int) c );
+               val0 |= (long) data[ i ] << ( ( i - 13 ) * 8 );
             }
-            System.out.println();
+
+            long val1 = 0;
+            for ( int i = 21; i < 29; i++ )
+            {
+               val1 |= (long) data[ i ] << ( ( i - 21 ) * 8 );
+            }
+
+            if ( data[ 0 ] == 0 )
+            {
+               sent = new Date( val0 );
+               received = new Date( val1 );
+               sentSMS = true;
+            }
+            else
+            {
+               sent = new Date( val1 );
+               received = new Date( val0 );
+               sentSMS = false;
+            }
 
             break;
+
+         default:
+            // Should be no default
       }
    }
 
@@ -105,6 +132,6 @@ public class SMSMessage extends Record
    @Override
    public String toString()
    {
-      return "(Number: " + number + ", Text: " + text + ")";
+      return "(Number: " + number + /* ", Text: " + text + */", Sent: " + sent + ", Received: " + received + ")";
    }
 }
