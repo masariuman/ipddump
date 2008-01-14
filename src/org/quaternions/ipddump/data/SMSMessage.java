@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * An SMS message is a record representing an SMS sent or received from the
+ * phone.
+ *
  * @author borkholder
  * @date Jan 1, 2008
  */
@@ -48,6 +51,10 @@ public class SMSMessage extends Record implements Comparable<SMSMessage>
     */
    protected String                    text;
 
+   /**
+    * Initialize the list of field names with all the fields contained in this
+    * record.
+    */
    static
    {
       fieldNames = new LinkedList<String>();
