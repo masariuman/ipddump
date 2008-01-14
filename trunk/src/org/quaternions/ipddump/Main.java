@@ -2,7 +2,7 @@ package org.quaternions.ipddump;
 
 import java.io.IOException;
 
-import org.quaternions.ipddump.data.Database;
+import org.quaternions.ipddump.data.InteractivePagerBackup;
 import org.quaternions.ipddump.data.SMSMessage;
 
 public class Main
@@ -14,7 +14,7 @@ public class Main
       {
          try
          {
-            Database db = new IPDParser( args[ 0 ] ).parse();
+            InteractivePagerBackup db = new IPDParser( args[ 0 ] ).parse();
 
             if ( db != null )
             {
@@ -33,7 +33,7 @@ public class Main
       }
    }
 
-   public static void dump( Database database, String fileName )
+   public static void dump( InteractivePagerBackup database, String fileName )
    {
       System.out.println( "sent,received,sent?,far number,text" );
       for ( SMSMessage record : database.smsRecords() )

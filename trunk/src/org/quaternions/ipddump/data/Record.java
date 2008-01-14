@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * A Record is an entry in a particular database. Each record indexes into the
+ * list of databases and identifies the type of data in the fields of this
+ * record.
+ *
  * @author borkholder
  * @date Jan 1, 2008
  */
@@ -28,6 +32,12 @@ public abstract class Record
     * The length of the record.
     */
    protected int       length;
+
+   /**
+    * A handle of the record in the database. This is an element in the
+    * increasing sequence of integers within the IPD.
+    */
+   protected int       recordDBHandle;
 
    /**
     * Creates a new record with all provided data.
@@ -110,6 +120,27 @@ public abstract class Record
    public int getLength()
    {
       return length;
+   }
+
+   /**
+    * Gets the handle of the record in the database.
+    *
+    * @return The record handle
+    */
+   public int getRecordDBHandle()
+   {
+      return recordDBHandle;
+   }
+
+   /**
+    * Sets the handle of the record in the database.
+    *
+    * @param recordDBHandle
+    *           The record handle
+    */
+   public void setRecordDBHandle( int recordDBHandle )
+   {
+      this.recordDBHandle = recordDBHandle;
    }
 
    /**

@@ -4,11 +4,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-import org.quaternions.ipddump.data.Database;
+import org.quaternions.ipddump.data.InteractivePagerBackup;
 import org.quaternions.ipddump.data.Record;
 
 /**
- * Parse an IPD file and populate a {@link Database} with the records.
+ * Parse an IPD file and populate a {@link InteractivePagerBackup} with the
+ * records.
  *
  * @author borkholder
  * @date Jan 13, 2008
@@ -84,6 +85,10 @@ public class IPDParser
        */
       RECORDDBEVERSION,
 
+      /**
+       * A handle of the record within the database (this is a increasing
+       * sequence of integers with the IPD) - 2 bytes little endian.
+       */
       DATABASERECORDHANDLE,
 
       /**
@@ -119,13 +124,22 @@ public class IPDParser
       this.fileName = fileName;
    }
 
-   public Database parse() throws IOException
+   /**
+    * Parses the provided IPD file into an {@link InteractivePagerBackup}.
+    *
+    * @return A new InteractivePagerBackup representing the IPD file
+    * @throws IOException
+    *            Any error in reading the IPD file
+    */
+   public InteractivePagerBackup parse() throws IOException
    {
       // Temporary variables used in parsing
-      char linefeed = 0;
-      int numdatabases = 0;
+      char lineFeed = 0;
+      int numberOfDatabases = 0;
       int dbNameLength = 0;
       int recordRead = 0;
+      int recordDBVersion = 0;
+      int databaseHandle = 0;
       int fieldLength = 0;
       int fieldType = 0;
       int dbID = 0;
@@ -133,7 +147,7 @@ public class IPDParser
       int uid = 0;
 
       Record record = null;
-      Database database = null;
+      InteractivePagerBackup database = null;
       FileInputStream input = null;
 
       try
@@ -156,24 +170,24 @@ public class IPDParser
                   break;
 
                case LINEFEED:
-                  linefeed = (char) input.read();
+                  lineFeed = (char) input.read();
                   state = ReadingState.VERSION;
                   break;
 
                case VERSION:
-                  database = new Database( input.read(), linefeed );
+                  database = new InteractivePagerBackup( input.read(), lineFeed );
                   state = ReadingState.DATABASECOUNT;
                   break;
 
                case DATABASECOUNT:
-                  numdatabases = input.read() << 8;
-                  numdatabases |= input.read();
+                  numberOfDatabases = input.read() << 8;
+                  numberOfDatabases |= input.read();
                   state = ReadingState.DATABASENAMESEPARATOR;
                   break;
 
+               // Just eat it because we know the terminating null will be in
+               // the name anyway
                case DATABASENAMESEPARATOR:
-                  // Just eat it because we know the terminating null will be in
-                  // the name anyway
                   input.read();
                   state = ReadingState.DATABASENAMELENGTH;
                   break;
@@ -197,7 +211,7 @@ public class IPDParser
                   // Eat null/separator
                   input.read();
 
-                  if ( database.databaseNames().size() < numdatabases )
+                  if ( database.databaseNames().size() < numberOfDatabases )
                   {
                      state = ReadingState.DATABASENAMELENGTH;
                   }
@@ -224,14 +238,13 @@ public class IPDParser
 
                case RECORDDBEVERSION:
                   recordRead++;
-                  input.read();
+                  recordDBVersion = input.read();
                   state = ReadingState.DATABASERECORDHANDLE;
                   break;
 
                case DATABASERECORDHANDLE:
-                  // Just toss this
-                  input.read();
-                  input.read();
+                  databaseHandle = input.read();
+                  databaseHandle |= input.read() << 8;
                   recordRead += 2;
                   state = ReadingState.RECORDUNIQUEID;
                   break;
@@ -242,7 +255,8 @@ public class IPDParser
                   uid |= input.read() << 16;
                   uid |= input.read() << 24;
                   recordRead += 4;
-                  record = database.createRecord( dbID, uid, recordLength );
+                  record = database.createRecord( dbID, recordDBVersion, uid, recordLength );
+                  record.setRecordDBHandle( databaseHandle );
                   state = ReadingState.FIELDLENGTH;
                   break;
 
