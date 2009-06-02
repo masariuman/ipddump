@@ -152,7 +152,14 @@ public class SMSMessage extends Record implements Comparable<SMSMessage>
             builder = new StringBuilder();
             for ( char c : data )
             {
-               if ( Character.isLetterOrDigit( c ) )
+               if ( Character.isLetterOrDigit( c ) ||
+                    c == '#' ||
+                    c == '*' ||
+                    c == '(' ||
+                    c == ')' ||
+                    c == '.' ||
+                    c == '-' ||
+                    c == '+' )
                {
                   builder.append( c );
                }
@@ -257,5 +264,17 @@ public class SMSMessage extends Record implements Comparable<SMSMessage>
       {
          return received.compareTo( o.received );
       }
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   @Override
+   public String toString() {
+     if ( wasSent() ) {
+       return "To: " + getNumber() + " - " + getText();
+     } else {
+       return "From: " + getNumber() + " - " + getText();
+     }
    }
 }
