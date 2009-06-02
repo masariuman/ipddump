@@ -1,5 +1,6 @@
 package org.quaternions.ipddump.data;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -53,7 +54,7 @@ public class InteractivePagerBackup
    {
       this.version = version;
       this.lineFeed = lineFeed;
-      databases = new LinkedList<String>();
+      databases = new ArrayList<String>();
       smsRecords = new LinkedList<SMSMessage>();
    }
 
@@ -94,7 +95,9 @@ public class InteractivePagerBackup
     */
    public Record createRecord( int dbIndex, int version, int uid, int length )
    {
-      if ( "SMS Messages".equals( databases.get( dbIndex ) ) )
+      if ( dbIndex >= databases.size() ) {
+        return new DummyRecord( dbIndex, version, uid, length );
+      } else if ( "SMS Messages".equals( databases.get( dbIndex ) ) )
       {
          SMSMessage record = new SMSMessage( dbIndex, version, uid, length );
          smsRecords.add( record );

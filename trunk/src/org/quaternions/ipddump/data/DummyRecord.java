@@ -38,7 +38,7 @@ public class DummyRecord extends Record
    @Override
    public void addField( int type, char[] data )
    {
-      fields.add( "" + type + "|" + data.length );
+      fields.add( "" + type + "|" + new String( data ) );
    }
 
    /**
@@ -58,4 +58,12 @@ public class DummyRecord extends Record
    {
       return Collections.<String, String> emptyMap();
    }
+
+   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return fields.toString();
+  }
 }
