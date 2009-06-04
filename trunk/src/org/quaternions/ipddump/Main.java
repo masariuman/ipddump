@@ -24,9 +24,9 @@ public class Main {
   }
 
   public static void dump( InteractivePagerBackup database, String fileName ) {
-    System.out.println( "sent,received,sent?,far number,text" );
+    System.out.println( "uid,sent,received,sent?,far number,text" );
     for ( SMSMessage record : database.smsRecords() ) {
-      System.out.println( "" + record.getSent() + "," + record.getReceived() + "," + record.wasSent() + "," + record.getNumber() + ",\"" +
+      System.out.println( record.getUID() + "," + record.getSent() + "," + record.getReceived() + "," + record.wasSent() + "," + record.getNumber() + ",\"" +
                           record.getText() + "\"" );
     }
   }
