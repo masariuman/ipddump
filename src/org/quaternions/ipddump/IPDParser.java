@@ -10,7 +10,7 @@ import org.quaternions.ipddump.data.Record;
 /**
  * Parse an IPD file and populate a {@link InteractivePagerBackup} with the
  * records.
- * 
+ *
  * @author borkholder
  * @date Jan 13, 2008
  */
@@ -23,7 +23,7 @@ public class IPDParser {
   /**
    * Specifies the state of the parser, that is, the current part of the IPD
    * that the parser is reading.
-   * 
+   *
    * @author borkholder
    * @date Jan 13, 2008
    */
@@ -111,7 +111,7 @@ public class IPDParser {
 
   /**
    * Creates a new IPDParser that will parse the file at the given path.
-   * 
+   *
    * @param fileName The path of the file to parse
    */
   public IPDParser( String fileName ) {
@@ -120,7 +120,7 @@ public class IPDParser {
 
   /**
    * Parses the provided IPD file into an {@link InteractivePagerBackup}.
-   * 
+   *
    * @return A new InteractivePagerBackup representing the IPD file
    * @throws IOException Any error in reading the IPD file
    */
@@ -283,3 +283,4 @@ public class IPDParser {
     return database;
   }
 }
+
