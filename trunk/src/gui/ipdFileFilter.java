@@ -21,7 +21,7 @@ import java.util.HashSet;
 // Application specific imports
 
 /**
- * File filter for restricting files to types Xj3D knows about.
+ * File filter for restricting files.
  *
  * @author Alan Hudson
  * @version

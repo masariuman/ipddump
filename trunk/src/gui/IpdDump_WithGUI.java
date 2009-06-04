@@ -39,12 +39,13 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
             "\n\n Next to do: Unicode Support";
 
     static String chglog="\n\n--------------------" +
-            "\nChange Log" +            
+            "\nChange Log\n--------------------" +
             "\n!Ability to write the output to a txt file"+
             "\nipddump-0.1.1"+
             "\nDumped the recordId for SMS messages."+
             "\nIf no argument given, then the gui pops up"+
-            "\nOnly *.ipd Files will get parsed now";
+            "\nOnly *.ipd Files will get parsed now"+
+            "\nWhen the parsing is complete, the total number of SMSs is dispalyed";
 
     /** Creates new form IpdDump */
     public IpdDump_WithGUI() {
@@ -125,7 +126,7 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
                     .addComponent(writeToFileb)
                     .addComponent(outputFilefield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -164,7 +165,7 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
 
 
            
-         string = org.quaternions.ipddump.Main.makeItString();
+         string = org.quaternions.ipddump.Main.SMStoString();
         
         //string = unicodeString.convert(string);
 
@@ -191,10 +192,10 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
         System.out.println(e.getMessage());
     }
 
-            jTextArea1.setText("uid,   sent,   received,   sent?,     far number,    text\n");
+            jTextArea1.setText("uid,       sent,      received,      sent?,       far number,      text\n");
             jTextArea1.append(string);
+            jTextArea1.append("Total Number of SMS messages: "+String.valueOf(Main.getNumberOfSMS()));
             writeToFileb.setEnabled(true);
-            
             
         }
          else jTextArea1.setText(thnx);
@@ -206,14 +207,7 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_outputFilefieldActionPerformed
 
     private void writeToFilebActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeToFilebActionPerformed
-        try {
-
-                writeBytesToFile.writeBytes2File(filename , string);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(IpdDump_WithGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(IpdDump_WithGUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+      Main.WriteTxt(filename,string);
     }//GEN-LAST:event_writeToFilebActionPerformed
 
     /**
