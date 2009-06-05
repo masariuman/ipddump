@@ -17,7 +17,20 @@ public class Main {
     private static StringBuilder          temp=new StringBuilder();    // fast builder!!
     private static InteractivePagerBackup db;                          // need access of it from the hole class
 
+    //~--- methods ------------------------------------------------------------
 
+    /**
+     * The main method
+     *
+     *
+     * @param args
+     * arg[0] must be the .ipd file
+     * -help: get Help
+     * -txt: Dumps a csv to a txt
+     * -doc: Dumps a csv to a doc
+     * -xml: Dumps a csv to a xml
+     *
+     */
     public static void main(String[] args) {
         if ((args.length>0) && args[0].endsWith(".ipd")) {
             try {
@@ -32,36 +45,29 @@ public class Main {
 
             for (int i=1; i<args.length; i++)
 
-            // //////////
             {
                 if (args[i].trim().startsWith("-")) {
-                    if (args[i].trim().equals("-txt")) {
-                        if (!WriteTxt(args[0].trim(), SMStoString())) {
+                    if (args[i].trim().equalsIgnoreCase("-txt")) {
+                        if (!writeTxt(args[0].trim(), getSMStoString())) {
                             System.err.println("Failed to write the .txt");
                         }
 
                         continue;
                     }
-                }
 
-                if (args[i].trim().startsWith("-")) {
-                    if (args[i].trim().equals("-doc")) {
+                    if (args[i].trim().equalsIgnoreCase("-doc")) {
                         System.out.println("\nImplementation pending for -doc");
 
                         continue;
                     }
-                }
 
-                if (args[i].trim().startsWith("-")) {
-                    if (args[i].trim().equals("-xml")) {
+                    if (args[i].trim().equalsIgnoreCase("-xml")) {
                         System.out.println("\nImplementation pending for -xml");
 
                         continue;
                     }
-                }
 
-                if (args[i].trim().startsWith("-")) {
-                    if (args[i].trim().startsWith("-help")) {
+                    if (args[i].trim().equalsIgnoreCase("-help")) {
                         GiveHelp();
 
                         continue;
@@ -70,8 +76,6 @@ public class Main {
 
                 System.out.println("Unknown argument: "+args[i]);
             }
-
-            // //////////
         } else if ((args.length>0) &&!args[0].endsWith(".ipd")) {
             GiveHelp();
         } else {
@@ -80,7 +84,13 @@ public class Main {
         }
     }
 
-
+    /**
+     * Method description
+     *
+     *
+     * @param database: The database to dump
+     * @param fileName
+     */
     public static void dump(InteractivePagerBackup database, String fileName) {
         System.out.println("uid,sent,received,sent?,far number,text");
 
@@ -92,12 +102,24 @@ public class Main {
         }
     }
 
+    //~--- get methods --------------------------------------------------------
 
-    public static String SMStoString() {
+    /**
+     * Get the cvs of the parsed SMS's
+     *
+     *
+     * @return
+     */
+    public static String getSMStoString() {
         return temp.toString();
     }
 
-
+    /**
+     * Returns the total of the SMS messages
+     *
+     *
+     * @return
+     */
     public static int getNumberOfSMS() {
         if (db!=null) {
             return db.smsRecords().size();
@@ -106,22 +128,35 @@ public class Main {
         }
     }
 
+    //~--- methods ------------------------------------------------------------
 
+    /**
+     * Method description
+     *
+     */
     private static void GiveHelp() {
         System.out.println("\n");
-        System.out.println("Usage: java -jar ipdump.jar <path to ipd>");
+        System.out.println("Usage: java -jar ipdDump.jar <path to ipd>");
         System.out.println("  Dumps a csv to stdout.");
-        System.out.println("Usage: java -jar ipdump.jar <path to ipd> -Args");
+        System.out.println("Usage: java -jar ipdDump.jar <path to ipd> -Args");
         System.out.println("  -txt: Dumps a csv to a txt.");
         System.out.println("  -doc: Dumps a csv to a doc.");
         System.out.println("  -xml: Dumps a csv to a xml.");
-        System.out.println("Usage: java -jar ipdump.jar ");
+        System.out.println("Usage: java -jar ipdDump.jar ");
         System.out.println("  for opening the GUI");
         System.out.println("\n");
     }
 
-
-    public static boolean WriteTxt(String filename, String stringToWrite) {
+    /**
+     * This will write a file that contains the given string
+     *
+     *
+     * @param filename
+     * @param stringToWrite
+     *
+     * @return
+     */
+    public static boolean writeTxt(String filename, String stringToWrite) {
         try {
             int last=filename.lastIndexOf('.');
 
