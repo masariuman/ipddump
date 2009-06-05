@@ -165,7 +165,7 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
 
 
            
-         string = org.quaternions.ipddump.Main.SMStoString();
+         string = org.quaternions.ipddump.Main.getSMStoString();
         
         //string = unicodeString.convert(string);
 
@@ -207,7 +207,7 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_outputFilefieldActionPerformed
 
     private void writeToFilebActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeToFilebActionPerformed
-      Main.WriteTxt(filename,string);
+      Main.writeTxt(filename,string);
     }//GEN-LAST:event_writeToFilebActionPerformed
 
     /**
