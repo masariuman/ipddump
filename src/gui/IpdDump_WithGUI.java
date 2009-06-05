@@ -32,7 +32,7 @@ import javax.swing.JFileChooser;
  */
 public class IpdDump_WithGUI extends javax.swing.JFrame {
     String string;
-    String filename;
+    String pathString;
     static String thnx = "Give your Thanks to\n\n Jimmys:" +
             " jimdaskalakis01@gmail.com\n and basically TO -----> http:" +
             "//code.google.com/p/ipddump/wiki/Main<----- for the core source code" +
@@ -66,7 +66,8 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         outputFilefield = new javax.swing.JTextField();
-        writeToFileb = new javax.swing.JButton();
+        writeToTxt = new javax.swing.JButton();
+        writeToXml = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IpdDump with GUI");
@@ -80,11 +81,11 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
         });
 
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Times New Roman", 0, 14));
+        jTextArea1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        outputFilefield.setFont(new java.awt.Font("Tahoma", 0, 12));
+        outputFilefield.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         outputFilefield.setText("Path and the name of the output file");
         outputFilefield.setEnabled(false);
         outputFilefield.addActionListener(new java.awt.event.ActionListener() {
@@ -93,11 +94,19 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
             }
         });
 
-        writeToFileb.setText("Write to file");
-        writeToFileb.setEnabled(false);
-        writeToFileb.addActionListener(new java.awt.event.ActionListener() {
+        writeToTxt.setEnabled(false);
+        writeToTxt.setLabel("Write to txt");
+        writeToTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                writeToFilebActionPerformed(evt);
+                writeToTxtActionPerformed(evt);
+            }
+        });
+
+        writeToXml.setText("Write to xml");
+        writeToXml.setEnabled(false);
+        writeToXml.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                writeToXmlActionPerformed(evt);
             }
         });
 
@@ -112,9 +121,11 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(filebrowser)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(writeToFileb)
+                        .addComponent(writeToTxt)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(outputFilefield, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(writeToXml)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(outputFilefield, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -123,12 +134,15 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(filebrowser)
-                    .addComponent(writeToFileb)
-                    .addComponent(outputFilefield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(writeToTxt)
+                    .addComponent(outputFilefield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(writeToXml))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        writeToTxt.getAccessibleContext().setAccessibleName("Write to TXT");
 
         pack();
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -152,8 +166,8 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
                 int last = path.lastIndexOf('.');
                 path= path.substring(0, last);
 
-                filename = path+".txt";
-                outputFilefield.setText(filename);
+                pathString = path;
+                outputFilefield.setText(pathString+".*");
              
              String[] args = {jFileChooser1.getSelectedFile().getPath()};
              System.out.println(args[0]);
@@ -195,7 +209,14 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
             jTextArea1.setText("uid,       sent,      received,      sent?,       far number,      text\n");
             jTextArea1.append(string);
             jTextArea1.append("Total Number of SMS messages: "+String.valueOf(Main.getNumberOfSMS()));
-            writeToFileb.setEnabled(true);
+            if (Main.getNumberOfSMS()!=0){
+            writeToTxt.setEnabled(true);
+            writeToXml.setEnabled(true);
+            } else {
+            writeToTxt.setEnabled(false);
+            writeToXml.setEnabled(false);
+            }
+            
             
         }
          else jTextArea1.setText(thnx);
@@ -206,9 +227,15 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
 }//GEN-LAST:event_outputFilefieldActionPerformed
 
-    private void writeToFilebActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeToFilebActionPerformed
-      Main.writeTxt(filename,string);
-    }//GEN-LAST:event_writeToFilebActionPerformed
+    private void writeToTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeToTxtActionPerformed
+    String x=pathString;
+        Main.writeTxt(x,string);
+}//GEN-LAST:event_writeToTxtActionPerformed
+
+    private void writeToXmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeToXmlActionPerformed
+        String x=pathString;
+        Main.writeXml(pathString, Main.db);    // TODO add your handling code here:
+}//GEN-LAST:event_writeToXmlActionPerformed
 
     /**
     * @param args the command line arguments
@@ -231,7 +258,8 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField outputFilefield;
-    private javax.swing.JButton writeToFileb;
+    private javax.swing.JButton writeToTxt;
+    private javax.swing.JButton writeToXml;
     // End of variables declaration//GEN-END:variables
 
  

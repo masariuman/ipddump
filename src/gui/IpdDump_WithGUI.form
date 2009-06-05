@@ -36,9 +36,11 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="filebrowser" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="writeToFileb" min="-2" max="-2" attributes="0"/>
+                      <Component id="writeToTxt" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="outputFilefield" min="-2" pref="366" max="-2" attributes="0"/>
+                      <Component id="writeToXml" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="outputFilefield" min="-2" pref="284" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -51,8 +53,9 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="filebrowser" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="writeToFileb" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="writeToTxt" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="outputFilefield" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="writeToXml" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="308" max="32767" attributes="0"/>
@@ -103,13 +106,25 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="outputFilefieldActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="writeToFileb">
+    <Component class="javax.swing.JButton" name="writeToTxt">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Write to file"/>
+        <Property name="enabled" type="boolean" value="false"/>
+        <Property name="label" type="java.lang.String" value="Write to txt"/>
+      </Properties>
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Write to TXT"/>
+      </AccessibilityProperties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="writeToTxtActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="writeToXml">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Write to xml"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="writeToFilebActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="writeToXmlActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

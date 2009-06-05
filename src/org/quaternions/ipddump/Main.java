@@ -3,6 +3,7 @@ package org.quaternions.ipddump;
 //~--- non-JDK imports --------------------------------------------------------
 
 import gui.IpdDump_WithGUI;
+import gui.SmsMessageToXML;
 import gui.writeBytesToFile;
 
 import org.quaternions.ipddump.data.InteractivePagerBackup;
@@ -15,7 +16,7 @@ import java.io.IOException;
 
 public class Main {
     private static StringBuilder          temp=new StringBuilder();    // fast builder!!
-    private static InteractivePagerBackup db;                          // need access of it from the hole class
+    public static InteractivePagerBackup db;                          // need access of it from the hole class
 
     //~--- methods ------------------------------------------------------------
 
@@ -43,9 +44,7 @@ public class Main {
                 System.err.println(ex.getMessage());
             }
 
-            for (int i=1; i<args.length; i++)
-
-            {
+            for (int i=1; i<args.length; i++) {
                 if (args[i].trim().startsWith("-")) {
                     if (args[i].trim().equalsIgnoreCase("-txt")) {
                         if (!writeTxt(args[0].trim(), getSMStoString())) {
@@ -62,7 +61,9 @@ public class Main {
                     }
 
                     if (args[i].trim().equalsIgnoreCase("-xml")) {
-                        System.out.println("\nImplementation pending for -xml");
+                        if (!writeXml(args[0].trim(), db)) {
+                            System.err.println("Failed to write the .xml");
+                        }
 
                         continue;
                     }
@@ -158,9 +159,9 @@ public class Main {
      */
     public static boolean writeTxt(String filename, String stringToWrite) {
         try {
-            int last=filename.lastIndexOf('.');
+            //int last=filename.lastIndexOf('.')+1;
 
-            filename=filename.substring(0, last);
+            //filename=filename.substring(0, last);
             filename=filename+".txt";
             System.out.println("\n->Writing "+filename);
 
@@ -168,10 +169,6 @@ public class Main {
                 writeBytesToFile.writeBytes2File(filename, stringToWrite);
 
                 return true;    // the write was succesfull
-            } catch (FileNotFoundException ex) {
-                System.err.println(ex.getMessage());
-
-                return false;
             } catch (IOException ex) {
                 System.err.println(ex.getMessage());
 
@@ -179,6 +176,39 @@ public class Main {
             }
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param filename
+     * @param Db
+     *
+     * @return
+     */
+    public static boolean writeXml(String filename, InteractivePagerBackup Db) {
+        try {
+            //int last=filename.lastIndexOf('.')+1;
+
+            //filename=filename.substring(0, last);
+            filename=filename+".xml";
+            System.out.println("\n->Writing "+filename);
+
+            try {
+                SmsMessageToXML.saveXML(filename, SmsMessageToXML.createSmsMessageToXML(Db));
+
+                return true;    // the write was succesfull
+            } catch (IOException ex) {
+                System.err.println(ex);
+
+                return false;
+            }
+        } catch (Exception ex) {
+            System.err.println(ex);
 
             return false;
         }
