@@ -23,7 +23,7 @@ import javax.swing.JFileChooser;
 /*
  * IpdDump.java
  *
- * Created on 27 Μαϊ 2009, 12:12:24 μμ
+ * Created on 27 ÎÎ±Ï 2009, 12:12:24 Î¼Î¼
  */
 
 /**
@@ -206,13 +206,14 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
     }
 
 
-            jTextArea1.setText("uid,       sent,      received,      sent?,       far number,      text\n");
-            jTextArea1.append(string);
-            jTextArea1.append("Total Number of SMS messages: "+String.valueOf(Main.getNumberOfSMS()));
+            
             if (Main.getNumberOfSMS()!=0){
+            jTextArea1.setText(string);
+            jTextArea1.append("Total Number of SMS messages: "+String.valueOf(Main.getNumberOfSMS()));
             writeToTxt.setEnabled(true);
             writeToXml.setEnabled(true);
             } else {
+            jTextArea1.setText(thnx+"\n\n--->NO SMS messages were parsed!<---");
             writeToTxt.setEnabled(false);
             writeToXml.setEnabled(false);
             }

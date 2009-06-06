@@ -94,7 +94,8 @@ public class Main {
      */
     public static void dump(InteractivePagerBackup database, String fileName) {
         System.out.println("uid,sent,received,sent?,far number,text");
-
+        temp.delete(0, temp.capacity());
+         temp.append("uid,sent,received,sent?,far number,text\n");
         for (SMSMessage record : database.smsRecords()) {
             temp.append(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
                         +record.getNumber()+",\""+record.getText()+"\"\n");
@@ -159,10 +160,10 @@ public class Main {
      */
     public static boolean writeTxt(String filename, String stringToWrite) {
         try {
-            //int last=filename.lastIndexOf('.')+1;
+            int last=filename.lastIndexOf('.')+1;
 
-            //filename=filename.substring(0, last);
-            filename=filename+".txt";
+            filename=filename.substring(0, last);
+            filename=filename+"txt";
             System.out.println("\n->Writing "+filename);
 
             try {
@@ -192,10 +193,10 @@ public class Main {
      */
     public static boolean writeXml(String filename, InteractivePagerBackup Db) {
         try {
-            //int last=filename.lastIndexOf('.')+1;
+            int last=filename.lastIndexOf('.')+1;
 
-            //filename=filename.substring(0, last);
-            filename=filename+".xml";
+            filename=filename.substring(0, last);
+            filename=filename+"xml";
             System.out.println("\n->Writing "+filename);
 
             try {
@@ -203,12 +204,12 @@ public class Main {
 
                 return true;    // the write was succesfull
             } catch (IOException ex) {
-                System.err.println(ex);
+                System.err.println(ex.getMessage());
 
                 return false;
             }
         } catch (Exception ex) {
-            System.err.println(ex);
+            System.err.println(ex.getMessage());
 
             return false;
         }
