@@ -153,7 +153,7 @@ public class Main {
      * This will write a file that contains the given string
      *
      *
-     * @param filename The file name without the .ipd missing!!
+     * @param filename The file name with the .ipd missing!!
      * @param stringToWrite
      *
      * @return
@@ -183,7 +183,7 @@ public class Main {
      * Method description
      *
      *
-     * @param filename The file name without the .ipd missing!!
+     * @param filename The file name with the .ipd missing!!
      * @param Db
      *
      * @return

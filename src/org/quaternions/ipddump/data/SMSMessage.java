@@ -138,12 +138,9 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
         for ( int i = 0; i < data.length; i++ ) {
           d[ i ] = (byte)data[ i ];
         }
-        try {
-          text = new String( d, "ISO-8859-7" );
+          text = new String(d);
           fields.put( "text", text );
-        } catch ( UnsupportedEncodingException exception ) {
-          throw new RuntimeException( exception );
-        }
+
         break;
 
       case 2:

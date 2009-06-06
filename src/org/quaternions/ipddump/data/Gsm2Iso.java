@@ -14,7 +14,7 @@ package org.quaternions.ipddump.data;
 public class Gsm2Iso {
 
     /**
-     * Method description
+     * GSM 03.38 to ISO standart converter
      *
      *
      * @param data
