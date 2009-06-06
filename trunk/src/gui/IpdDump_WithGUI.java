@@ -50,6 +50,10 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
     /** Creates new form IpdDump */
     public IpdDump_WithGUI() {
         initComponents();
+         ipdFileFilter f = new ipdFileFilter();
+        //File location = new File(jarsLocation.getText());
+        //jFileChooser1.setCurrentDirectory(location);
+        jFileChooser1.setFileFilter(f);
     }
 
     /** This method is called from within the constructor to
@@ -153,11 +157,6 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
     private void filebrowserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filebrowserActionPerformed
        jTextArea1.setText(thnx+"\n\nWORKING...  be patient!");
         jFileChooser1.setMultiSelectionEnabled(false);
-        File file;
-        ipdFileFilter f = new ipdFileFilter();
-        //File location = new File(jarsLocation.getText());
-        //jFileChooser1.setCurrentDirectory(location);
-        jFileChooser1.setFileFilter(f);
 
          if (JFileChooser.APPROVE_OPTION == jFileChooser1.showOpenDialog(null)) {
              
@@ -184,7 +183,7 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
         //string = unicodeString.convert(string);
 
             try {
-                
+
     // Create the encoder and decoder for ISO-8859-1
     Charset charset = Charset.forName("ISO-8859-1");
     CharsetDecoder decoder = charset.newDecoder();
@@ -199,12 +198,13 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
         CharBuffer cbuf = decoder.decode(bbuf);
         String s = cbuf.toString();
 
-  
+
 
 
     } catch (Exception e) {
         System.out.println(e.getMessage());
     }
+
 
             jTextArea1.setText("uid,       sent,      received,      sent?,       far number,      text\n");
             jTextArea1.append(string);

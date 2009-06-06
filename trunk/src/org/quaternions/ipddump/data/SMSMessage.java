@@ -146,7 +146,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
       case 2:
         builder = new StringBuilder();
         for ( char c : data ) {
-          if ( Character.isLetterOrDigit( c ) || c == '#' || c == '*' || c == '(' || c == ')' || c == '.' || c == '-' || c == '+' ) {
+          if ( Character.isLetterOrDigit( c ) || c == '#' || c == '*' || c == '(' || c == ')' || c == '.' || c == '-' || c == '+'|| c == ' ' ) {
             builder.append( c );
           }
         }
