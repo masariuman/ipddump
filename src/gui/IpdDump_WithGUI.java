@@ -32,7 +32,7 @@ import javax.swing.JFileChooser;
  */
 public class IpdDump_WithGUI extends javax.swing.JFrame {
     String string;
-    String pathString;
+    String pathString="";
     static String thnx = "Give your Thanks to\n\n Jimmys:" +
             " jimdaskalakis01@gmail.com\n and basically TO -----> http:" +
             "//code.google.com/p/ipddump/wiki/Main<----- for the core source code" +
@@ -166,8 +166,7 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
                 path= path.substring(0, last);
 
                 pathString = path;
-                outputFilefield.setText(pathString+".*");
-             
+                
              String[] args = {jFileChooser1.getSelectedFile().getPath()};
              System.out.println(args[0]);
              Main.main(args);
@@ -180,40 +179,15 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
            
          string = org.quaternions.ipddump.Main.getSMStoString();
         
-        //string = unicodeString.convert(string);
-
-            try {
-
-    // Create the encoder and decoder for ISO-8859-1
-    Charset charset = Charset.forName("ISO-8859-1");
-    CharsetDecoder decoder = charset.newDecoder();
-    CharsetEncoder encoder = charset.newEncoder();
-
-      // Convert a string to ISO-LATIN-1 bytes in a ByteBuffer
-        // The new ByteBuffer is ready to be read.
-        ByteBuffer bbuf = encoder.encode(CharBuffer.wrap("a string"));
-
-        // Convert ISO-LATIN-1 bytes in a ByteBuffer to a character ByteBuffer and then to a string.
-        // The new ByteBuffer is ready to be read.
-        CharBuffer cbuf = decoder.decode(bbuf);
-        String s = cbuf.toString();
-
-
-
-
-    } catch (Exception e) {
-        System.out.println(e.getMessage());
-    }
-
-
-            
             if (Main.getNumberOfSMS()!=0){
             jTextArea1.setText(string);
             jTextArea1.append("Total Number of SMS messages: "+String.valueOf(Main.getNumberOfSMS()));
+            outputFilefield.setText(pathString+".*");
             writeToTxt.setEnabled(true);
             writeToXml.setEnabled(true);
             } else {
             jTextArea1.setText(thnx+"\n\n--->NO SMS messages were parsed!<---");
+            outputFilefield.setText("Path and the name of the output file");
             writeToTxt.setEnabled(false);
             writeToXml.setEnabled(false);
             }
@@ -229,12 +203,10 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_outputFilefieldActionPerformed
 
     private void writeToTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeToTxtActionPerformed
-    String x=pathString;
-        Main.writeTxt(x,string);
+        Main.writeTxt(pathString,string);
 }//GEN-LAST:event_writeToTxtActionPerformed
 
     private void writeToXmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeToXmlActionPerformed
-        String x=pathString;
         Main.writeXml(pathString, Main.db);    // TODO add your handling code here:
 }//GEN-LAST:event_writeToXmlActionPerformed
 
