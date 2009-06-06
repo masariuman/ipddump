@@ -65,8 +65,8 @@ public class SmsMessageToXML {
             // Add the "receivedDate" element
             message.addElement("receivedDate").addText(record.getReceived().toString());
 
-            // Add the "sent" element
-            message.addElement("sent?").addText(sSent);
+            // Add the "sent?" element
+            message.addElement("wasSent").addText(sSent);
 
             // Add the "to" element
             message.addElement("to").addText(record.getNumber());
