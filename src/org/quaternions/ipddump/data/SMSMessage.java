@@ -131,12 +131,19 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
     switch ( type ) {
       case 4:
+          for ( int i = 0; i < data.length; i++ ) {
+          if (data[i]==0x10) {data[i]=0xc4; System.out.println("Delta");}
+          else if (data[i]==0x13) {data[i]=0xc3; System.out.println("Gamma");}
+          else if (data[i]==0x14) {data[i]=0xcb; System.out.println("Lamda");}
+          else if (data[i]==0x16) {data[i]=0xd9; System.out.println("Omega");}
+          else if (data[i]==0x16) {data[i]=0xd9; System.out.println("Omega");}
+        }
         byte[] d = new byte[ data.length ];
         for ( int i = 0; i < data.length; i++ ) {
           d[ i ] = (byte)data[ i ];
         }
         try {
-          text = new String( d, "UTF8" );
+          text = new String( d, "ISO-8859-7" );
           fields.put( "text", text );
         } catch ( UnsupportedEncodingException exception ) {
           throw new RuntimeException( exception );
