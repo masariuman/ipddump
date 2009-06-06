@@ -153,17 +153,14 @@ public class Main {
      * This will write a file that contains the given string
      *
      *
-     * @param filename
+     * @param filename The file name without the .ipd missing!!
      * @param stringToWrite
      *
      * @return
      */
     public static boolean writeTxt(String filename, String stringToWrite) {
         try {
-            int last=filename.lastIndexOf('.')+1;
-
-            filename=filename.substring(0, last);
-            filename=filename+"txt";
+            filename=filename+".txt";
             System.out.println("\n->Writing "+filename);
 
             try {
@@ -186,17 +183,14 @@ public class Main {
      * Method description
      *
      *
-     * @param filename
+     * @param filename The file name without the .ipd missing!!
      * @param Db
      *
      * @return
      */
     public static boolean writeXml(String filename, InteractivePagerBackup Db) {
         try {
-            int last=filename.lastIndexOf('.')+1;
-
-            filename=filename.substring(0, last);
-            filename=filename+"xml";
+            filename=filename+".xml";
             System.out.println("\n->Writing "+filename);
 
             try {
