@@ -1,5 +1,6 @@
 package org.quaternions.ipddump.data;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -130,8 +131,16 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
     switch ( type ) {
       case 4:
-        text = new StringBuilder().append( data ).toString();
-        fields.put( "text", text );
+        byte[] d = new byte[ data.length ];
+        for ( int i = 0; i < data.length; i++ ) {
+          d[ i ] = (byte)data[ i ];
+        }
+        try {
+          text = new String( d, "UTF8" );
+          fields.put( "text", text );
+        } catch ( UnsupportedEncodingException exception ) {
+          throw new RuntimeException( exception );
+        }
         break;
 
       case 2:
