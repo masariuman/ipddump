@@ -47,31 +47,32 @@ public class SmsMessageToXML {
 
         // System.out.println("uid,sent,received,sent?,far number,text");
         for (SMSMessage record : database.smsRecords()) {
-
-//          System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
-//          +record.getNumber()+",\""+record.getText()+"\"");
-            // Element message = root.addElement("SmsMessage");
-            // Create the document
-            // Add the "sentDate" element
-            root.addElement("sentDate").addText(record.getSent().toString());
-
-            // Add the "receivedDate" element
-            root.addElement("receivedDate").addText(record.getReceived().toString());
-
-            // Add the "sent" element
             if (record.wasSent()) {
                 sSent="true";
             } else {
                 sSent="false";
             }
 
-            root.addElement("sent?").addText(sSent);
+
+//          System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
+//          +record.getNumber()+",\""+record.getText()+"\"");
+            Element message=root.addElement("SmsMessage").addAttribute("UID", String.valueOf(record.getUID()));
+
+            // Create the document
+            // Add the "sentDate" element
+            message.addElement("sentDate").addText(record.getSent().toString());
+
+            // Add the "receivedDate" element
+            message.addElement("receivedDate").addText(record.getReceived().toString());
+
+            // Add the "sent" element
+            message.addElement("sent?").addText(sSent);
 
             // Add the "to" element
-            root.addElement("to").addText(record.getNumber());
+            message.addElement("to").addText(record.getNumber());
 
             // Add the "text" element
-            root.addElement("text").addText(record.getText()+"\n");
+            message.addElement("text").addText(record.getText()+"\n");
         }
 
         // System.out.println(document.getDocument().getText());
@@ -92,11 +93,13 @@ public class SmsMessageToXML {
      * @throws IOException
      */
     public static void saveXML(String path, Document document) throws IOException {
+
         // Make a pretty output
         OutputFormat format=OutputFormat.createPrettyPrint();
 
         format.setEncoding("UTF-8");
-        //format.setTrimText(true);
+
+        // format.setTrimText(true);
 
 //      Save it
         XMLWriter writer;
