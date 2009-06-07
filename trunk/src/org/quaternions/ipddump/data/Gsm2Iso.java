@@ -42,7 +42,7 @@ public class Gsm2Iso {
             } else if (data[i]==0x09) {
                 data[i]='Ç';
             } else if (data[i]==0x0A) {
-                data[i]='?';
+                data[i]='\n';
             } else if (data[i]==0x0B) {
                 data[i]='Ø';
             } else if (data[i]==0x0C) {
@@ -97,6 +97,7 @@ public class Gsm2Iso {
                 // System.out.println("Ksi");
             } else if (data[i]==0x1B) {
                 //data[i]='';//<ESC>
+                System.out.println("esc character");
             } else if (data[i]==0x1C) {
                 data[i]='Æ';
             } else if (data[i]==0x1D) {
@@ -106,7 +107,7 @@ public class Gsm2Iso {
             } else if (data[i]==0x1F) {
                 data[i]='É';
             } else if (data[i]==0x20) {
-                //data[i]='';//sp?
+                data[i]=' ';
             } else if (data[i]==0x21) {
                 data[i]='!';
             } else if (data[i]==0x22) {
