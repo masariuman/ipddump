@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
-    private static StringBuilder          temp=new StringBuilder();    // fast builder!!
+    private static StringBuilder         temp=new StringBuilder();    // fast builder!!
     public static InteractivePagerBackup db;                          // need access of it from the hole class
 
     //~--- methods ------------------------------------------------------------
@@ -52,23 +52,23 @@ public class Main {
                         }
 
                         continue;
-                    }
-
-                    if (args[i].trim().equalsIgnoreCase("-doc")) {
+                    } else if (args[i].trim().equalsIgnoreCase("-doc")) {
                         System.out.println("\nImplementation pending for -doc");
 
                         continue;
-                    }
-
-                    if (args[i].trim().equalsIgnoreCase("-xml")) {
+                    } else if (args[i].trim().equalsIgnoreCase("-xml")) {
                         if (!writeXml(args[0].trim(), db)) {
                             System.err.println("Failed to write the .xml");
                         }
 
                         continue;
-                    }
+                    } else if (args[i].trim().equalsIgnoreCase("-csv")) {
+                        if (!writeCsv(args[0].trim(), getSMStoString())) {
+                            System.err.println("Failed to write the .xml");
+                        }
 
-                    if (args[i].trim().equalsIgnoreCase("-help")) {
+                        continue;
+                    } else if (args[i].trim().equalsIgnoreCase("-help")) {
                         GiveHelp();
 
                         continue;
@@ -95,7 +95,8 @@ public class Main {
     public static void dump(InteractivePagerBackup database, String fileName) {
         System.out.println("uid,sent,received,sent?,far number,text");
         temp.delete(0, temp.capacity());
-         temp.append("uid,sent,received,sent?,far number,text\n");
+        temp.append("uid,sent,received,sent?,far number,text\n");
+
         for (SMSMessage record : database.smsRecords()) {
             temp.append(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
                         +record.getNumber()+",\""+record.getText()+"\"\n");
@@ -141,9 +142,10 @@ public class Main {
         System.out.println("Usage: java -jar ipdDump.jar <path to ipd>");
         System.out.println("  Dumps a csv to stdout.");
         System.out.println("Usage: java -jar ipdDump.jar <path to ipd> -Args");
-        System.out.println("  -txt: Dumps a csv to a txt.");
-        System.out.println("  -doc: Dumps a csv to a doc.");
-        System.out.println("  -xml: Dumps a csv to a xml.");
+        System.out.println("  -txt: Dumps a csv to a <ipdNAme>.txt");
+        System.out.println("  -doc: Dumps a csv to a <ipdNAme>.doc");
+        System.out.println("  -xml: Dumps xml to a <ipdNAme>.xml");
+        System.out.println("  -csv: Dumps csv to a <ipdNAme>.csv");
         System.out.println("Usage: java -jar ipdDump.jar ");
         System.out.println("  for opening the GUI");
         System.out.println("\n");
@@ -160,6 +162,9 @@ public class Main {
      */
     public static boolean writeTxt(String filename, String stringToWrite) {
         try {
+            int last=filename.lastIndexOf('.');
+
+            filename=filename.substring(0, last);
             filename=filename+".txt";
             System.out.println("\n->Writing "+filename);
 
@@ -190,11 +195,47 @@ public class Main {
      */
     public static boolean writeXml(String filename, InteractivePagerBackup Db) {
         try {
+            int last=filename.lastIndexOf('.');
+
+            filename=filename.substring(0, last);
             filename=filename+".xml";
             System.out.println("\n->Writing "+filename);
 
             try {
                 SmsMessageToXML.saveXML(filename, SmsMessageToXML.createSmsMessageToXML(Db));
+
+                return true;    // the write was succesfull
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+
+                return false;
+            }
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param filename
+     * @param stringToWrite
+     *
+     * @return
+     */
+    public static boolean writeCsv(String filename, String stringToWrite) {
+        try {
+            int last=filename.lastIndexOf('.');
+
+            filename=filename.substring(0, last);
+            filename=filename+".csv";
+            System.out.println("\n->Writing "+filename);
+
+            try {
+                writeBytesToFile.writeBytes2File(filename, stringToWrite);
 
                 return true;    // the write was succesfull
             } catch (IOException ex) {

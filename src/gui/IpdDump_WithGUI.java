@@ -33,6 +33,7 @@ import javax.swing.JFileChooser;
 public class IpdDump_WithGUI extends javax.swing.JFrame {
     String string;
     String pathString="";
+    String path="";
     static String thnx = "Give your Thanks to\n\n Jimmys:" +
             " jimdaskalakis01@gmail.com\n and basically TO -----> http:" +
             "//code.google.com/p/ipddump/wiki/Main<----- for the core source code" +
@@ -161,11 +162,10 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
          if (JFileChooser.APPROVE_OPTION == jFileChooser1.showOpenDialog(null)) {
              
 
-              String path = jFileChooser1.getSelectedFile().getAbsolutePath().toString();
+                path = jFileChooser1.getSelectedFile().getAbsolutePath().toString();
                 int last = path.lastIndexOf('.');
-                path= path.substring(0, last);
+                pathString= path.substring(0, last);
 
-                pathString = path;
                 
              String[] args = {jFileChooser1.getSelectedFile().getPath()};
              System.out.println(args[0]);
@@ -203,11 +203,11 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_outputFilefieldActionPerformed
 
     private void writeToTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeToTxtActionPerformed
-        Main.writeTxt(pathString,string);
+        Main.writeTxt(path,string);
 }//GEN-LAST:event_writeToTxtActionPerformed
 
     private void writeToXmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writeToXmlActionPerformed
-        Main.writeXml(pathString, Main.db);    // TODO add your handling code here:
+        Main.writeXml(path, Main.db);    // TODO add your handling code here:
 }//GEN-LAST:event_writeToXmlActionPerformed
 
     /**
