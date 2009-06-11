@@ -43,7 +43,7 @@ public class SmsMessageToXML {
         Document document=DocumentHelper.createDocument();
 
         // Add the root
-        Element root=document.addElement("SMSmessages");
+        Element root=document.addElement("SMSmessages").addAttribute("TotalSMS",String.valueOf(database.smsRecords().size()));
 
         // System.out.println("uid,sent,received,sent?,far number,text");
         for (SMSMessage record : database.smsRecords()) {
@@ -53,10 +53,10 @@ public class SmsMessageToXML {
                 sSent="false";
             }
 
-
 //          System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
 //          +record.getNumber()+",\""+record.getText()+"\"");
-            Element message=root.addElement("SmsMessage").addAttribute("UID", String.valueOf(record.getUID()));
+            Element message=root.addElement("SmsMessage").addAttribute("UID",
+                                            String.valueOf(record.getUID()));
 
             // Create the document
             // Add the "sentDate" element
@@ -100,7 +100,6 @@ public class SmsMessageToXML {
         format.setEncoding("UTF-8");
 
         // format.setTrimText(true);
-
 //      Save it
         XMLWriter writer;
 

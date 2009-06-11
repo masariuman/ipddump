@@ -2,6 +2,7 @@ package org.quaternions.ipddump;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import gui.IpdDump_NewGUI;
 import gui.IpdDump_WithGUI;
 import gui.SmsMessageToXML;
 import gui.writeBytesToFile;
@@ -81,7 +82,8 @@ public class Main {
             GiveHelp();
         } else {
             System.out.println("  GUI enviroment will now pop up!");
-            new IpdDump_WithGUI().setVisible(true);
+            //new IpdDump_WithGUI().setVisible(true);
+            new IpdDump_NewGUI().setVisible(true);
         }
     }
 

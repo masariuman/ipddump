@@ -7,11 +7,44 @@
 
 package org.quaternions.ipddump.data;
 
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Jimmys Daskalakis
  */
 public class Gsm2Iso {
+
+    /**
+     * Method description
+     *
+     *
+     * @param ucs2Bytes
+     *
+     * @return
+     *
+     * @throws UnsupportedEncodingException
+     */
+    public static String ucs2ToUTF8(char[] ucs2Chars) {
+
+String unicode="";
+String utf8="";
+        byte[] ucs2Bytes = new byte[ ucs2Chars.length ];
+        for ( int i = 0; i < ucs2Chars.length; i++ ) {
+          ucs2Bytes[ i ] = (byte)ucs2Chars[ i ];
+        }
+
+        try {
+      unicode = new String(ucs2Bytes, "UTF-16");
+      utf8 = new String(unicode.getBytes("UTF-8"), "Cp1252");
+            } catch (UnsupportedEncodingException ex1) {
+                Logger.getLogger(Gsm2Iso.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+
+        return utf8;
+    }
 
     /**
      * GSM 03.38 to ISO standart converter
@@ -96,14 +129,16 @@ public class Gsm2Iso {
 
                 // System.out.println("Ksi");
             } else if (data[i]==0x1B) {
-                //data[i]='';//<ESC>
+
+                // data[i]='';//<ESC>
                 System.out.println("esc character");
             } else if (data[i]==0x1C) {
                 data[i]='Æ';
             } else if (data[i]==0x1D) {
                 data[i]='æ';
             } else if (data[i]==0x1E) {
-                //data[i]='';//??
+
+                // data[i]='';//??
             } else if (data[i]==0x1F) {
                 data[i]='É';
             } else if (data[i]==0x20) {
@@ -235,7 +270,8 @@ public class Gsm2Iso {
             } else if (data[i]==0x5F) {
                 data[i]='Ü';
             } else if (data[i]==0x60) {
-               // data[i]='';//?
+
+                // data[i]='';//?
             } else if (data[i]==0x61) {
                 data[i]='a';
             } else if (data[i]==0x62) {
