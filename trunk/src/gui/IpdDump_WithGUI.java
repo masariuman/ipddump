@@ -51,10 +51,10 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
     /** Creates new form IpdDump */
     public IpdDump_WithGUI() {
         initComponents();
-         ipdFileFilter f = new ipdFileFilter();
-        //File location = new File(jarsLocation.getText());
-        //jFileChooser1.setCurrentDirectory(location);
-        jFileChooser1.setFileFilter(f);
+        
+        jFileChooser1.addChoosableFileFilter(
+                new ExtensionFileFilter(
+                    new String[] {".ipd"}, "BB Backup Files Only"));
     }
 
     /** This method is called from within the constructor to
