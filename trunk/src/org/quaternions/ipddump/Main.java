@@ -251,6 +251,30 @@ public class Main {
         }
     }
 
+        public static boolean writeXml(String filename, InteractivePagerBackup Db, int[] selectedMessages) {
+        try {
+            int last=filename.lastIndexOf('.');
+
+            filename=filename.substring(0, last);
+            filename=filename+".xml";
+            System.out.println("\n->Writing "+filename);
+
+            try {
+                SmsMessageToXML.saveXML(filename, SmsMessageToXML.createSmsMessageToXML(Db,selectedMessages));
+
+                return true;    // the write was succesfull
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+
+                return false;
+            }
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+
+            return false;
+        }
+    }
+
     /**
      * Method description
      *

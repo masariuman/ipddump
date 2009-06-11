@@ -432,9 +432,10 @@ for (SMSMessage record : database.smsRecords()) {
         
        if (evt.getButton()==MouseEvent.BUTTON3){
        System.out.println("right click" );
-       smsViewer.TextArea.setText(SMStoPlainText());
-        smsViewer.setVisible(true);
-        
+       String tmp = SMStoPlainText();
+       if (!tmp.equals("")){
+       smsViewer.TextArea.setText(tmp);
+       smsViewer.setVisible(true);}
        }
         if (evt.getClickCount() == 2){
         System.out.println("double click" );
@@ -456,7 +457,7 @@ if (ActiveTAB==SMStabINDEX){
 
 if (ext.equalsIgnoreCase("txt")){Main.writeTxt(fToSave, SMStoPlainText());}
 if (ext.equalsIgnoreCase("cvs")){Main.writeTxt(fToSave, Main.getSMStoString());}
-if (ext.equalsIgnoreCase("xml")){Main.writeXml(fToSave, database);}
+if (ext.equalsIgnoreCase("xml")){Main.writeXml(fToSave, database,jTableSMS.getSelectedRows());}
         }else{
         JOptionPane.showMessageDialog(jFrame1, "Select the Tab and/or \nthe items you want to save");
         }

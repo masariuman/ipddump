@@ -43,7 +43,8 @@ public class SmsMessageToXML {
         Document document=DocumentHelper.createDocument();
 
         // Add the root
-        Element root=document.addElement("SMSmessages").addAttribute("TotalSMS",String.valueOf(database.smsRecords().size()));
+        Element root=document.addElement("SMSmessages").addAttribute("TotalSMS",
+                                         String.valueOf(database.smsRecords().size()));
 
         // System.out.println("uid,sent,received,sent?,far number,text");
         for (SMSMessage record : database.smsRecords()) {
@@ -55,8 +56,7 @@ public class SmsMessageToXML {
 
 //          System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
 //          +record.getNumber()+",\""+record.getText()+"\"");
-            Element message=root.addElement("SmsMessage").addAttribute("UID",
-                                            String.valueOf(record.getUID()));
+            Element message=root.addElement("SmsMessage").addAttribute("UID", String.valueOf(record.getUID()));
 
             // Create the document
             // Add the "sentDate" element
@@ -73,6 +73,71 @@ public class SmsMessageToXML {
 
             // Add the "text" element
             message.addElement("text").addText(record.getText()+"\n");
+        }
+
+        // System.out.println(document.getDocument().getText());
+        return document;
+
+        // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param database
+     * @param selectedMessages
+     *
+     * @return
+     */
+    public static Document createSmsMessageToXML(InteractivePagerBackup database, int[] selectedMessages) {
+        String sSent="";
+
+        // System.out.println("uid,sent,received,sent?,far number,text");
+        Document document=DocumentHelper.createDocument();
+
+        // Add the root
+        Element root=document.addElement("SMSmessages").addAttribute("TotalSMS",
+                                         String.valueOf(selectedMessages.length));
+
+        // System.out.println("uid,sent,received,sent?,far number,text");
+        int smsRecord=0;
+        int j=0;
+
+        for (SMSMessage record : database.smsRecords()) {
+            System.out.println(smsRecord+" "+j+" "+selectedMessages[j]);
+            if ((smsRecord==selectedMessages[j]) && selectedMessages[j]<database.smsRecords().size()) {
+                
+                if (record.wasSent()) {
+                    sSent="true";
+                } else {
+                    sSent="false";
+                }
+
+//              System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
+//              +record.getNumber()+",\""+record.getText()+"\"");
+                Element message=root.addElement("SmsMessage").addAttribute("UID", String.valueOf(record.getUID()));
+
+                // Create the document
+                // Add the "sentDate" element
+                message.addElement("sentDate").addText(record.getSent().toString());
+
+                // Add the "receivedDate" element
+                message.addElement("receivedDate").addText(record.getReceived().toString());
+
+                // Add the "sent?" element
+                message.addElement("wasSent").addText(sSent);
+
+                // Add the "to" element
+                message.addElement("to").addText(record.getNumber());
+
+                // Add the "text" element
+                message.addElement("text").addText(record.getText()+"\n");
+                j++;
+                if (j>=selectedMessages.length){break;}
+            }
+
+            smsRecord++;
         }
 
         // System.out.println(document.getDocument().getText());
