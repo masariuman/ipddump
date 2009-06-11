@@ -156,7 +156,7 @@ public class IpdDump_WithGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void filebrowserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filebrowserActionPerformed
-       jTextArea1.setText(thnx+"\n\nWORKING...  be patient!");
+        jTextArea1.setText(thnx+"\n\nWORKING...  be patient!");
         jFileChooser1.setMultiSelectionEnabled(false);
 
          if (JFileChooser.APPROVE_OPTION == jFileChooser1.showOpenDialog(null)) {

@@ -26,14 +26,15 @@ import java.util.HashSet;
  * @author Alan Hudson
  * @version
  */
-public class ipdFileFilter extends FileFilter
+public class savesFileFilter extends FileFilter
 {
     /** The valid extensions */
     private HashSet validExts;
 
-    public ipdFileFilter() {
+    public savesFileFilter() {
         validExts = new HashSet(4);
 
+        validExts.add("csv");
         validExts.add("ipd");
     }
 
@@ -74,6 +75,6 @@ public class ipdFileFilter extends FileFilter
     // The description of this filter
     public String getDescription()
     {
-        return "Just ipd Files";
+        return "Blackberry Backup Files *.ipd";
     }
 }
