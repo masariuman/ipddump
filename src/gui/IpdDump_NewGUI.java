@@ -39,6 +39,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
    private String welcome="Welcome to IpdDump - http://code.google.com/p/ipddump/";
    private Object[][] smsObj;
    private String ClipBoardTemp;
+   SmsViewer smsViewer;
 
    final private int SMSWasSentIndex=0  ;
    final private  int SMSNumberIndex = 1;
@@ -144,9 +145,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelSMS.setLayout(jPanelSMSLayout);
         jPanelSMSLayout.setHorizontalGroup(
             jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSMSLayout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
         );
         jPanelSMSLayout.setVerticalGroup(
             jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,7 +206,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelTasksLayout.setHorizontalGroup(
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 637, Short.MAX_VALUE)
-            .addGap(0, 637, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTasksLayout.createSequentialGroup()
                 .addGap(219, 219, 219)
                 .addComponent(status_label4, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
@@ -215,7 +213,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelTasksLayout.setVerticalGroup(
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 393, Short.MAX_VALUE)
             .addGap(0, 393, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTasksLayout.createSequentialGroup()
                 .addGap(191, 191, 191)
@@ -232,7 +229,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 637, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(219, 219, 219)
                 .addComponent(status_label3, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
@@ -240,7 +236,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 393, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(191, 191, 191)
                 .addComponent(status_label3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -338,7 +333,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     public IpdDump_NewGUI() {
         initComponents();
-
+        smsViewer = new SmsViewer();
         IpdChooser.setAcceptAllFileFilterUsed(false);
         IpdChooser.setFileHidingEnabled(false);
         IpdChooser.addChoosableFileFilter(
@@ -437,7 +432,8 @@ for (SMSMessage record : database.smsRecords()) {
         
        if (evt.getButton()==MouseEvent.BUTTON3){
        System.out.println("right click" );
-        SMStoPlainText();
+       smsViewer.TextArea.setText(SMStoPlainText());
+        smsViewer.setVisible(true);
         
        }
         if (evt.getClickCount() == 2){
