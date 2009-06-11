@@ -48,8 +48,8 @@ public class Main {
             for (int i=1; i<args.length; i++) {
                 if (args[i].trim().startsWith("-")) {
                     if (args[i].trim().equalsIgnoreCase("-txt")) {
-                        if (!writeTxt(args[0].trim(), getSMStoString())) {
-                            System.err.println("Failed to write the .txt");
+                        if (!writeTxt(args[0].trim(), getSMStoPlainText())) {
+                            System.err.println("Failed to write the plain txt");
                         }
 
                         continue;
@@ -65,7 +65,7 @@ public class Main {
                         continue;
                     } else if (args[i].trim().equalsIgnoreCase("-csv")) {
                         if (!writeCsv(args[0].trim(), getSMStoString())) {
-                            System.err.println("Failed to write the .xml");
+                            System.err.println("Failed to write the .csv");
                         }
 
                         continue;
@@ -82,7 +82,8 @@ public class Main {
             GiveHelp();
         } else {
             System.out.println("  GUI enviroment will now pop up!");
-            //new IpdDump_WithGUI().setVisible(true);
+
+            // new IpdDump_WithGUI().setVisible(true);
             new IpdDump_NewGUI().setVisible(true);
         }
     }
@@ -100,8 +101,8 @@ public class Main {
         temp.append("uid,sent,received,sent?,far number,text\n");
 
         for (SMSMessage record : database.smsRecords()) {
-            temp.append(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
-                        +record.getNumber()+",\""+record.getText()+"\"\n");
+            temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
+                        +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
             System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
                                +record.getNumber()+",\""+record.getText()+"\"");
         }
@@ -117,6 +118,37 @@ public class Main {
      */
     public static String getSMStoString() {
         return temp.toString();
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     */
+    public static String getSMStoPlainText() {
+        String tmp="";
+
+        if (db!=null) {
+            for (SMSMessage record : db.smsRecords()) {
+                String number  =record.getNumber();
+                String text    =record.getText();
+                String sent    =record.getSent().toString();
+                String recieved=record.getReceived().toString();
+
+                if (!record.wasSent()) {
+                    tmp=tmp+"From: "+number+"\nTo: My Phone\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                        +"\n\n";
+                } else {
+                    tmp=tmp+"From: My Phone\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                        +"\n\n";
+                }
+            }
+
+            return tmp;
+        }
+
+        return tmp;
     }
 
     /**
@@ -144,10 +176,10 @@ public class Main {
         System.out.println("Usage: java -jar ipdDump.jar <path to ipd>");
         System.out.println("  Dumps a csv to stdout.");
         System.out.println("Usage: java -jar ipdDump.jar <path to ipd> -Args");
-        System.out.println("  -txt: Dumps a csv to a <ipdNAme>.txt");
-        System.out.println("  -doc: Dumps a csv to a <ipdNAme>.doc");
-        System.out.println("  -xml: Dumps xml to a <ipdNAme>.xml");
-        System.out.println("  -csv: Dumps csv to a <ipdNAme>.csv");
+        System.out.println("  -txt: Dumps simple readable text to a <ipdName>.txt");
+        System.out.println("  -doc: Dumps a csv to a <ipdName>.doc");
+        System.out.println("  -xml: Dumps xml to a <ipdName>.xml");
+        System.out.println("  -csv: Dumps csv to a <ipdName>.csv");
         System.out.println("Usage: java -jar ipdDump.jar ");
         System.out.println("  for opening the GUI");
         System.out.println("\n");
