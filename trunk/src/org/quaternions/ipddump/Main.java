@@ -3,12 +3,13 @@ package org.quaternions.ipddump;
 //~--- non-JDK imports --------------------------------------------------------
 
 import gui.IpdDump_NewGUI;
-import gui.IpdDump_WithGUI;
 import gui.SmsMessageToXML;
-import gui.writeBytesToFile;
 
 import org.quaternions.ipddump.data.InteractivePagerBackup;
 import org.quaternions.ipddump.data.SMSMessage;
+import org.quaternions.ipddump.writers.FileWriters;
+import org.quaternions.ipddump.writers.SmsWriters;
+import org.quaternions.ipddump.writers.writeBytesToFile;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -16,8 +17,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
-    private static StringBuilder         temp=new StringBuilder();    // fast builder!!
-    public static InteractivePagerBackup db;                          // need access of it from the hole class
+    private static SmsWriters            smsWriter =new SmsWriters();
+    private static FileWriters           FileWriter=new FileWriters();
+    public static InteractivePagerBackup db;
 
     //~--- methods ------------------------------------------------------------
 
@@ -37,10 +39,7 @@ public class Main {
         if ((args.length>0) && args[0].endsWith(".ipd")) {
             try {
                 db=new IPDParser(args[0]).parse();
-
-                if (db!=null) {
-                    dump(db, null);
-                }
+                dump(db, null);
             } catch (IOException ex) {
                 System.err.println(ex.getMessage());
             }
@@ -48,7 +47,7 @@ public class Main {
             for (int i=1; i<args.length; i++) {
                 if (args[i].trim().startsWith("-")) {
                     if (args[i].trim().equalsIgnoreCase("-txt")) {
-                        if (!writeTxt(args[0].trim(), getSMStoPlainText())) {
+                        if (!FileWriter.writeTxttoFile(args[0].trim(), smsWriter.SMStoPlainText(db))) {
                             System.err.println("Failed to write the plain txt");
                         }
 
@@ -58,13 +57,13 @@ public class Main {
 
                         continue;
                     } else if (args[i].trim().equalsIgnoreCase("-xml")) {
-                        if (!writeXml(args[0].trim(), db)) {
+                        if (!FileWriter.writeXMLtoFile(args[0], smsWriter.SMSToXML(db))) {
                             System.err.println("Failed to write the .xml");
                         }
 
                         continue;
                     } else if (args[i].trim().equalsIgnoreCase("-csv")) {
-                        if (!writeCsv(args[0].trim(), getSMStoString())) {
+                        if (!FileWriter.writeCsvtoFile(args[0].trim(), getSMStoString())) {
                             System.err.println("Failed to write the .csv");
                         }
 
@@ -96,16 +95,7 @@ public class Main {
      * @param fileName
      */
     public static void dump(InteractivePagerBackup database, String fileName) {
-        System.out.println("uid,sent,received,sent?,far number,text");
-        temp.delete(0, temp.capacity());
-        temp.append("uid,sent,received,sent?,far number,text\n");
-
-        for (SMSMessage record : database.smsRecords()) {
-            temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
-                        +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
-            System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
-                               +record.getNumber()+",\""+record.getText()+"\"");
-        }
+        System.out.println(getSMStoString());
     }
 
     //~--- get methods --------------------------------------------------------
@@ -117,38 +107,7 @@ public class Main {
      * @return
      */
     public static String getSMStoString() {
-        return temp.toString();
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public static String getSMStoPlainText() {
-        String tmp="";
-
-        if (db!=null) {
-            for (SMSMessage record : db.smsRecords()) {
-                String number  =record.getNumber();
-                String text    =record.getText();
-                String sent    =record.getSent().toString();
-                String recieved=record.getReceived().toString();
-
-                if (!record.wasSent()) {
-                    tmp=tmp+"From: "+number+"\nTo: My Phone\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                        +"\n\n";
-                } else {
-                    tmp=tmp+"From: My Phone\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                        +"\n\n";
-                }
-            }
-
-            return tmp;
-        }
-
-        return tmp;
+        return smsWriter.SMStoCVS(db);
     }
 
     /**
@@ -183,128 +142,5 @@ public class Main {
         System.out.println("Usage: java -jar ipdDump.jar ");
         System.out.println("  for opening the GUI");
         System.out.println("\n");
-    }
-
-    /**
-     * This will write a file that contains the given string
-     *
-     *
-     * @param filename The file name with the .ipd missing!!
-     * @param stringToWrite
-     *
-     * @return
-     */
-    public static boolean writeTxt(String filename, String stringToWrite) {
-        try {
-            int last=filename.lastIndexOf('.');
-
-            filename=filename.substring(0, last);
-            filename=filename+".txt";
-            System.out.println("\n->Writing "+filename);
-
-            try {
-                writeBytesToFile.writeBytes2File(filename, stringToWrite);
-
-                return true;    // the write was succesfull
-            } catch (IOException ex) {
-                System.err.println(ex.getMessage());
-
-                return false;
-            }
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-
-            return false;
-        }
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @param filename The file name with the .ipd missing!!
-     * @param Db
-     *
-     * @return
-     */
-    public static boolean writeXml(String filename, InteractivePagerBackup Db) {
-        try {
-            int last=filename.lastIndexOf('.');
-
-            filename=filename.substring(0, last);
-            filename=filename+".xml";
-            System.out.println("\n->Writing "+filename);
-
-            try {
-                SmsMessageToXML.saveXML(filename, SmsMessageToXML.createSmsMessageToXML(Db));
-
-                return true;    // the write was succesfull
-            } catch (IOException ex) {
-                System.err.println(ex.getMessage());
-
-                return false;
-            }
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-
-            return false;
-        }
-    }
-
-        public static boolean writeXml(String filename, InteractivePagerBackup Db, int[] selectedMessages) {
-        try {
-            int last=filename.lastIndexOf('.');
-
-            filename=filename.substring(0, last);
-            filename=filename+".xml";
-            System.out.println("\n->Writing "+filename);
-
-            try {
-                SmsMessageToXML.saveXML(filename, SmsMessageToXML.createSmsMessageToXML(Db,selectedMessages));
-
-                return true;    // the write was succesfull
-            } catch (IOException ex) {
-                System.err.println(ex.getMessage());
-
-                return false;
-            }
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-
-            return false;
-        }
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @param filename
-     * @param stringToWrite
-     *
-     * @return
-     */
-    public static boolean writeCsv(String filename, String stringToWrite) {
-        try {
-            int last=filename.lastIndexOf('.');
-
-            filename=filename.substring(0, last);
-            filename=filename+".csv";
-            System.out.println("\n->Writing "+filename);
-
-            try {
-                writeBytesToFile.writeBytes2File(filename, stringToWrite);
-
-                return true;    // the write was succesfull
-            } catch (IOException ex) {
-                System.err.println(ex.getMessage());
-
-                return false;
-            }
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-
-            return false;
-        }
     }
 }

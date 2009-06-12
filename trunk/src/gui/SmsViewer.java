@@ -8,7 +8,6 @@
  *
  * Created on 11 Ιουν 2009, 9:29:00 μμ
  */
-
 package gui;
 
 /**
@@ -17,9 +16,29 @@ package gui;
  */
 public class SmsViewer extends javax.swing.JFrame {
 
+    private String strXml;
+    private String strTxt;
+    private String strCsv;
+
     /** Creates new form SmsViewer */
     public SmsViewer() {
         initComponents();
+    }
+
+    public void setXml(String strXml) {
+        this.strXml = strXml;
+        TextArea.setText(strXml);
+    }
+
+    public void setTxt(String strTxt) {
+        this.strTxt = strTxt;
+        TextArea.setText(strTxt);
+
+    }
+
+    public void setCvs(String strCsv) {
+        this.strCsv = strCsv;
+        TextArea.setText(strCsv);
     }
 
     /** This method is called from within the constructor to
@@ -56,21 +75,19 @@ public class SmsViewer extends javax.swing.JFrame {
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         setBounds((screenSize.width-585)/2, (screenSize.height-410)/2, 585, 410);
     }// </editor-fold>//GEN-END:initComponents
-
     /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SmsViewer().setVisible(true);
-            }
-        });
-    }
+     * @param args the command line arguments
+     */
+//    public static void main(String args[]) {
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new SmsViewer().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTextArea TextArea;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-
 }
