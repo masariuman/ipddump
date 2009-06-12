@@ -3,23 +3,89 @@
  * and open the template in the editor.
  */
 
+
+
 package org.quaternions.ipddump.writers;
 
-import gui.SmsMessageToXML;
-import java.io.IOException;
-import java.io.StringWriter;
-import org.quaternions.ipddump.data.InteractivePagerBackup;
-import org.quaternions.ipddump.data.SMSMessage;
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+
+import org.quaternions.ipddump.data.InteractivePagerBackup;
+import org.quaternions.ipddump.data.SMSMessage;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+import java.io.StringWriter;
+
 /**
  *
  * @author Jimmys Daskalakis
  */
 public class SmsWriters {
-FileWriters filewriter = new FileWriters();
-        public String SMStoPlainText(InteractivePagerBackup db) {
+    FileWriters filewriter=new FileWriters();
+
+    //~--- methods ------------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @param db
+     *
+     * @return
+     */
+    public String SMStoPlainText(InteractivePagerBackup database, int[] SMSselectedRows) {
+        String tmp="";
+
+        if (database!=null) {
+            int smsRecord=0;
+            int j        =0;
+
+            for (SMSMessage record : database.smsRecords()) {
+                if ((smsRecord==SMSselectedRows[j]) && (SMSselectedRows[j]<database.smsRecords().size())) {
+                    String number  =record.getNumber();
+                    String text    =record.getText();
+                    String sent    =record.getSent().toString();
+                    String recieved=record.getReceived().toString();
+
+                    if (!record.wasSent()) {
+                        tmp=tmp+"From: "+number+"\nTo: My Phone\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                            +"\n\n";
+                    } else {
+                        tmp=tmp+"From: My Phone\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                            +"\n\n";
+                    }
+
+                    j++;
+
+                    if (j>=SMSselectedRows.length) {
+                        break;
+                    }
+                }
+
+                smsRecord++;
+            }
+
+            return tmp;
+        }
+
+        return tmp;
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param database
+     * @param SMSselectedRows
+     *
+     * @return
+     */
+    public String SMStoPlainText(InteractivePagerBackup db) {
         String tmp="";
 
         if (db!=null) {
@@ -43,7 +109,16 @@ FileWriters filewriter = new FileWriters();
 
         return tmp;
     }
-public Document SMSToXML(InteractivePagerBackup database) {
+
+    /**
+     * Method description
+     *
+     *
+     * @param database
+     *
+     * @return
+     */
+    public Document SMSToXML(InteractivePagerBackup database) {
         String sSent="";
 
         // System.out.println("uid,sent,received,sent?,far number,text");
@@ -98,9 +173,9 @@ public Document SMSToXML(InteractivePagerBackup database) {
             writer.close();
             document=DocumentHelper.parseText(str.toString());
         } catch (IOException ex) {
-           System.out.println(ex.getMessage());
+            System.out.println(ex.getMessage());
         } catch (DocumentException ex) {
-           System.out.println(ex.getMessage());
+            System.out.println(ex.getMessage());
         }
 
         // System.out.println(document.getDocument().getText());
@@ -133,8 +208,8 @@ public Document SMSToXML(InteractivePagerBackup database) {
         int j        =0;
 
         for (SMSMessage record : database.smsRecords()) {
-//            System.out.println(smsRecord+" "+j+" "+selectedMessages[j]);
 
+//          System.out.println(smsRecord+" "+j+" "+selectedMessages[j]);
             if ((smsRecord==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
                 if (record.wasSent()) {
                     sSent="true";
@@ -198,16 +273,60 @@ public Document SMSToXML(InteractivePagerBackup database) {
         // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
     }
 
-    public String SMStoCVS(InteractivePagerBackup database){
-        StringBuilder         temp      =new StringBuilder();    // fast builder!!
+    /**
+     * Method description
+     *
+     *
+     * @param database
+     *
+     * @return
+     */
+    public String SMStoCVS(InteractivePagerBackup database) {
+        StringBuilder temp=new StringBuilder();    // fast builder!!
+
         temp.delete(0, temp.capacity());
         temp.append("uid,sent,received,sent?,far number,text\n");
 
         for (SMSMessage record : database.smsRecords()) {
             temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
                         +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
-    }
-        return temp.toString();
-}
+        }
 
+        return temp.toString();
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param database
+     * @param selectedMessages
+     *
+     * @return
+     */
+    public String SMStoCVS(InteractivePagerBackup database, int[] selectedMessages) {
+        StringBuilder temp=new StringBuilder();    // fast builder!!
+
+        temp.delete(0, temp.capacity());
+        temp.append("uid,sent,received,sent?,far number,text\n");
+
+        int smsRecord=0;
+        int j        =0;
+
+        for (SMSMessage record : database.smsRecords()) {
+            if ((smsRecord==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
+                temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
+                            +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
+                j++;
+
+                if (j>=selectedMessages.length) {
+                    break;
+                }
+            }
+
+            smsRecord++;
+        }
+
+        return temp.toString();
+    }
 }

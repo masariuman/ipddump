@@ -3,8 +3,6 @@ package org.quaternions.ipddump;
 //~--- non-JDK imports --------------------------------------------------------
 
 import gui.IpdDump_NewGUI;
-import gui.SmsMessageToXML;
-
 import org.quaternions.ipddump.data.InteractivePagerBackup;
 import org.quaternions.ipddump.data.SMSMessage;
 import org.quaternions.ipddump.writers.FileWriters;

@@ -21,6 +21,7 @@ import javax.swing.table.TableModel;
 import org.quaternions.ipddump.*;
 import org.quaternions.ipddump.data.*;
 import org.quaternions.ipddump.writers.FileWriters;
+import org.quaternions.ipddump.writers.SmsWriters;
 
 /**
  *
@@ -40,7 +41,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private String welcome = "Welcome to IpdDump - http://code.google.com/p/ipddump/";
     private Object[][] smsObj;
     private String ClipBoardTemp;
-    SmsViewer smsViewer;
+    private DataViewer viewer;
     final private int SMSWasSentIndex = 0;
     final private int SMSNumberIndex = 1;
     final private int SMSTextIndex = 2;
@@ -50,6 +51,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private String ext;
     private String fToSave;
     private FileWriters fileWriter = new FileWriters();
+    private SmsWriters smsWriter = new SmsWriters();
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -68,6 +70,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jMenuItemTxt = new javax.swing.JMenuItem();
         jMenuItemXML = new javax.swing.JMenuItem();
         jMenuItemCSV = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItemCPTXT = new javax.swing.JMenuItem();
+        jMenuItemCPXML = new javax.swing.JMenuItem();
+        jMenuItemCPCSV = new javax.swing.JMenuItem();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelSMS = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -106,7 +112,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
-        jMenuItemTxt.setText("View Plain in PlainText");
+        jMenuItemTxt.setText("View in PlainText");
         jMenuItemTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemTxtActionPerformed(evt);
@@ -114,7 +120,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         });
         jPopupMenuSMS.add(jMenuItemTxt);
 
-        jMenuItemXML.setText("View Plain in Xml");
+        jMenuItemXML.setText("View in Xml");
         jMenuItemXML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemXMLActionPerformed(evt);
@@ -122,13 +128,41 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         });
         jPopupMenuSMS.add(jMenuItemXML);
 
-        jMenuItemCSV.setText("View Plain in Csv");
+        jMenuItemCSV.setText("View in Csv");
         jMenuItemCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemCSVActionPerformed(evt);
             }
         });
         jPopupMenuSMS.add(jMenuItemCSV);
+
+        jMenu1.setText("Copy in-->");
+
+        jMenuItemCPTXT.setText("Plain Text");
+        jMenuItemCPTXT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCPTXTActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemCPTXT);
+
+        jMenuItemCPXML.setText("XML");
+        jMenuItemCPXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCPXMLActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemCPXML);
+
+        jMenuItemCPCSV.setText("CSV");
+        jMenuItemCPCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCPCSVActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItemCPCSV);
+
+        jPopupMenuSMS.add(jMenu1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IpdDump");
@@ -286,7 +320,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         });
         fileMenu.add(openMenuItem);
 
-        saveAsMenuItem.setText("Save As ...");
+        saveAsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        saveAsMenuItem.setText("Save Selected As ...");
         saveAsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveAsMenuItemActionPerformed(evt);
@@ -362,7 +397,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     public IpdDump_NewGUI() {
         initComponents();
-        smsViewer = new SmsViewer();
+        viewer = new DataViewer();
         IpdChooser.setAcceptAllFileFilterUsed(false);
         IpdChooser.setFileHidingEnabled(false);
         IpdChooser.addChoosableFileFilter(
@@ -456,26 +491,27 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             i++;//Go to next Line in the table
         }
     }
-private void ShowSMSPopup(MouseEvent e) {
-            jPopupMenuSMS.show(e.getComponent(),
-                       e.getX(), e.getY());
-}
+
+    private void ShowSMSPopup(MouseEvent e) {
+        jPopupMenuSMS.show(e.getComponent(),
+                e.getX(), e.getY());
+    }
 
     private void jTableSMSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableSMSMouseClicked
         int[] SMSselectedRows = jTableSMS.getSelectedRows();
-        if (evt.getButton() == MouseEvent.BUTTON3 && SMSselectedRows.length>0) {
+        if (evt.getButton() == MouseEvent.BUTTON3 && SMSselectedRows.length > 0) {
             System.out.println("right click");
-           // String tmpCvs =
+            // String tmpCvs =
             ShowSMSPopup(evt);
 
-        }else{
-            if (evt.getButton() == MouseEvent.BUTTON3 && SMSselectedRows.length==0){
+        } else {
+            if (evt.getButton() == MouseEvent.BUTTON3 && SMSselectedRows.length == 0) {
                 JOptionPane.showMessageDialog(jFrame1, "Select the Messages you want to View");
             }
         }
         if (evt.getClickCount() == 2) {
             System.out.println("double click");
-            //SMStoPlainText(SMSselectedRows);
+        //SMStoPlainText(SMSselectedRows);
         }
 //jFrame1.setVisible(true);
 }//GEN-LAST:event_jTableSMSMouseClicked
@@ -492,7 +528,7 @@ private void ShowSMSPopup(MouseEvent e) {
                 } else if (ext.equalsIgnoreCase("cvs")) {
                     fileWriter.writeTxttoFile(fToSave, Main.getSMStoString());
                 } else if (ext.equalsIgnoreCase("xml")) {
-                    fileWriter.writeXMLtoFile(fToSave, SmsMessageToXML.createSmsMessageToXML(database, SMSselectedRows));
+                    fileWriter.writeXMLtoFile(fToSave, smsWriter.SMSToXML(database, SMSselectedRows));
                 }
             }
         } else {
@@ -518,24 +554,45 @@ private void ShowSMSPopup(MouseEvent e) {
 
     private void jMenuItemXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemXMLActionPerformed
         int[] SMSselectedRows = jTableSMS.getSelectedRows();
-         String tmpXml = SmsMessageToXML.createSmsMessageToXML(database, SMSselectedRows).asXML();
-                smsViewer.setXml(tmpXml);
-                smsViewer.setVisible(true);
+        String tmpXml = smsWriter.SMSToXML(database, SMSselectedRows).asXML();
+        viewer.setXml(tmpXml);
+        viewer.setTitle("SMS Viewer - XML");
+        viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemXMLActionPerformed
 
     private void jMenuItemTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTxtActionPerformed
         int[] SMSselectedRows = jTableSMS.getSelectedRows();
-        String tmp = SMStoPlainText(SMSselectedRows);
-                smsViewer.setTxt(tmp);
-                smsViewer.setVisible(true);
+        String tmp = smsWriter.SMStoPlainText(database, SMSselectedRows);
+        viewer.setTxt(tmp);
+        viewer.setTitle("SMS Viewer - Plain Text");
+        viewer.setVisible(true);
     }//GEN-LAST:event_jMenuItemTxtActionPerformed
 
     private void jMenuItemCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCSVActionPerformed
-    int[] SMSselectedRows = jTableSMS.getSelectedRows();
-        String tmp = SMStoPlainText(SMSselectedRows);
-                smsViewer.setTxt(tmp);
-                smsViewer.setVisible(true);
+        int[] SMSselectedRows = jTableSMS.getSelectedRows();
+        String tmp = smsWriter.SMStoCVS(database, SMSselectedRows);
+        viewer.setTxt(tmp);
+        viewer.setTitle("SMS Viewer - C");
+        viewer.setVisible(true);
     }//GEN-LAST:event_jMenuItemCSVActionPerformed
+
+    private void jMenuItemCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPTXTActionPerformed
+        int[] SMSselectedRows = jTableSMS.getSelectedRows();
+        String tmp = smsWriter.SMStoPlainText(database, SMSselectedRows);
+        setClipboardContents(tmp);
+    }//GEN-LAST:event_jMenuItemCPTXTActionPerformed
+
+    private void jMenuItemCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPXMLActionPerformed
+        int[] SMSselectedRows = jTableSMS.getSelectedRows();
+        String tmp = smsWriter.SMSToXML(database, SMSselectedRows).asXML();
+        setClipboardContents(tmp);
+    }//GEN-LAST:event_jMenuItemCPXMLActionPerformed
+
+    private void jMenuItemCPCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPCSVActionPerformed
+        int[] SMSselectedRows = jTableSMS.getSelectedRows();
+        String tmp = smsWriter.SMStoCVS(database, SMSselectedRows);
+        setClipboardContents(tmp);
+    }//GEN-LAST:event_jMenuItemCPCSVActionPerformed
 
     /**
      * @param args the command line arguments
@@ -628,6 +685,10 @@ private void ShowSMSPopup(MouseEvent e) {
     private javax.swing.JMenu helpMenu;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JFrame jFrame1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItemCPCSV;
+    private javax.swing.JMenuItem jMenuItemCPTXT;
+    private javax.swing.JMenuItem jMenuItemCPXML;
     private javax.swing.JMenuItem jMenuItemCSV;
     private javax.swing.JMenuItem jMenuItemTxt;
     private javax.swing.JMenuItem jMenuItemXML;
