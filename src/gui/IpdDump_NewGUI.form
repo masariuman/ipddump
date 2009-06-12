@@ -29,7 +29,7 @@
       <SubComponents>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItemTxt">
           <Properties>
-            <Property name="text" type="java.lang.String" value="View Plain in PlainText"/>
+            <Property name="text" type="java.lang.String" value="View in PlainText"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemTxtActionPerformed"/>
@@ -37,7 +37,7 @@
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItemXML">
           <Properties>
-            <Property name="text" type="java.lang.String" value="View Plain in Xml"/>
+            <Property name="text" type="java.lang.String" value="View in Xml"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemXMLActionPerformed"/>
@@ -45,12 +45,43 @@
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCSV">
           <Properties>
-            <Property name="text" type="java.lang.String" value="View Plain in Csv"/>
+            <Property name="text" type="java.lang.String" value="View in Csv"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCSVActionPerformed"/>
           </Events>
         </MenuItem>
+        <Menu class="javax.swing.JMenu" name="jMenu1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Copy in--&gt;"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCPTXT">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Plain Text"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCPTXTActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCPXML">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="XML"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCPXMLActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCPCSV">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="CSV"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCPCSVActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
       </SubComponents>
     </Container>
     <Menu class="javax.swing.JMenuBar" name="menuBar">
@@ -73,7 +104,10 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="saveAsMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Save As ..."/>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+S"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Save Selected As ..."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveAsMenuItemActionPerformed"/>

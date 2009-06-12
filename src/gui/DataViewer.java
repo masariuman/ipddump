@@ -4,7 +4,7 @@
  */
 
 /*
- * SmsViewer.java
+ * DataViewer.java
  *
  * Created on 11 Ιουν 2009, 9:29:00 μμ
  */
@@ -14,14 +14,14 @@ package gui;
  *
  * @author Jimmys Daskalakis
  */
-public class SmsViewer extends javax.swing.JFrame {
+public class DataViewer extends javax.swing.JFrame {
 
     private String strXml;
     private String strTxt;
     private String strCsv;
 
-    /** Creates new form SmsViewer */
-    public SmsViewer() {
+    /** Creates new form DataViewer */
+    public DataViewer() {
         initComponents();
     }
 
@@ -57,7 +57,7 @@ public class SmsViewer extends javax.swing.JFrame {
 
         TextArea.setColumns(20);
         TextArea.setEditable(false);
-        TextArea.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        TextArea.setFont(new java.awt.Font("Monospaced", 0, 12));
         TextArea.setRows(5);
         jScrollPane1.setViewportView(TextArea);
 
@@ -81,7 +81,7 @@ public class SmsViewer extends javax.swing.JFrame {
 //    public static void main(String args[]) {
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                new SmsViewer().setVisible(true);
+//                new DataViewer().setVisible(true);
 //            }
 //        });
 //    }
