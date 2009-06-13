@@ -34,7 +34,8 @@ public class SmsWriters {
      * Method description
      *
      *
-     * @param db
+     * @param database
+     * @param SMSselectedRows
      *
      * @return
      */
@@ -274,10 +275,8 @@ public class SmsWriters {
     }
 
     /**
-     * Method description
+     * Get the cvs of the parsed SMS's
      *
-     *
-     * @param database
      *
      * @return
      */
@@ -296,11 +295,8 @@ public class SmsWriters {
     }
 
     /**
-     * Method description
+     * Get the cvs of the parsed SMS's
      *
-     *
-     * @param database
-     * @param selectedMessages
      *
      * @return
      */
@@ -328,5 +324,21 @@ public class SmsWriters {
         }
 
         return temp.toString();
+    }
+
+    //~--- get methods --------------------------------------------------------
+
+    /**
+     * Returns the total of the SMS messages
+     *
+     *
+     * @return
+     */
+    public static int getNumberOfSMS(InteractivePagerBackup database) {
+        if (database!=null) {
+            return database.smsRecords().size();
+        } else {
+            return -1;
+        }
     }
 }

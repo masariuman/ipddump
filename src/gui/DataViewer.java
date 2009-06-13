@@ -53,7 +53,7 @@ public class DataViewer extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TextArea = new javax.swing.JTextArea();
 
-        setTitle("SMS Viewer");
+        setTitle("Viewer");
 
         TextArea.setColumns(20);
         TextArea.setEditable(false);

@@ -3,6 +3,7 @@ package org.quaternions.ipddump;
 //~--- non-JDK imports --------------------------------------------------------
 
 import gui.IpdDump_NewGUI;
+
 import org.quaternions.ipddump.data.InteractivePagerBackup;
 import org.quaternions.ipddump.data.SMSMessage;
 import org.quaternions.ipddump.writers.FileWriters;
@@ -61,7 +62,7 @@ public class Main {
 
                         continue;
                     } else if (args[i].trim().equalsIgnoreCase("-csv")) {
-                        if (!FileWriter.writeCsvtoFile(args[0].trim(), getSMStoString())) {
+                        if (!FileWriter.writeCsvtoFile(args[0].trim(), smsWriter.SMStoCVS(db))) {
                             System.err.println("Failed to write the .csv");
                         }
 
@@ -86,46 +87,19 @@ public class Main {
     }
 
     /**
-     * Method description
+     * This method will print cvs data directly to the System.out
+     * for the command line usage of the project
      *
      *
      * @param database: The database to dump
      * @param fileName
      */
     public static void dump(InteractivePagerBackup database, String fileName) {
-        System.out.println(getSMStoString());
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Get the cvs of the parsed SMS's
-     *
-     *
-     * @return
-     */
-    public static String getSMStoString() {
-        return smsWriter.SMStoCVS(db);
+        System.out.println(smsWriter.SMStoCVS(db));
     }
 
     /**
-     * Returns the total of the SMS messages
-     *
-     *
-     * @return
-     */
-    public static int getNumberOfSMS() {
-        if (db!=null) {
-            return db.smsRecords().size();
-        } else {
-            return -1;
-        }
-    }
-
-    //~--- methods ------------------------------------------------------------
-
-    /**
-     * Method description
+     * If needed it displays help about how to use the console
      *
      */
     private static void GiveHelp() {
