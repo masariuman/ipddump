@@ -5,14 +5,11 @@ package org.quaternions.ipddump;
 import gui.IpdDump_NewGUI;
 
 import org.quaternions.ipddump.data.InteractivePagerBackup;
-import org.quaternions.ipddump.data.SMSMessage;
 import org.quaternions.ipddump.writers.FileWriters;
 import org.quaternions.ipddump.writers.SmsWriters;
-import org.quaternions.ipddump.writers.writeBytesToFile;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
@@ -81,7 +78,6 @@ public class Main {
         } else {
             System.out.println("  GUI enviroment will now pop up!");
 
-            // new IpdDump_WithGUI().setVisible(true);
             new IpdDump_NewGUI().setVisible(true);
         }
     }
@@ -108,7 +104,7 @@ public class Main {
         System.out.println("  Dumps a csv to stdout.");
         System.out.println("Usage: java -jar ipdDump.jar <path to ipd> -Args");
         System.out.println("  -txt: Dumps simple readable text to a <ipdName>.txt");
-        System.out.println("  -doc: Dumps a csv to a <ipdName>.doc");
+        //System.out.println("  -doc: Dumps a csv to a <ipdName>.doc");
         System.out.println("  -xml: Dumps xml to a <ipdName>.xml");
         System.out.println("  -csv: Dumps csv to a <ipdName>.csv");
         System.out.println("Usage: java -jar ipdDump.jar ");

@@ -9,12 +9,11 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
-
 /**
  *
  * @author Jimmys Daskalakis
  */
-public class writeBytesToFile {
+public class writeStringToFile {
 
     /**
      * Method description
@@ -26,7 +25,7 @@ public class writeBytesToFile {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static void writeBytes2File(String pathfile, String content) throws IOException {
+    public static void writeStringToFile(String pathfile, String content) throws IOException {
         BufferedWriter fos;
         String         strFilePath=pathfile;
         String         strContent =content;
@@ -44,11 +43,9 @@ public class writeBytesToFile {
             }
 
 //          FileOutputStream fos = new FileOutputStream(strFilePath);
-
             fos.write(strContent);
 
 //          fos.write(strContent.getBytes());
-
             fos.close();
         } catch (FileNotFoundException ex) {
             System.out.println("FileNotFoundException : "+ex);
