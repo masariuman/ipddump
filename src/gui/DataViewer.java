@@ -27,17 +27,20 @@ public class DataViewer extends javax.swing.JFrame {
 
     public void setXml(String strXml) {
         this.strXml = strXml;
+        TextArea.setLineWrap(true);
         TextArea.setText(strXml);
     }
 
     public void setTxt(String strTxt) {
         this.strTxt = strTxt;
+        TextArea.setLineWrap(true);
         TextArea.setText(strTxt);
 
     }
 
     public void setCvs(String strCsv) {
         this.strCsv = strCsv;
+        TextArea.setLineWrap(false);
         TextArea.setText(strCsv);
     }
 
@@ -57,7 +60,8 @@ public class DataViewer extends javax.swing.JFrame {
 
         TextArea.setColumns(20);
         TextArea.setEditable(false);
-        TextArea.setFont(new java.awt.Font("Monospaced", 0, 12));
+        TextArea.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        TextArea.setLineWrap(true);
         TextArea.setRows(5);
         jScrollPane1.setViewportView(TextArea);
 
