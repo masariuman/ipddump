@@ -31,88 +31,7 @@ public class SmsWriters {
     //~--- methods ------------------------------------------------------------
 
     /**
-     * Method description
-     *
-     *
-     * @param database
-     * @param SMSselectedRows
-     *
-     * @return
-     */
-    public String SMStoPlainText(InteractivePagerBackup database, int[] SMSselectedRows) {
-        String tmp="";
-
-        if (database!=null) {
-            int smsRecord=0;
-            int j        =0;
-
-            for (SMSMessage record : database.smsRecords()) {
-                if ((smsRecord==SMSselectedRows[j]) && (SMSselectedRows[j]<database.smsRecords().size())) {
-                    String number  =record.getNumber();
-                    String text    =record.getText();
-                    String sent    =record.getSent().toString();
-                    String recieved=record.getReceived().toString();
-
-                    if (!record.wasSent()) {
-                        tmp=tmp+"From: "+number+"\nTo: My Phone\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                            +"\n\n";
-                    } else {
-                        tmp=tmp+"From: My Phone\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                            +"\n\n";
-                    }
-
-                    j++;
-
-                    if (j>=SMSselectedRows.length) {
-                        break;
-                    }
-                }
-
-                smsRecord++;
-            }
-
-            return tmp;
-        }
-
-        return tmp;
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @param database
-     * @param SMSselectedRows
-     *
-     * @return
-     */
-    public String SMStoPlainText(InteractivePagerBackup db) {
-        String tmp="";
-
-        if (db!=null) {
-            for (SMSMessage record : db.smsRecords()) {
-                String number  =record.getNumber();
-                String text    =record.getText();
-                String sent    =record.getSent().toString();
-                String recieved=record.getReceived().toString();
-
-                if (!record.wasSent()) {
-                    tmp=tmp+"From: "+number+"\nTo: My Phone\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                        +"\n\n";
-                } else {
-                    tmp=tmp+"From: My Phone\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                        +"\n\n";
-                }
-            }
-
-            return tmp;
-        }
-
-        return tmp;
-    }
-
-    /**
-     * Method description
+     * Get the XML of the parsed SMS's
      *
      *
      * @param database
@@ -186,8 +105,7 @@ public class SmsWriters {
     }
 
     /**
-     * Method description
-     *
+     * Get the XML of the parsed SMS's
      *
      * @param database
      * @param selectedMessages
@@ -324,6 +242,88 @@ public class SmsWriters {
         }
 
         return temp.toString();
+    }
+
+    /**
+     * Get a represantation of the parsed SMS's
+     * in plain text
+     *
+     * @param database
+     * @param SMSselectedRows
+     *
+     * @return
+     */
+    public String SMStoPlainText(InteractivePagerBackup db) {
+        String tmp="";
+
+        if (db!=null) {
+            for (SMSMessage record : db.smsRecords()) {
+                String number  =record.getNumber();
+                String text    =record.getText();
+                String sent    =record.getSent().toString();
+                String recieved=record.getReceived().toString();
+
+                if (!record.wasSent()) {
+                    tmp=tmp+"From: "+number+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                        +"\n\n";
+                } else {
+                    tmp=tmp+"From: My Phone"+"\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                        +"\n\n";
+                }
+            }
+
+            return tmp;
+        }
+
+        return tmp;
+    }
+
+    /**
+     * Get a represantation of the parsed SMS's
+     * in plain text
+     *
+     *
+     * @param database
+     * @param SMSselectedRows
+     *
+     * @return
+     */
+    public String SMStoPlainText(InteractivePagerBackup database, int[] SMSselectedRows) {
+        String tmp="";
+
+        if (database!=null) {
+            int smsRecord=0;
+            int j        =0;
+
+            for (SMSMessage record : database.smsRecords()) {
+                if ((smsRecord==SMSselectedRows[j]) && (SMSselectedRows[j]<database.smsRecords().size())) {
+                    String number  =record.getNumber();
+                    String text    =record.getText();
+                    String sent    =record.getSent().toString();
+                    String recieved=record.getReceived().toString();
+
+                    if (!record.wasSent()) {
+                        tmp=tmp+"From: "+number+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
+                            +text+"\n\n";
+                    } else {
+                        tmp=tmp+"From: My Phone"+"\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
+                            +text+"\n\n";
+                    }
+
+                    j++;
+
+                    if (j>=SMSselectedRows.length) {
+                        break;
+                    }
+                }
+
+                smsRecord++;
+            }
+
+            return tmp;
+        }
+
+        return tmp;
     }
 
     //~--- get methods --------------------------------------------------------

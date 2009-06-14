@@ -121,7 +121,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         status_label2 = new javax.swing.JLabel();
         jPanelTasks = new javax.swing.JPanel();
         status_label4 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelOptions = new javax.swing.JPanel();
         status_label3 = new javax.swing.JLabel();
         status_label = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
@@ -532,24 +532,24 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         status_label3.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label3.setText("Left Intentionally Blank");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelOptionsLayout = new javax.swing.GroupLayout(jPanelOptions);
+        jPanelOptions.setLayout(jPanelOptionsLayout);
+        jPanelOptionsLayout.setHorizontalGroup(
+            jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelOptionsLayout.createSequentialGroup()
                 .addGap(219, 219, 219)
                 .addComponent(status_label3, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
                 .addGap(202, 202, 202))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        jPanelOptionsLayout.setVerticalGroup(
+            jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelOptionsLayout.createSequentialGroup()
                 .addGap(191, 191, 191)
                 .addComponent(status_label3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(180, 180, 180))
         );
 
-        jTabbedPane1.addTab("Options", jPanel1);
+        jTabbedPane1.addTab("Options", jPanelOptions);
 
         status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
         status_label.setText("Welcome to IpdDump - http://code.google.com/p/ipddump/");
@@ -774,8 +774,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         }
         if (evt.getClickCount() == 2) {
-            System.out.println("double click");
-        //SMStoPlainText(SMSselectedRows);
+         //System.out.println("double click");
         }
 //jFrame1.setVisible(true);
 }//GEN-LAST:event_jTableSMSMouseClicked
@@ -1059,9 +1058,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuOptions;
     private javax.swing.JMenu jMenuSMS;
     private javax.swing.JMenu jMenuTasks;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelCalendar;
     private javax.swing.JPanel jPanelContacts;
+    private javax.swing.JPanel jPanelOptions;
     private javax.swing.JPanel jPanelSMS;
     private javax.swing.JPanel jPanelTasks;
     private javax.swing.JPopupMenu jPopupMenuCalendar;
