@@ -334,7 +334,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public static int getNumberOfSMS(InteractivePagerBackup database) {
+    public int getNumberOfSMS(InteractivePagerBackup database) {
         if (database!=null) {
             return database.smsRecords().size();
         } else {
