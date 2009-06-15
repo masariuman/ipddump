@@ -74,7 +74,7 @@ public class FileWriters {
      *
      * @return
      */
-    public boolean writeTxttoFile(String filename, String stringToWrite) {
+    public boolean writeTxtToFile(String filename, String stringToWrite) {
         try {
             int last=filename.lastIndexOf('.');
 

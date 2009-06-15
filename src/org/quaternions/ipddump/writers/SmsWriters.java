@@ -198,7 +198,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public String SMStoCVS(InteractivePagerBackup database) {
+    public String SMSToCVS(InteractivePagerBackup database) {
         StringBuilder temp=new StringBuilder();    // fast builder!!
 
         temp.delete(0, temp.capacity());
@@ -218,7 +218,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public String SMStoCVS(InteractivePagerBackup database, int[] selectedMessages) {
+    public String SMSToCVS(InteractivePagerBackup database, int[] selectedMessages) {
         StringBuilder temp=new StringBuilder();    // fast builder!!
 
         temp.delete(0, temp.capacity());
@@ -253,7 +253,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public String SMStoPlainText(InteractivePagerBackup db) {
+    public String SMSToPlainText(InteractivePagerBackup db) {
         String tmp="";
 
         if (db!=null) {
@@ -288,7 +288,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public String SMStoPlainText(InteractivePagerBackup database, int[] SMSselectedRows) {
+    public String SMSToPlainText(InteractivePagerBackup database, int[] SMSselectedRows) {
         String tmp="";
 
         if (database!=null) {
