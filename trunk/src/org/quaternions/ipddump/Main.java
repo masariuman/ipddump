@@ -43,7 +43,7 @@ public class Main {
             for (int i=1; i<args.length; i++) {
                 if (args[i].trim().startsWith("-")) {
                     if (args[i].trim().equalsIgnoreCase("-txt")) {
-                        if (!FileWriter.writeTxttoFile(args[0].trim(), smsWriter.SMStoPlainText(db))) {
+                        if (!FileWriter.writeTxtToFile(args[0].trim(), smsWriter.SMSToPlainText(db))) {
                             System.err.println("Failed to write the plain txt");
                         }
 
@@ -59,7 +59,7 @@ public class Main {
 
                         continue;
                     } else if (args[i].trim().equalsIgnoreCase("-csv")) {
-                        if (!FileWriter.writeCsvtoFile(args[0].trim(), smsWriter.SMStoCVS(db))) {
+                        if (!FileWriter.writeCsvtoFile(args[0].trim(), smsWriter.SMSToCVS(db))) {
                             System.err.println("Failed to write the .csv");
                         }
 
@@ -91,7 +91,7 @@ public class Main {
      * @param fileName
      */
     public static void dump(InteractivePagerBackup database, String fileName) {
-        System.out.println(smsWriter.SMStoCVS(db));
+        System.out.println(smsWriter.SMSToCVS(db));
     }
 
     /**
