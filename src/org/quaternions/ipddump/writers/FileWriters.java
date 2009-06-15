@@ -13,18 +13,15 @@ import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
-import org.quaternions.ipddump.data.InteractivePagerBackup;
-import org.quaternions.ipddump.data.SMSMessage;
-import org.quaternions.ipddump.writers.writeStringToFile;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -49,17 +46,54 @@ public class FileWriters {
             filename=filename+".csv";
             System.out.println("\n->Writing "+filename);
 
-            try {
-                writeStringToFile.writeStringToFile(filename, stringToWrite);
-
-                return true;    // the write was succesfull
-            } catch (IOException ex) {
-                System.err.println(ex.getMessage());
-
-                return false;
-            }
+            return writeStringToFile(filename, stringToWrite);
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param pathfile
+     * @param content
+     *
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    private static boolean writeStringToFile(String pathfile, String content) {
+        BufferedWriter fos;
+        String         strFilePath=pathfile;
+        String         strContent =content;
+
+        try {
+
+//          System.out.println(strFilePath);
+            File out=new File(strFilePath);
+
+            if (!out.exists()) {
+                out.createNewFile();
+                fos=new BufferedWriter(new FileWriter(out));
+            } else {
+                fos=new BufferedWriter(new FileWriter(out));
+            }
+
+//          FileOutputStream fos = new FileOutputStream(strFilePath);
+            fos.write(strContent);
+
+//          fos.write(strContent.getBytes());
+            fos.close();
+
+            return true;
+        } catch (FileNotFoundException ex) {
+            System.out.println("FileNotFoundException : "+ex);
+
+            return false;
+        } catch (IOException ioe) {
+            System.out.println("IOException : "+ioe);
 
             return false;
         }
@@ -82,15 +116,7 @@ public class FileWriters {
             filename=filename+".txt";
             System.out.println("\n->Writing "+filename);
 
-            try {
-                writeStringToFile.writeStringToFile(filename, stringToWrite);
-
-                return true;    // the write was succesfull
-            } catch (IOException ex) {
-                System.err.println(ex.getMessage());
-
-                return false;
-            }
+            return writeStringToFile(filename, stringToWrite);
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
 
