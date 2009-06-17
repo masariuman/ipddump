@@ -13,7 +13,7 @@ import org.quaternions.ipddump.writers.SmsWriters;
 import java.io.IOException;
 
 public class Main {
-    private static SmsWriters            smsWriter =new SmsWriters();
+    private static SmsWriters            smsWriter;
     private static FileWriters           FileWriter=new FileWriters();
     public static InteractivePagerBackup db;
 
@@ -35,6 +35,7 @@ public class Main {
         if ((args.length>0) && args[0].endsWith(".ipd")) {
             try {
                 db=new IPDParser(args[0]).parse();
+                 smsWriter=new SmsWriters(db);
                 dump(db, null);
             } catch (IOException ex) {
                 System.err.println(ex.getMessage());
@@ -43,7 +44,7 @@ public class Main {
             for (int i=1; i<args.length; i++) {
                 if (args[i].trim().startsWith("-")) {
                     if (args[i].trim().equalsIgnoreCase("-txt")) {
-                        if (!FileWriter.writeTxtToFile(args[0].trim(), smsWriter.SMSToPlainText(db))) {
+                        if (!FileWriter.writeTxtToFile(args[0].trim(), smsWriter.SMSToPlainText())) {
                             System.err.println("Failed to write the plain txt");
                         }
 
@@ -53,13 +54,13 @@ public class Main {
 
                         continue;
                     } else if (args[i].trim().equalsIgnoreCase("-xml")) {
-                        if (!FileWriter.writeXMLtoFile(args[0], smsWriter.SMSToXML(db))) {
+                        if (!FileWriter.writeXMLtoFile(args[0], smsWriter.SMSToXML())) {
                             System.err.println("Failed to write the .xml");
                         }
 
                         continue;
                     } else if (args[i].trim().equalsIgnoreCase("-csv")) {
-                        if (!FileWriter.writeCsvtoFile(args[0].trim(), smsWriter.SMSToCVS(db))) {
+                        if (!FileWriter.writeCsvtoFile(args[0].trim(), smsWriter.SMSToCVS())) {
                             System.err.println("Failed to write the .csv");
                         }
 
@@ -91,7 +92,7 @@ public class Main {
      * @param fileName
      */
     public static void dump(InteractivePagerBackup database, String fileName) {
-        System.out.println(smsWriter.SMSToCVS(db));
+        System.out.println(smsWriter.SMSToCVS());
     }
 
     /**
