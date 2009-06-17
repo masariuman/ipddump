@@ -26,9 +26,150 @@ import java.io.StringWriter;
  * @author Jimmys Daskalakis
  */
 public class SmsWriters {
-    FileWriters filewriter=new FileWriters();
+    FileWriters            filewriter=new FileWriters();
+    InteractivePagerBackup database;
+
+    //~--- constructors -------------------------------------------------------
+
+    public SmsWriters(InteractivePagerBackup database) {
+        this.database=database;
+    }
 
     //~--- methods ------------------------------------------------------------
+
+    /**
+     * Get the cvs of the parsed SMS's
+     *
+     *
+     * @return
+     */
+    public String SMSToCVS() {
+        StringBuilder temp=new StringBuilder();    // fast builder!!
+
+        temp.delete(0, temp.capacity());
+        temp.append("uid,sent,received,sent?,far number,text\n");
+
+        for (SMSMessage record : database.smsRecords()) {
+            temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
+                        +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
+        }
+
+        return temp.toString();
+    }
+
+    /**
+     * Get the cvs of the parsed SMS's
+     *
+     *
+     * @return
+     */
+    public String SMSToCVS(int[] selectedMessages) {
+        StringBuilder temp=new StringBuilder();    // fast builder!!
+
+        temp.delete(0, temp.capacity());
+        temp.append("uid,sent,received,sent?,far number,text\n");
+
+        int smsRecord=0;
+        int j        =0;
+
+        for (SMSMessage record : database.smsRecords()) {
+            if ((smsRecord==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
+                temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
+                            +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
+                j++;
+
+                if (j>=selectedMessages.length) {
+                    break;
+                }
+            }
+
+            smsRecord++;
+        }
+
+        return temp.toString();
+    }
+
+    /**
+     * Get a represantation of the parsed SMS's
+     * in plain text
+     *
+     * @param database
+     * @param SMSselectedRows
+     *
+     * @return
+     */
+    public String SMSToPlainText() {
+        String tmp="";
+
+        if (database!=null) {
+            for (SMSMessage record : database.smsRecords()) {
+                String number  =record.getNumber();
+                String text    =record.getText();
+                String sent    =record.getSent().toString();
+                String recieved=record.getReceived().toString();
+
+                if (!record.wasSent()) {
+                    tmp=tmp+"From: "+number+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                        +"\n\n";
+                } else {
+                    tmp=tmp+"From: My Phone"+"\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                        +"\n\n";
+                }
+            }
+
+            return tmp;
+        }
+
+        return tmp;
+    }
+
+    /**
+     * Get a represantation of the parsed SMS's
+     * in plain text
+     *
+     *
+     * @param database
+     * @param SMSselectedRows
+     *
+     * @return
+     */
+    public String SMSToPlainText(int[] SMSselectedRows) {
+        String tmp="";
+
+        if (database!=null) {
+            int smsRecord=0;
+            int j        =0;
+
+            for (SMSMessage record : database.smsRecords()) {
+                if ((smsRecord==SMSselectedRows[j]) && (SMSselectedRows[j]<database.smsRecords().size())) {
+                    String number  =record.getNumber();
+                    String text    =record.getText();
+                    String sent    =record.getSent().toString();
+                    String recieved=record.getReceived().toString();
+
+                    if (!record.wasSent()) {
+                        tmp=tmp+"From: "+number+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
+                            +text+"\n\n";
+                    } else {
+                        tmp=tmp+"From: My Phone"+"\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
+                            +text+"\n\n";
+                    }
+
+                    j++;
+
+                    if (j>=SMSselectedRows.length) {
+                        break;
+                    }
+                }
+
+                smsRecord++;
+            }
+
+            return tmp;
+        }
+
+        return tmp;
+    }
 
     /**
      * Get the XML of the parsed SMS's
@@ -38,7 +179,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public Document SMSToXML(InteractivePagerBackup database) {
+    public Document SMSToXML() {
         String sSent="";
 
         // System.out.println("uid,sent,received,sent?,far number,text");
@@ -112,7 +253,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public Document SMSToXML(InteractivePagerBackup database, int[] selectedMessages) {
+    public Document SMSToXML(int[] selectedMessages) {
         String sSent="";
 
         // System.out.println("uid,sent,received,sent?,far number,text");
@@ -192,140 +333,6 @@ public class SmsWriters {
         // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
     }
 
-    /**
-     * Get the cvs of the parsed SMS's
-     *
-     *
-     * @return
-     */
-    public String SMSToCVS(InteractivePagerBackup database) {
-        StringBuilder temp=new StringBuilder();    // fast builder!!
-
-        temp.delete(0, temp.capacity());
-        temp.append("uid,sent,received,sent?,far number,text\n");
-
-        for (SMSMessage record : database.smsRecords()) {
-            temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
-                        +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
-        }
-
-        return temp.toString();
-    }
-
-    /**
-     * Get the cvs of the parsed SMS's
-     *
-     *
-     * @return
-     */
-    public String SMSToCVS(InteractivePagerBackup database, int[] selectedMessages) {
-        StringBuilder temp=new StringBuilder();    // fast builder!!
-
-        temp.delete(0, temp.capacity());
-        temp.append("uid,sent,received,sent?,far number,text\n");
-
-        int smsRecord=0;
-        int j        =0;
-
-        for (SMSMessage record : database.smsRecords()) {
-            if ((smsRecord==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
-                temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
-                            +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
-                j++;
-
-                if (j>=selectedMessages.length) {
-                    break;
-                }
-            }
-
-            smsRecord++;
-        }
-
-        return temp.toString();
-    }
-
-    /**
-     * Get a represantation of the parsed SMS's
-     * in plain text
-     *
-     * @param database
-     * @param SMSselectedRows
-     *
-     * @return
-     */
-    public String SMSToPlainText(InteractivePagerBackup db) {
-        String tmp="";
-
-        if (db!=null) {
-            for (SMSMessage record : db.smsRecords()) {
-                String number  =record.getNumber();
-                String text    =record.getText();
-                String sent    =record.getSent().toString();
-                String recieved=record.getReceived().toString();
-
-                if (!record.wasSent()) {
-                    tmp=tmp+"From: "+number+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                        +"\n\n";
-                } else {
-                    tmp=tmp+"From: My Phone"+"\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                        +"\n\n";
-                }
-            }
-
-            return tmp;
-        }
-
-        return tmp;
-    }
-
-    /**
-     * Get a represantation of the parsed SMS's
-     * in plain text
-     *
-     *
-     * @param database
-     * @param SMSselectedRows
-     *
-     * @return
-     */
-    public String SMSToPlainText(InteractivePagerBackup database, int[] SMSselectedRows) {
-        String tmp="";
-
-        if (database!=null) {
-            int smsRecord=0;
-            int j        =0;
-
-            for (SMSMessage record : database.smsRecords()) {
-                if ((smsRecord==SMSselectedRows[j]) && (SMSselectedRows[j]<database.smsRecords().size())) {
-                    String number  =record.getNumber();
-                    String text    =record.getText();
-                    String sent    =record.getSent().toString();
-                    String recieved=record.getReceived().toString();
-
-                    if (!record.wasSent()) {
-                        tmp=tmp+"From: "+number+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
-                            +text+"\n\n";
-                    } else {
-                        tmp=tmp+"From: My Phone"+"\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
-                            +text+"\n\n";
-                    }
-
-                    j++;
-
-                    if (j>=SMSselectedRows.length) {
-                        break;
-                    }
-                }
-
-                smsRecord++;
-            }
-
-            return tmp;
-        }
-
-        return tmp;
-    }
-
     //~--- get methods --------------------------------------------------------
 
     /**
@@ -334,11 +341,23 @@ public class SmsWriters {
      *
      * @return
      */
-    public int getNumberOfSMS(InteractivePagerBackup database) {
+    public int getNumberOfSMS() {
         if (database!=null) {
             return database.smsRecords().size();
         } else {
             return -1;
         }
+    }
+
+    //~--- set methods --------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @param database
+     */
+    public void setDatabase(InteractivePagerBackup database) {
+        this.database=database;
     }
 }
