@@ -1,11 +1,8 @@
 package org.quaternions.ipddump.data;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,11 +17,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
    * The map from the name of the field to the field value.
    */
   protected final Map<String, String> fields;
-
-  /**
-   * The list of field names this record keeps.
-   */
-  protected static final List<String> fieldNames;
 
   /**
    * The date the SMS was sent;
@@ -50,19 +42,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
    * The text of the SMS.
    */
   protected String                    text;
-
-  /**
-   * Initialize the list of field names with all the fields contained in this
-   * record.
-   */
-  static {
-    fieldNames = new LinkedList<String>();
-    fieldNames.add( "sent" );
-    fieldNames.add( "received" );
-    fieldNames.add( "sent?" );
-    fieldNames.add( "number" );
-    fieldNames.add( "text" );
-  }
 
   /**
    * Creates a new record with all provided data.
@@ -210,23 +189,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
   @Override
   public Map<String, String> fields() {
     return Collections.<String, String> unmodifiableMap( fields );
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<String> fieldNames() {
-    return getFieldNames();
-  }
-
-  /**
-   * Gets the list of field names that may be assigned by this record.
-   *
-   * @return An unmodifiable list of field names
-   */
-  public static List<String> getFieldNames() {
-    return Collections.<String> unmodifiableList( fieldNames );
   }
 
   /**
