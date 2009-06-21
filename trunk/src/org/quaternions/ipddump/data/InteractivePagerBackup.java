@@ -16,7 +16,7 @@ import java.util.List;
  * <code>InteractivePagerBackup </code> refers to the <em>datastructure</em>
  * representing the file.
  * </p>
- * 
+ *
  * @author borkholder
  * @date Jan 1, 2008
  */
@@ -42,8 +42,13 @@ public class InteractivePagerBackup {
   protected final List<SMSMessage> smsRecords;
 
   /**
+   * The set of contacts.
+   */
+  protected final List<Contact>    contacts;
+
+  /**
    * Creates a new database.
-   * 
+   *
    * @param version The IPD version
    * @param lineFeed The line feed character
    */
@@ -52,11 +57,12 @@ public class InteractivePagerBackup {
     this.lineFeed = lineFeed;
     databases = new ArrayList<String>();
     smsRecords = new LinkedList<SMSMessage>();
+    contacts = new LinkedList<Contact>();
   }
 
   /**
    * Adds a new database to the list of contained databases.
-   * 
+   *
    * @param name The name of the database to add
    */
   public void addDatabase( String name ) {
@@ -65,7 +71,7 @@ public class InteractivePagerBackup {
 
   /**
    * Gets the list of database names that have been added so far.
-   * 
+   *
    * @return An unmodifiable list of database names
    */
   public List<String> databaseNames() {
@@ -75,7 +81,7 @@ public class InteractivePagerBackup {
   /**
    * Creates a new {@link Record} to represent the type of data for the database
    * given by the dbIndex value.
-   * 
+   *
    * @param dbIndex The index of the database that this record will be in
    * @param version The version of the database to which this record belongs
    * @param uid The unique identifier of the Record
@@ -89,6 +95,10 @@ public class InteractivePagerBackup {
       SMSMessage record = new SMSMessage( dbIndex, version, uid, length );
       smsRecords.add( record );
       return record;
+    } else if ( "Address Book".equals( databases.get( dbIndex ) ) ) {
+      Contact record = new Contact( dbIndex, version, uid, length );
+      contacts.add( record );
+      return record;
     } else {
       return new DummyRecord( dbIndex, version, uid, length );
     }
@@ -96,10 +106,19 @@ public class InteractivePagerBackup {
 
   /**
    * Gets the collection of SMS records.
-   * 
+   *
    * @return An unmodifiable collection of SMS records
    */
   public Collection<SMSMessage> smsRecords() {
     return Collections.<SMSMessage> unmodifiableCollection( smsRecords );
+  }
+
+  /**
+   * Gets the collection of contacts.
+   *
+   * @return An unmodifiable collection of contacts
+   */
+  public Collection<Contact> contacts() {
+    return Collections.<Contact> unmodifiableCollection( contacts );
   }
 }

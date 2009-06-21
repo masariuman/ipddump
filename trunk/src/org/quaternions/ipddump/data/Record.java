@@ -1,13 +1,12 @@
 package org.quaternions.ipddump.data;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * A Record is an entry in a particular database. Each record indexes into the
  * list of databases and identifies the type of data in the fields of this
  * record.
- * 
+ *
  * @author borkholder
  * @date Jan 1, 2008
  */
@@ -40,7 +39,7 @@ public abstract class Record {
 
   /**
    * Creates a new record with all provided data.
-   * 
+   *
    * @param dbID The database id
    * @param dbVersion The database version
    * @param uid The unique identifier of this record
@@ -55,7 +54,7 @@ public abstract class Record {
 
   /**
    * Adds the field to the record.
-   * 
+   *
    * @param type The type of field
    * @param data The field data
    */
@@ -63,22 +62,14 @@ public abstract class Record {
 
   /**
    * Gets the fields contained by this record.
-   * 
+   *
    * @return An unmodifiable map from the name of the field to the field data
    */
   public abstract Map<String, String> fields();
 
   /**
-   * Gets the names of the fields contained by this record. The names of the
-   * fields are up to the records.
-   * 
-   * @return An unmodifiable list of field names
-   */
-  public abstract List<String> fieldNames();
-
-  /**
    * Gets the 0-based index of the database to which this field belongs.
-   * 
+   *
    * @return The database index
    */
   public int getDatabaseID() {
@@ -87,7 +78,7 @@ public abstract class Record {
 
   /**
    * Gets the version of the database to which this field belongs.
-   * 
+   *
    * @return The database version
    */
   public int getDatabaseVersion() {
@@ -103,7 +94,7 @@ public abstract class Record {
 
   /**
    * Gets the length of the record.
-   * 
+   *
    * @return The record length
    */
   public int getLength() {
@@ -112,7 +103,7 @@ public abstract class Record {
 
   /**
    * Gets the handle of the record in the database.
-   * 
+   *
    * @return The record handle
    */
   public int getRecordDBHandle() {
@@ -121,7 +112,7 @@ public abstract class Record {
 
   /**
    * Sets the handle of the record in the database.
-   * 
+   *
    * @param recordDBHandle The record handle
    */
   public void setRecordDBHandle( int recordDBHandle ) {

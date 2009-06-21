@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * This record is here for any records that this utility doesn't handle yet.
- * 
+ *
  * @author borkholder
  * @date Jan 1, 2008
  */
@@ -16,7 +16,7 @@ public class DummyRecord extends Record {
 
   /**
    * Creates a new record with all provided data.
-   * 
+   *
    * @param dbID The database id
    * @param dbVersion The database version
    * @param uid The unique identifier of this record
@@ -32,14 +32,6 @@ public class DummyRecord extends Record {
   @Override
   public void addField( int type, char[] data ) {
     fields.add( "" + type + "|" + new String( data ) );
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public List<String> fieldNames() {
-    return Collections.<String> emptyList();
   }
 
   /**
