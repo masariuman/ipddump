@@ -65,6 +65,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private int ContactsEmailIndex = 1;
     private int ContactsMobileIndex = 2;
     private int ContactsHomeNumberIndex = 3;
+    ContactFinder contactFinder;
+    private boolean resolveNames = true;
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -77,7 +79,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         IpdChooser = new javax.swing.JFileChooser();
-        jFrame1 = new javax.swing.JFrame();
+        MessageFrame = new javax.swing.JFrame();
         jFileChooser1 = new javax.swing.JFileChooser();
         jPopupMenuSMS = new javax.swing.JPopupMenu();
         jMenuItemSMSTxt = new javax.swing.JMenuItem();
@@ -136,6 +138,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
+        ResolveCheckBox = new javax.swing.JCheckBoxMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
@@ -147,14 +150,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         contentsMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
 
-        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
-        jFrame1.getContentPane().setLayout(jFrame1Layout);
-        jFrame1Layout.setHorizontalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        IpdChooser.setAcceptAllFileFilterUsed(false);
+
+        javax.swing.GroupLayout MessageFrameLayout = new javax.swing.GroupLayout(MessageFrame.getContentPane());
+        MessageFrame.getContentPane().setLayout(MessageFrameLayout);
+        MessageFrameLayout.setHorizontalGroup(
+            MessageFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
         );
-        jFrame1Layout.setVerticalGroup(
-            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        MessageFrameLayout.setVerticalGroup(
+            MessageFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
@@ -511,12 +516,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelContacts.setLayout(jPanelContactsLayout);
         jPanelContactsLayout.setHorizontalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 637, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
         );
         jPanelContactsLayout.setVerticalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 393, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
         );
 
@@ -601,6 +604,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         });
         fileMenu.add(openMenuItem);
+
+        ResolveCheckBox.setSelected(true);
+        ResolveCheckBox.setText("Resolve Names?");
+        ResolveCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ResolveCheckBoxActionPerformed(evt);
+            }
+        });
+        fileMenu.add(ResolveCheckBox);
 
         saveAsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveAsMenuItem.setText("Save Selected As ...");
@@ -730,33 +742,45 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             try {
                 database = new IPDParser(args[0]).parse();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(jFrame1, "ERROR: " + ex.getMessage());
+                JOptionPane.showMessageDialog(MessageFrame, "ERROR: " + ex.getMessage());
                 saveAsMenuItem.setEnabled(false);
             }
-            smsWriter = new SmsWriters(database);
+            resolveNames = ResolveCheckBox.isSelected();
+            smsWriter = new SmsWriters(database, resolveNames);
             totalSMS = smsWriter.getNumberOfSMS();
 
             ContactsWriter = new ContactsWriters(database);
             //System.out.println(smsWriter.SMSToXML().asXML());
             totalContacts = ContactsWriter.getNumberOfContacts();
 
+            contactFinder = new ContactFinder(database);
+
             if (database != null) {
                 saveAsMenuItem.setEnabled(true);
+            //ResolveCheckBox.setEnabled(true);
             } else {
                 saveAsMenuItem.setEnabled(false);
+            //ResolveCheckBox.setEnabled(false);
             }
 
-            fillSMSTable();
-            fillContactsTable();
+            fillTables();
         }
 
     }//GEN-LAST:event_openMenuItemActionPerformed
+    private void fillTables() {
+        resolveNames = ResolveCheckBox.isSelected();
+
+        fillSMSTable();
+        fillContactsTable();
+    }
+
     private void fillSMSTable() {
 
         smsTablePrepair();
         jTabbedPane1.setTitleAt(SMStabINDEX, "SMS (" + totalSMS + ")");
         int i = 0;
         String sSent = "";
+        String Name = "";
 
         for (SMSMessage record : database.smsRecords()) {
             if (record.wasSent()) {
@@ -764,8 +788,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             } else {
                 sSent = "false";
             }
+            if (resolveNames) {
+                Name = contactFinder.findContactByPhoneNumber(record.getNumber());
+            } else {
+                Name = record.getNumber();
+            }
             SMSDataModel.setValueAt(sSent, i, SMSWasSentIndex);
-            SMSDataModel.setValueAt(record.getNumber(), i, SMSNumberIndex);
+            SMSDataModel.setValueAt(Name, i, SMSNumberIndex);
             SMSDataModel.setValueAt(record.getText(), i, SMSTextIndex);
             SMSDataModel.setValueAt(record.getSent().toString(), i, SMSSentIndex);
             SMSDataModel.setValueAt(record.getReceived().toString(), i, SMSReceivedIndex);
@@ -823,7 +852,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         } else {
             if (evt.getButton() == MouseEvent.BUTTON3 && SMSSelectedRows.length == 0) {
-                JOptionPane.showMessageDialog(jFrame1, "Select the Messages you want to View");
+                JOptionPane.showMessageDialog(MessageFrame, "Select the Messages you want to View");
             }
         }
         if (evt.getClickCount() == 2) {
@@ -857,7 +886,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(jFrame1, "Select the items you want to save");
+            JOptionPane.showMessageDialog(MessageFrame, "Select the items you want to save");
         }
 
 
@@ -1029,13 +1058,22 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         } else {
             if (evt.getButton() == MouseEvent.BUTTON3 && ContactsSelectedRows.length == 0) {
-                JOptionPane.showMessageDialog(jFrame1, "Select the Contacts you want to View");
+                JOptionPane.showMessageDialog(MessageFrame, "Select the Contacts you want to View");
             }
         }
         if (evt.getClickCount() == 2) {
             //System.out.println("double click");
         }
 }//GEN-LAST:event_jTableContactsMouseClicked
+
+    private void ResolveCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResolveCheckBoxActionPerformed
+        resolveNames = ResolveCheckBox.isSelected();
+        
+        if (saveAsMenuItem.isEnabled()) {
+            smsWriter = new SmsWriters(database, resolveNames);
+            fillTables();
+        }
+    }//GEN-LAST:event_ResolveCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1129,6 +1167,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser IpdChooser;
+    private javax.swing.JFrame MessageFrame;
+    private javax.swing.JCheckBoxMenuItem ResolveCheckBox;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem contentsMenuItem;
     private javax.swing.JMenuItem copyMenuItem;
@@ -1139,7 +1179,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JFrame jFrame1;
     private javax.swing.JMenu jMenuCalendar;
     private javax.swing.JMenu jMenuContacts;
     private javax.swing.JMenuItem jMenuItemCalendarCPCSV;
