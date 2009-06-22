@@ -13,6 +13,7 @@ import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
+import org.quaternions.ipddump.data.ContactFinder;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
 import org.quaternions.ipddump.data.SMSMessage;
 
@@ -28,11 +29,20 @@ import java.io.StringWriter;
 public class SmsWriters {
     FileWriters            filewriter=new FileWriters();
     InteractivePagerBackup database;
+    boolean                resolveNames=false;
+    ContactFinder          contactFinder;
 
     //~--- constructors -------------------------------------------------------
 
     public SmsWriters(InteractivePagerBackup database) {
-        this.database=database;
+        this.database    =database;
+        this.resolveNames=false;
+    }
+
+    public SmsWriters(InteractivePagerBackup database, boolean resolveNames) {
+        this.database    =database;
+        this.resolveNames=resolveNames;
+        contactFinder    =new ContactFinder(database);
     }
 
     //~--- methods ------------------------------------------------------------
@@ -50,8 +60,16 @@ public class SmsWriters {
         temp.append("uid,sent,received,sent?,far number,text\n");
 
         for (SMSMessage record : database.smsRecords()) {
+            String Name="";
+
+            if (resolveNames) {
+                Name=contactFinder.findContactByPhoneNumber(record.getNumber());
+            } else {
+                Name=record.getNumber();
+            }
+
             temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
-                        +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
+                        +record.wasSent()+","+Name+",\""+record.getText()+"\"\n");
         }
 
         return temp.toString();
@@ -74,8 +92,16 @@ public class SmsWriters {
 
         for (SMSMessage record : database.smsRecords()) {
             if ((RecordIndex==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
+                String Name="";
+
+                if (resolveNames) {
+                    Name=contactFinder.findContactByPhoneNumber(record.getNumber());
+                } else {
+                    Name=record.getNumber();
+                }
+
                 temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
-                            +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
+                            +record.wasSent()+","+Name+",\""+record.getText()+"\"\n");
                 j++;
 
                 if (j>=selectedMessages.length) {
@@ -107,12 +133,19 @@ public class SmsWriters {
                 String text    =record.getText();
                 String sent    =record.getSent().toString();
                 String recieved=record.getReceived().toString();
+                String Name    ="";
+
+                if (resolveNames) {
+                    Name=contactFinder.findContactByPhoneNumber(number);
+                } else {
+                    Name=number;
+                }
 
                 if (!record.wasSent()) {
-                    tmp=tmp+"From: "+number+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                    tmp=tmp+"From: "+Name+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
                         +"\n\n";
                 } else {
-                    tmp=tmp+"From: My Phone"+"\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                    tmp=tmp+"From: My Phone"+"\nTo: "+Name+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
                         +"\n\n";
                 }
             }
@@ -146,13 +179,20 @@ public class SmsWriters {
                     String text    =record.getText();
                     String sent    =record.getSent().toString();
                     String recieved=record.getReceived().toString();
+                    String Name    ="";
+
+                    if (resolveNames) {
+                        Name=contactFinder.findContactByPhoneNumber(number);
+                    } else {
+                        Name=number;
+                    }
 
                     if (!record.wasSent()) {
-                        tmp=tmp+"From: "+number+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
-                            +text+"\n\n";
+                        tmp=tmp+"From: "+Name+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                            +"\n\n";
                     } else {
-                        tmp=tmp+"From: My Phone"+"\nTo: "+number+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
-                            +text+"\n\n";
+                        tmp=tmp+"From: My Phone"+"\nTo: "+Name+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                            +"\n\n";
                     }
 
                     j++;
@@ -196,6 +236,13 @@ public class SmsWriters {
             } else {
                 sSent="false";
             }
+            String Name="";
+
+            if (resolveNames) {
+                Name=contactFinder.findContactByPhoneNumber(record.getNumber());
+            } else {
+                Name=record.getNumber();
+            }
 
 //          System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
 //          +record.getNumber()+",\""+record.getText()+"\"");
@@ -212,7 +259,7 @@ public class SmsWriters {
             message.addElement("wasSent").addText(sSent);
 
             // Add the "to" element
-            message.addElement("to").addText(record.getNumber());
+            message.addElement("to").addText(Name);
 
             // Add the "text" element
             message.addElement("text").addText(record.getText()+"\n");
@@ -276,7 +323,13 @@ public class SmsWriters {
                 } else {
                     sSent="false";
                 }
+            String Name="";
 
+            if (resolveNames) {
+                Name=contactFinder.findContactByPhoneNumber(record.getNumber());
+            } else {
+                Name=record.getNumber();
+            }
 //              System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
 //              +record.getNumber()+",\""+record.getText()+"\"");
                 Element message=root.addElement("SmsMessage").addAttribute("UID", String.valueOf(record.getUID()));
@@ -292,7 +345,7 @@ public class SmsWriters {
                 message.addElement("wasSent").addText(sSent);
 
                 // Add the "to" element
-                message.addElement("to").addText(record.getNumber());
+                message.addElement("to").addText(Name);
 
                 // Add the "text" element
                 message.addElement("text").addText(record.getText()+"\n");

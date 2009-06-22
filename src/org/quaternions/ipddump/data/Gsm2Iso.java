@@ -7,7 +7,10 @@
 
 package org.quaternions.ipddump.data;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.UnsupportedEncodingException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,34 +19,6 @@ import java.util.logging.Logger;
  * @author Jimmys Daskalakis
  */
 public class Gsm2Iso {
-
-    /**s
-     * Method description
-     *
-     *
-     * @param ucs2Bytes
-     *
-     * @return
-     *
-     */
-    public static String ucs2ToUTF8(char[] ucs2Chars) {
-
-String unicode="";
-String utf8="";
-        byte[] ucs2Bytes = new byte[ ucs2Chars.length ];
-        for ( int i = 0; i < ucs2Chars.length; i++ ) {
-          ucs2Bytes[ i ] = (byte)ucs2Chars[ i ];
-        }
-
-        try {
-      unicode = new String(ucs2Bytes, "UTF-16");
-      utf8 = new String(unicode.getBytes("UTF-8"), "Cp1252");
-            } catch (UnsupportedEncodingException ex1) {
-                Logger.getLogger(Gsm2Iso.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-
-        return utf8;
-    }
 
     /**
      * GSM 03.38 to ISO standart converter
@@ -331,9 +306,75 @@ String utf8="";
                 data[i]='ñ';
             } else if (data[i]==0x7E) {
                 data[i]='ü';
-            } else if (data[i]==0x7F) {
-                data[i]='ü';
-            }
+            } else if (data[i]==0xA3) {
+                data[i]='£';
+            } else if (data[i]==0xA4) {
+                data[i]='¤';
+            } else if (data[i]==0xA5) {
+                data[i]='¥';
+            } else if (data[i]==0xA7) {
+                data[i]='§';
+            } else if (data[i]==0x9B) {
+                data[i]='›';
+            } else if (data[i]==0x86) {
+                data[i]='†';
+            } else if (data[i]==0x97) {
+                data[i]='—';
+            } else if (data[i]==0x95) {
+                data[i]='•';
+            } else if (data[i]==0x91) {
+                data[i]='‘';
+            } else if (data[i]==0x94) {
+                data[i]='”';
+            } else if (data[i]==0xA1) {
+                data[i]='΅';
+            } else if (data[i]=='?') {}
+            else if (data[i]==0x80) {    // FIX
+                data[i]='€';
+            } else if (data[i]=='¨') {}
+            else if (data[i]=='¦') {}
+            else if (data[i]=='±') {}
+            else if (data[i]=='½') {}
+            else if (data[i]=='»') {}
+            else if (data[i]=='·') {}
+            else if (data[i]=='¶') {}
+            else if (data[i]=='©') {}
+            else if (data[i]=='?') {}
+            else if (data[i]=='µ') {}
+            else if (data[i]=='¬') {}
+            else if (data[i]==0x8C) {}
+            else if (data[i]==0x9F) {}
+            else if (data[i]==0x9A) {}
+            else if (data[i]==0x8f) {}
+            else if (data[i]==0x0) {}
+            else {}
         }
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param ucs2Chars
+     *
+     * @return
+     */
+    public static String ucs2ToUTF8(char[] ucs2Chars) {
+        String unicode  ="";
+        String utf8     ="";
+        byte[] ucs2Bytes=new byte[ucs2Chars.length];
+
+        for (int i=0; i<ucs2Chars.length; i++) {
+            ucs2Bytes[i]=(byte) ucs2Chars[i];
+        }
+
+        try {
+            unicode=new String(ucs2Bytes, "UTF-16");
+            utf8   =new String(unicode.getBytes("UTF-8"), "Cp1252");
+        } catch (UnsupportedEncodingException ex1) {
+            Logger.getLogger(Gsm2Iso.class.getName()).log(Level.SEVERE, null, ex1);
+        }
+
+        return utf8;
     }
 }

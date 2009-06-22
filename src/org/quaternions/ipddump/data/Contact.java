@@ -188,7 +188,7 @@ public class Contact extends Record implements Comparable<Contact> {
     }
 
     protected String makeString(char[] data) {
-        //Gsm2Iso.Gsm2Iso(data); // I dont think that this is needed.
+        Gsm2Iso.Gsm2Iso(data);
         String str = new String(data);
         return str.substring(0, str.length() - 1);
     }
