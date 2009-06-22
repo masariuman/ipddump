@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class Gsm2Iso {
 
-    /**
+    /**s
      * Method description
      *
      *
@@ -25,7 +25,6 @@ public class Gsm2Iso {
      *
      * @return
      *
-     * @throws UnsupportedEncodingException
      */
     public static String ucs2ToUTF8(char[] ucs2Chars) {
 
@@ -54,7 +53,7 @@ String utf8="";
      */
     public static void Gsm2Iso(char[] data) {
         for (int i=0; i<data.length; i++) {
-            if (data[i]==0x00) {
+            if (data[i]==0x40) {
                 data[i]='@';
             } else if (data[i]==0x01) {
                 data[i]='£';
@@ -268,7 +267,7 @@ String utf8="";
             } else if (data[i]==0x5E) {
                 data[i]='Ü';
             } else if (data[i]==0x5F) {
-                data[i]='Ü';
+                data[i]='_';
             } else if (data[i]==0x60) {
 
                 // data[i]='';//?
