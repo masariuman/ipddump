@@ -69,11 +69,11 @@ public class SmsWriters {
         temp.delete(0, temp.capacity());
         temp.append("uid,sent,received,sent?,far number,text\n");
 
-        int smsRecord=0;
-        int j        =0;
+        int RecordIndex=0;
+        int j          =0;
 
         for (SMSMessage record : database.smsRecords()) {
-            if ((smsRecord==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
+            if ((RecordIndex==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
                 temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
                             +record.wasSent()+","+record.getNumber()+",\""+record.getText()+"\"\n");
                 j++;
@@ -83,7 +83,7 @@ public class SmsWriters {
                 }
             }
 
-            smsRecord++;
+            RecordIndex++;
         }
 
         return temp.toString();
@@ -137,11 +137,11 @@ public class SmsWriters {
         String tmp="";
 
         if (database!=null) {
-            int smsRecord=0;
-            int j        =0;
+            int RecordIndex=0;
+            int j          =0;
 
             for (SMSMessage record : database.smsRecords()) {
-                if ((smsRecord==SMSselectedRows[j]) && (SMSselectedRows[j]<database.smsRecords().size())) {
+                if ((RecordIndex==SMSselectedRows[j]) && (SMSselectedRows[j]<database.smsRecords().size())) {
                     String number  =record.getNumber();
                     String text    =record.getText();
                     String sent    =record.getSent().toString();
@@ -162,7 +162,7 @@ public class SmsWriters {
                     }
                 }
 
-                smsRecord++;
+                RecordIndex++;
             }
 
             return tmp;
@@ -264,13 +264,13 @@ public class SmsWriters {
                                          String.valueOf(selectedMessages.length));
 
         // System.out.println("uid,sent,received,sent?,far number,text");
-        int smsRecord=0;
-        int j        =0;
+        int RecordIndex=0;
+        int j          =0;
 
         for (SMSMessage record : database.smsRecords()) {
 
 //          System.out.println(smsRecord+" "+j+" "+selectedMessages[j]);
-            if ((smsRecord==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
+            if ((RecordIndex==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
                 if (record.wasSent()) {
                     sSent="true";
                 } else {
@@ -303,7 +303,7 @@ public class SmsWriters {
                 }
             }
 
-            smsRecord++;
+            RecordIndex++;
         }
 
         OutputFormat format=OutputFormat.createPrettyPrint();

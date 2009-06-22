@@ -139,7 +139,7 @@ public class FileWriters {
         int last=filename.lastIndexOf('.');
 
         filename=filename.substring(0, last);
-        filename=filename+".csv";
+        filename=filename+".xml";
         System.out.println("\n->Writing "+filename);
 
         // Make a pretty output

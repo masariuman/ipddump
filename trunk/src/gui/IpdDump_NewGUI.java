@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import org.quaternions.ipddump.*;
 import org.quaternions.ipddump.data.*;
+import org.quaternions.ipddump.writers.ContactsWriters;
 import org.quaternions.ipddump.writers.FileWriters;
 import org.quaternions.ipddump.writers.SmsWriters;
 
@@ -58,6 +59,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private DataViewer viewer;
     private FileWriters fileWriter = new FileWriters();
     private SmsWriters smsWriter;
+    private ContactsWriters ContactsWriter;
+    private TableModel ContactsDataModel;
+    private int ContactsNameIndex = 0;
+    private int ContactsEmailIndex = 1;
+    private int ContactsMobileIndex = 2;
+    private int ContactsHomeNumberIndex = 3;
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -117,7 +124,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableSMS = new javax.swing.JTable();
         jPanelContacts = new javax.swing.JPanel();
-        status_label1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableContacts = new javax.swing.JTable();
         jPanelCalendar = new javax.swing.JPanel();
         status_label2 = new javax.swing.JLabel();
         jPanelTasks = new javax.swing.JPanel();
@@ -446,10 +454,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jTableSMS.getColumnModel().getColumn(0).setMinWidth(40);
         jTableSMS.getColumnModel().getColumn(0).setPreferredWidth(40);
         jTableSMS.getColumnModel().getColumn(0).setMaxWidth(40);
+        jTableSMS.getColumnModel().getColumn(0).setHeaderValue("Sent?");
         jTableSMS.getColumnModel().getColumn(1).setMaxWidth(130);
+        jTableSMS.getColumnModel().getColumn(1).setHeaderValue("Number");
         jTableSMS.getColumnModel().getColumn(2).setMinWidth(150);
+        jTableSMS.getColumnModel().getColumn(2).setHeaderValue("Text");
         jTableSMS.getColumnModel().getColumn(3).setMaxWidth(200);
+        jTableSMS.getColumnModel().getColumn(3).setHeaderValue("Sent Date");
         jTableSMS.getColumnModel().getColumn(4).setMaxWidth(200);
+        jTableSMS.getColumnModel().getColumn(4).setHeaderValue("Received Date");
 
         javax.swing.GroupLayout jPanelSMSLayout = new javax.swing.GroupLayout(jPanelSMS);
         jPanelSMS.setLayout(jPanelSMSLayout);
@@ -464,24 +477,47 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("SMS", jPanelSMS);
 
-        status_label1.setFont(new java.awt.Font("Tahoma", 0, 18));
-        status_label1.setText("Left Intentionally Blank");
+        jTableContacts.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Name", "Email", "Mobile", "Home"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTableContacts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableContactsMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTableContacts);
 
         javax.swing.GroupLayout jPanelContactsLayout = new javax.swing.GroupLayout(jPanelContacts);
         jPanelContacts.setLayout(jPanelContactsLayout);
         jPanelContactsLayout.setHorizontalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContactsLayout.createSequentialGroup()
-                .addGap(219, 219, 219)
-                .addComponent(status_label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(235, 235, 235))
+            .addGap(0, 637, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
         );
         jPanelContactsLayout.setVerticalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContactsLayout.createSequentialGroup()
-                .addGap(191, 191, 191)
-                .addComponent(status_label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(180, 180, 180))
+            .addGap(0, 393, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Contacts", jPanelContacts);
@@ -552,7 +588,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Options", jPanelOptions);
 
-        status_label.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
         status_label.setText("Welcome to IpdDump - http://code.google.com/p/ipddump/");
 
         fileMenu.setText("File");
@@ -663,6 +699,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 new String[]{".txt"}, "Text Document *.txt"));
 
         SMSDataModel = jTableSMS.getModel();
+        ContactsDataModel = jTableContacts.getModel();
         SMStabINDEX = jTabbedPane1.indexOfTab("SMS");
         ContactstabINDEX = jTabbedPane1.indexOfTab("Contacts");
         CalendartabINDEX = jTabbedPane1.indexOfTab("Calendar");
@@ -699,6 +736,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             smsWriter = new SmsWriters(database);
             totalSMS = smsWriter.getNumberOfSMS();
 
+            ContactsWriter = new ContactsWriters(database);
+            //System.out.println(smsWriter.SMSToXML().asXML());
+            totalContacts = ContactsWriter.getNumberOfContacts();
+
             if (database != null) {
                 saveAsMenuItem.setEnabled(true);
             } else {
@@ -706,6 +747,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
 
             fillSMSTable();
+            fillContactsTable();
         }
 
     }//GEN-LAST:event_openMenuItemActionPerformed
@@ -727,6 +769,23 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             SMSDataModel.setValueAt(record.getText(), i, SMSTextIndex);
             SMSDataModel.setValueAt(record.getSent().toString(), i, SMSSentIndex);
             SMSDataModel.setValueAt(record.getReceived().toString(), i, SMSReceivedIndex);
+            i++;//Go to next Line in the table
+        }
+    }
+
+    private void fillContactsTable() {
+
+        ContactsTablePrepair();
+        jTabbedPane1.setTitleAt(ContactstabINDEX, "Contacts (" + totalContacts + ")");
+        int i = 0;
+        String sSent = "";
+
+        for (Contact record : database.contacts()) {
+
+            ContactsDataModel.setValueAt(record.getName(), i, ContactsNameIndex);
+            ContactsDataModel.setValueAt(record.getEmail(), i, ContactsEmailIndex);
+            ContactsDataModel.setValueAt(record.getMobilePhone(), i, ContactsMobileIndex);
+            ContactsDataModel.setValueAt(record.getHomePhone(), i, ContactsHomeNumberIndex);
             i++;//Go to next Line in the table
         }
     }
@@ -787,6 +846,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                     fileWriter.writeXMLtoFile(fToSave, smsWriter.SMSToXML(SMSSelectedRows));
                 }
             }
+        } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+            if (saveDialog()) {
+                if (ext.equalsIgnoreCase("txt")) {
+                    fileWriter.writeTxtToFile(fToSave, ContactsWriter.ContactsToPlainText(ContactsSelectedRows));
+                } else if (ext.equalsIgnoreCase("cvs")) {
+                    fileWriter.writeTxtToFile(fToSave, ContactsWriter.ContactsToCVS(ContactsSelectedRows));
+                } else if (ext.equalsIgnoreCase("xml")) {
+                    fileWriter.writeXMLtoFile(fToSave, ContactsWriter.ContactsToXML(ContactsSelectedRows));
+                }
+            }
         } else {
             JOptionPane.showMessageDialog(jFrame1, "Select the items you want to save");
         }
@@ -845,27 +914,39 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_jMenuItemSMSCPCSVActionPerformed
 
     private void jMenuItemContactsTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsTxtActionPerformed
-        // TODO add your handling code here:
+        String tmp = ContactsWriter.ContactsToPlainText(ContactsSelectedRows);
+        viewer.setTxt(tmp);
+        viewer.setTitle("Contacts Viewer - Plain Text");
+        viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemContactsTxtActionPerformed
 
     private void jMenuItemContactsXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsXMLActionPerformed
-        // TODO add your handling code here:
+        String tmpXml = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
+        viewer.setXml(tmpXml);
+        viewer.setTitle("Contacts Viewer - XML");
+        viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemContactsXMLActionPerformed
 
     private void jMenuItemContactsCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsCSVActionPerformed
-        // TODO add your handling code here:
+        String tmp = ContactsWriter.ContactsToCVS(ContactsSelectedRows);
+        viewer.setCvs(tmp);
+        viewer.setTitle("Contacts Viewer - Csv");
+        viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemContactsCSVActionPerformed
 
     private void jMenuItemContactsCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsCPTXTActionPerformed
-        // TODO add your handling code here:
+        String tmp = ContactsWriter.ContactsToPlainText(ContactsSelectedRows);
+        setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemContactsCPTXTActionPerformed
 
     private void jMenuItemContactsCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsCPXMLActionPerformed
-        // TODO add your handling code here:
+        String tmp = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
+        setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemContactsCPXMLActionPerformed
 
     private void jMenuItemContactsCPCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsCPCSVActionPerformed
-        // TODO add your handling code here:
+        String tmp = ContactsWriter.ContactsToCVS(ContactsSelectedRows);
+        setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemContactsCPCSVActionPerformed
 
     private void jMenuItemCalendarTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCalendarTxtActionPerformed
@@ -940,6 +1021,22 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
 }//GEN-LAST:event_jMenuItemOptionsCPCSVActionPerformed
 
+    private void jTableContactsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableContactsMouseClicked
+        ContactsSelectedRows = jTableContacts.getSelectedRows();
+        if (evt.getButton() == MouseEvent.BUTTON3 && ContactsSelectedRows.length > 0) {
+            //System.out.println("right click");
+            ShowContactsPopup(evt);
+
+        } else {
+            if (evt.getButton() == MouseEvent.BUTTON3 && ContactsSelectedRows.length == 0) {
+                JOptionPane.showMessageDialog(jFrame1, "Select the Contacts you want to View");
+            }
+        }
+        if (evt.getClickCount() == 2) {
+            //System.out.println("double click");
+        }
+}//GEN-LAST:event_jTableContactsMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -951,6 +1048,37 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 //        });
 //    }
     // <editor-fold defaultstate="collapsed" desc="Table Prepair Code - - NEED TO find alternative way of doing this??">
+    private void ContactsTablePrepair() {
+        jTableContacts.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[totalContacts][3], new String[]{
+                    "Name", "Email", "Mobile", "Home"
+                }) {
+
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        jTableContacts.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableContactsMouseClicked(evt);
+            }
+        });
+
+        ContactsDataModel = jTableContacts.getModel();
+    }
+
     private void smsTablePrepair() {
         jTableSMS.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[totalSMS][4],
@@ -1058,14 +1186,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenuSMS;
     private javax.swing.JPopupMenu jPopupMenuTasks;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTableContacts;
     private javax.swing.JTable jTableSMS;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JLabel status_label;
-    private javax.swing.JLabel status_label1;
     private javax.swing.JLabel status_label2;
     private javax.swing.JLabel status_label3;
     private javax.swing.JLabel status_label4;
