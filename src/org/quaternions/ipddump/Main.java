@@ -15,7 +15,7 @@ import java.io.IOException;
 public class Main {
     private static SmsWriters            smsWriter;
     private static FileWriters           FileWriter=new FileWriters();
-    public static InteractivePagerBackup db;
+    private static InteractivePagerBackup db;
 
     //~--- methods ------------------------------------------------------------
 
