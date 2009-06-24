@@ -1,5 +1,7 @@
 package org.quaternions.ipddump.data;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Map;
 
 /**
@@ -11,131 +13,142 @@ import java.util.Map;
  * @date Jan 1, 2008
  */
 public abstract class Record {
-  /**
-   * The 0-based index of the database to which this field belongs.
-   */
-  protected final int databaseID;
 
-  /**
-   * The version of the database to which this field belongs.
-   */
-  protected final int databaseVersion;
+    /**
+     * The 0-based index of the database to which this field belongs.
+     */
+    protected final int databaseID;
 
-  /**
-   * The unique identifier of this record.
-   */
-  protected int       uniqueID;
+    /**
+     * The version of the database to which this field belongs.
+     */
+    protected final int databaseVersion;
 
-  /**
-   * The length of the record.
-   */
-  protected int       length;
+    /**
+     * The unique identifier of this record.
+     */
+    protected int uniqueID;
 
-  /**
-   * A handle of the record in the database. This is an element in the
-   * increasing sequence of integers within the IPD.
-   */
-  protected int       recordDBHandle;
+    /**
+     * The length of the record.
+     */
+    protected int length;
 
-  /**
-   * Creates a new record with all provided data.
-   *
-   * @param dbID The database id
-   * @param dbVersion The database version
-   * @param uid The unique identifier of this record
-   * @param recordLength The length of the record
-   */
-  protected Record( int dbID, int dbVersion, int uid, int recordLength ) {
-    databaseID = dbID;
-    databaseVersion = dbVersion;
-    uniqueID = uid;
-    length = recordLength;
-  }
+    /**
+     * A handle of the record in the database. This is an element in the
+     * increasing sequence of integers within the IPD.
+     */
+    protected int recordDBHandle;
 
-  /**
-   * Adds the field to the record.
-   *
-   * @param type The type of field
-   * @param data The field data
-   */
-  public abstract void addField( int type, char[] data );
+    //~--- constructors -------------------------------------------------------
 
-  /**
-   * Gets the fields contained by this record.
-   *
-   * @return An unmodifiable map from the name of the field to the field data
-   */
-  public abstract Map<String, String> fields();
-
-  /**
-   * Gets the 0-based index of the database to which this field belongs.
-   *
-   * @return The database index
-   */
-  public int getDatabaseID() {
-    return databaseID;
-  }
-
-  /**
-   * Gets the version of the database to which this field belongs.
-   *
-   * @return The database version
-   */
-  public int getDatabaseVersion() {
-    return databaseVersion;
-  }
-
-  /**
-   * Gets the unique identifier of this record.
-   */
-  public int getUID() {
-    return uniqueID;
-  }
-
-  /**
-   * Gets the length of the record.
-   *
-   * @return The record length
-   */
-  public int getLength() {
-    return length;
-  }
-
-  /**
-   * Gets the handle of the record in the database.
-   *
-   * @return The record handle
-   */
-  public int getRecordDBHandle() {
-    return recordDBHandle;
-  }
-
-  /**
-   * Sets the handle of the record in the database.
-   *
-   * @param recordDBHandle The record handle
-   */
-  public void setRecordDBHandle( int recordDBHandle ) {
-    this.recordDBHandle = recordDBHandle;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean equals( Object obj ) {
-    if ( obj instanceof Record ) {
-      return uniqueID == ( (Record) obj ).uniqueID;
-    } else {
-      return false;
+    /**
+     * Creates a new record with all provided data.
+     *
+     * @param dbID The database id
+     * @param dbVersion The database version
+     * @param uid The unique identifier of this record
+     * @param recordLength The length of the record
+     */
+    protected Record(int dbID, int dbVersion, int uid, int recordLength) {
+        databaseID     =dbID;
+        databaseVersion=dbVersion;
+        uniqueID       =uid;
+        length         =recordLength;
     }
-  }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int hashCode() {
-    return uniqueID;
-  }
+    //~--- methods ------------------------------------------------------------
+
+    /**
+     * Adds the field to the record.
+     *
+     * @param type The type of field
+     * @param data The field data
+     */
+    public abstract void addField(int type, char[] data);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Record) {
+            return uniqueID==((Record) obj).uniqueID;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Gets the fields contained by this record.
+     *
+     * @return An unmodifiable map from the name of the field to the field data
+     */
+    public abstract Map<String, String> fields();
+
+    //~--- get methods --------------------------------------------------------
+
+    /**
+     * Gets the 0-based index of the database to which this field belongs.
+     *
+     * @return The database index
+     */
+    public int getDatabaseID() {
+        return databaseID;
+    }
+
+    /**
+     * Gets the version of the database to which this field belongs.
+     *
+     * @return The database version
+     */
+    public int getDatabaseVersion() {
+        return databaseVersion;
+    }
+
+    /**
+     * Gets the length of the record.
+     *
+     * @return The record length
+     */
+    public int getLength() {
+        return length;
+    }
+
+    /**
+     * Gets the handle of the record in the database.
+     *
+     * @return The record handle
+     */
+    public int getRecordDBHandle() {
+        return recordDBHandle;
+    }
+
+    /**
+     * Gets the unique identifier of this record.
+     */
+    public int getUID() {
+        return uniqueID;
+    }
+
+    //~--- methods ------------------------------------------------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return uniqueID;
+    }
+
+    //~--- set methods --------------------------------------------------------
+
+    /**
+     * Sets the handle of the record in the database.
+     *
+     * @param recordDBHandle The record handle
+     */
+    public void setRecordDBHandle(int recordDBHandle) {
+        this.recordDBHandle=recordDBHandle;
+    }
 }

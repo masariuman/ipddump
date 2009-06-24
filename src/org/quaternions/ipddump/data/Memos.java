@@ -49,27 +49,27 @@ public class Memos extends Record implements Comparable<Memos> {
         switch (type) {
         case 1 :
             fieldName="Title";
+
             break;
 
         case 2 :
-        fieldName="Memo";
+            fieldName="Memo";
 
             break;
 
         case 3 :
-
             break;
 
         default :
             System.err.println(type+": "+makeString(data));
         }
 
-//        if (fieldName==null /* && makeString( data )!=null */) {
-//            System.out.println(type+":-> "+makeString(data));
-//        }
-
+//      if (fieldName==null /* && makeString( data )!=null */) {
+//          System.out.println(type+":-> "+makeString(data));
+//      }
         if (fieldName!=null /* && makeString( data )!=null */) {
-            //System.out.println(fieldName+" "+type+":-> "+makeString(data));
+
+            // System.out.println(fieldName+" "+type+":-> "+makeString(data));
             addField(fieldName, makeString(data));
         }
     }
@@ -79,11 +79,11 @@ public class Memos extends Record implements Comparable<Memos> {
      */
     @Override
     public int compareTo(Memos o) {
-         if ( getTitle().compareTo( o.getTitle() ) != 0 ) {
-      return getTitle().compareTo( o.getTitle() );
-    } else {
-      return o.getTitle().compareTo( getTitle());
-    }
+        if (getTitle().compareTo(o.getTitle())!=0) {
+            return getTitle().compareTo(o.getTitle());
+        } else {
+            return o.getTitle().compareTo(getTitle());
+        }
     }
 
     /**
@@ -102,9 +102,9 @@ public class Memos extends Record implements Comparable<Memos> {
      *
      * @return
      */
-    public String getTitle() {
-        if (fields.containsKey("Title")) {
-            return fields.get("Title");
+    public String getMemo() {
+        if (fields.containsKey("Memo")) {
+            return fields.get("Memo");
         }
 
         return "";
@@ -116,9 +116,9 @@ public class Memos extends Record implements Comparable<Memos> {
      *
      * @return
      */
-    public String getMemo() {
-        if (fields.containsKey("Memo")) {
-            return fields.get("Memo");
+    public String getTitle() {
+        if (fields.containsKey("Title")) {
+            return fields.get("Title");
         }
 
         return "";
@@ -173,7 +173,7 @@ public class Memos extends Record implements Comparable<Memos> {
      */
     protected String makeString(char[] data) {
 
-        //Gsm2Iso.Gsm2Iso(data);
+        // Gsm2Iso.Gsm2Iso(data);
         String str=new String(data);
 
         return str.substring(0, str.length()-1);
