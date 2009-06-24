@@ -483,30 +483,34 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="219" max="-2" attributes="0"/>
-                      <Component id="status_label2" pref="216" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="314" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="749" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="749" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
+                      <Component id="status_label7" pref="137" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="191" max="-2" attributes="0"/>
-                      <Component id="status_label2" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="239" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="445" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="445" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="211" max="-2" attributes="0"/>
+                      <Component id="status_label7" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="212" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="status_label2">
+            <Component class="javax.swing.JLabel" name="status_label7">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Left Intentionally Blank"/>
+                <Property name="text" type="java.lang.String" value="Coming Soon"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -523,30 +527,30 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="219" max="-2" attributes="0"/>
-                      <Component id="status_label4" pref="216" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="314" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
+                      <Component id="status_label5" pref="137" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="191" max="-2" attributes="0"/>
-                      <Component id="status_label4" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="239" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="211" max="-2" attributes="0"/>
+                      <Component id="status_label5" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="212" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="status_label4">
+            <Component class="javax.swing.JLabel" name="status_label5">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Left Intentionally Blank"/>
+                <Property name="text" type="java.lang.String" value="Coming Soon"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -563,30 +567,32 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="219" max="-2" attributes="0"/>
-                      <Component id="status_label3" pref="216" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="314" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="749" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
+                      <Component id="status_label6" pref="137" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="191" max="-2" attributes="0"/>
-                      <Component id="status_label3" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="239" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="445" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="211" max="-2" attributes="0"/>
+                      <Component id="status_label6" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="212" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="status_label3">
+            <Component class="javax.swing.JLabel" name="status_label6">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Left Intentionally Blank"/>
+                <Property name="text" type="java.lang.String" value="Coming Soon"/>
               </Properties>
             </Component>
           </SubComponents>

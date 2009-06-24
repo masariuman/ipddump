@@ -168,7 +168,7 @@ public class ContactsWriters {
                 for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
                     Map.Entry entry=(Map.Entry) iterator.next();
 
-                    tmp+=entry.getKey()+" : "+entry.getValue()+"\n";
+                    tmp+=entry.getKey()+": "+entry.getValue()+"\n";
                 }
 
                 tmp+="\n";
@@ -202,7 +202,7 @@ public class ContactsWriters {
                     for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
                         Map.Entry entry=(Map.Entry) iterator.next();
 
-                        tmp+=entry.getKey()+" : "+entry.getValue()+"\n";
+                        tmp+=entry.getKey()+": "+entry.getValue()+"\n";
                     }
 
                     tmp+="\n";
