@@ -15,7 +15,6 @@ import org.dom4j.io.XMLWriter;
 
 import org.quaternions.ipddump.data.Contact;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
-import org.quaternions.ipddump.data.SMSMessage;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -25,7 +24,6 @@ import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.regex.*;
 
 /**
  *

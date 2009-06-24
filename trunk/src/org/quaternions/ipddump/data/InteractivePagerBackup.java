@@ -47,6 +47,15 @@ public class InteractivePagerBackup {
   protected final List<Contact>    contacts;
 
   /**
+   * The set of Tasks Entries.
+   */
+  protected final List<Tasks>    tasks;
+  /**
+   * The set of Memos.
+   */
+  protected final List<Memos>    memos;
+
+  /**
    * Creates a new database.
    *
    * @param version The IPD version
@@ -58,6 +67,8 @@ public class InteractivePagerBackup {
     databases = new ArrayList<String>();
     smsRecords = new LinkedList<SMSMessage>();
     contacts = new LinkedList<Contact>();
+    tasks = new LinkedList<Tasks>();
+    memos = new LinkedList<Memos>();
   }
 
   /**
@@ -89,6 +100,7 @@ public class InteractivePagerBackup {
    * @return A new Record
    */
   public Record createRecord( int dbIndex, int version, int uid, int length ) {
+    //System.out.println(databases.get( dbIndex ));
     if ( dbIndex >= databases.size() ) {
       return new DummyRecord( dbIndex, version, uid, length );
     } else if ( "SMS Messages".equals( databases.get( dbIndex ) ) ) {
@@ -98,6 +110,14 @@ public class InteractivePagerBackup {
     } else if ( "Address Book".equals( databases.get( dbIndex ) ) ) {
       Contact record = new Contact( dbIndex, version, uid, length );
       contacts.add( record );
+      return record;
+//    } else if ( "Tasks".equals( databases.get( dbIndex ) ) ) {
+//      Tasks record = new Tasks( dbIndex, version, uid, length );
+//      tasks.add( record );
+//      return record;
+    }else if ( "Memos".equals( databases.get( dbIndex ) ) ) {
+      Memos record = new Memos( dbIndex, version, uid, length );
+      memos.add( record );
       return record;
     } else {
       return new DummyRecord( dbIndex, version, uid, length );
@@ -120,5 +140,14 @@ public class InteractivePagerBackup {
    */
   public Collection<Contact> contacts() {
     return Collections.<Contact> unmodifiableCollection( contacts );
+  }
+
+  /**
+   * Gets the collection of memos.
+   *
+   * @return An unmodifiable collection of memos
+   */
+   public Collection<Memos> memos() {
+    return Collections.<Memos> unmodifiableCollection( memos );
   }
 }

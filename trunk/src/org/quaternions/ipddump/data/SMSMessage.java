@@ -111,7 +111,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
     switch ( type ) {
       case 4:
 
-          Gsm2Iso.Gsm2Iso(data);
+        Gsm2Iso.Gsm2Iso(data);
           //System.out.println(Gsm2Iso.ucs2ToUTF8(data));
 
         byte[] d = new byte[ data.length ];
@@ -175,7 +175,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
         fields.put( "sent", sent.toString() );
         fields.put( "received", received.toString() );
         fields.put( "sent?", wasSent.toString() );
-
+        
         break;
 
       default:
