@@ -79,7 +79,11 @@ public class Memos extends Record implements Comparable<Memos> {
      */
     @Override
     public int compareTo(Memos o) {
-        return 0;
+         if ( getTitle().compareTo( o.getTitle() ) != 0 ) {
+      return getTitle().compareTo( o.getTitle() );
+    } else {
+      return o.getTitle().compareTo( getTitle());
+    }
     }
 
     /**
