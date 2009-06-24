@@ -17,9 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import org.quaternions.ipddump.*;
 import org.quaternions.ipddump.data.*;
-import org.quaternions.ipddump.writers.ContactsWriters;
-import org.quaternions.ipddump.writers.FileWriters;
-import org.quaternions.ipddump.writers.SmsWriters;
+import org.quaternions.ipddump.writers.*;
 
 /**
  *
@@ -40,6 +38,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private int CalendartabINDEX;
     private int TaskstabINDEX;
     private int OptionstabINDEX;
+    private int MemostabINDEX;
     final private int SMSWasSentIndex = 0;
     final private int SMSNumberIndex = 1;
     final private int SMSTextIndex = 2;
@@ -52,6 +51,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private int[] ContactsSelectedRows;
     private int totalCalendar = 0;
     private int[] CalendarSelectedRows;
+    private int totalMemos = 0;
+    private int[] MemosSelectedRows;
     private int totalTasks = 0;
     private int[] TasksSelectedRows;
     private int totalOptions = 0;
@@ -60,13 +61,17 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private FileWriters fileWriter = new FileWriters();
     private SmsWriters smsWriter;
     private ContactsWriters ContactsWriter;
+    private MemosWriters MemosWriter;
     private TableModel ContactsDataModel;
+    private TableModel MemosDataModel;
     private int ContactsNameIndex = 0;
     private int ContactsEmailIndex = 1;
     private int ContactsMobileIndex = 2;
     private int ContactsHomeNumberIndex = 3;
     ContactFinder contactFinder;
     private boolean resolveNames = true;
+    private int MemosTitleIndex = 0;
+    private int MemosMemoIndex = 1;
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -81,46 +86,14 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         IpdChooser = new javax.swing.JFileChooser();
         MessageFrame = new javax.swing.JFrame();
         jFileChooser1 = new javax.swing.JFileChooser();
-        jPopupMenuSMS = new javax.swing.JPopupMenu();
-        jMenuItemSMSTxt = new javax.swing.JMenuItem();
-        jMenuItemSMSXML = new javax.swing.JMenuItem();
-        jMenuItemSMSCSV = new javax.swing.JMenuItem();
-        jMenuSMS = new javax.swing.JMenu();
-        jMenuItemSMSCPTXT = new javax.swing.JMenuItem();
-        jMenuItemSMSCPXML = new javax.swing.JMenuItem();
-        jMenuItemSMSCPCSV = new javax.swing.JMenuItem();
-        jPopupMenuContacts = new javax.swing.JPopupMenu();
-        jMenuItemContactsTxt = new javax.swing.JMenuItem();
-        jMenuItemContactsXML = new javax.swing.JMenuItem();
-        jMenuItemContactsCSV = new javax.swing.JMenuItem();
-        jMenuContacts = new javax.swing.JMenu();
-        jMenuItemContactsCPTXT = new javax.swing.JMenuItem();
-        jMenuItemContactsCPXML = new javax.swing.JMenuItem();
-        jMenuItemContactsCPCSV = new javax.swing.JMenuItem();
-        jPopupMenuCalendar = new javax.swing.JPopupMenu();
-        jMenuItemCalendarTxt = new javax.swing.JMenuItem();
-        jMenuItemCalendarXML = new javax.swing.JMenuItem();
-        jMenuItemCalendarCSV = new javax.swing.JMenuItem();
-        jMenuCalendar = new javax.swing.JMenu();
-        jMenuItemCalendarCPTXT = new javax.swing.JMenuItem();
-        jMenuItemCalendarCPXML = new javax.swing.JMenuItem();
-        jMenuItemCalendarCPCSV = new javax.swing.JMenuItem();
-        jPopupMenuTasks = new javax.swing.JPopupMenu();
-        jMenuItemTasksTxt = new javax.swing.JMenuItem();
-        jMenuItemTasksXML = new javax.swing.JMenuItem();
-        jMenuItemTasksCSV = new javax.swing.JMenuItem();
-        jMenuTasks = new javax.swing.JMenu();
-        jMenuItemTasksCPTXT = new javax.swing.JMenuItem();
-        jMenuItemTasksCPXML = new javax.swing.JMenuItem();
-        jMenuItemTasksCPCSV = new javax.swing.JMenuItem();
-        jPopupMenuOptions = new javax.swing.JPopupMenu();
-        jMenuItemOptionsTxt = new javax.swing.JMenuItem();
-        jMenuItemOptionsXML = new javax.swing.JMenuItem();
-        jMenuItemOptionsCSV = new javax.swing.JMenuItem();
-        jMenuOptions = new javax.swing.JMenu();
-        jMenuItemOptionsCPTXT = new javax.swing.JMenuItem();
-        jMenuItemOptionsCPXML = new javax.swing.JMenuItem();
-        jMenuItemOptionsCPCSV = new javax.swing.JMenuItem();
+        jPopupMenu = new javax.swing.JPopupMenu();
+        jMenuItemTxt = new javax.swing.JMenuItem();
+        jMenuItemXML = new javax.swing.JMenuItem();
+        jMenuItemCSV = new javax.swing.JMenuItem();
+        jMenu = new javax.swing.JMenu();
+        jMenuItemCPTXT = new javax.swing.JMenuItem();
+        jMenuItemCPXML = new javax.swing.JMenuItem();
+        jMenuItemCPCSV = new javax.swing.JMenuItem();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelSMS = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -128,6 +101,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelContacts = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableContacts = new javax.swing.JTable();
+        jPanelMemo = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableMemos = new javax.swing.JTable();
         jPanelCalendar = new javax.swing.JPanel();
         status_label2 = new javax.swing.JLabel();
         jPanelTasks = new javax.swing.JPanel();
@@ -163,265 +139,57 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
-        jMenuItemSMSTxt.setText("View in PlainText");
-        jMenuItemSMSTxt.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemTxt.setText("View in PlainText");
+        jMenuItemTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSMSTxtActionPerformed(evt);
+                jMenuItemTxtActionPerformed(evt);
             }
         });
-        jPopupMenuSMS.add(jMenuItemSMSTxt);
+        jPopupMenu.add(jMenuItemTxt);
 
-        jMenuItemSMSXML.setText("View in Xml");
-        jMenuItemSMSXML.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemXML.setText("View in Xml");
+        jMenuItemXML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSMSXMLActionPerformed(evt);
+                jMenuItemXMLActionPerformed(evt);
             }
         });
-        jPopupMenuSMS.add(jMenuItemSMSXML);
+        jPopupMenu.add(jMenuItemXML);
 
-        jMenuItemSMSCSV.setText("View in Csv");
-        jMenuItemSMSCSV.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCSV.setText("View in Csv");
+        jMenuItemCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSMSCSVActionPerformed(evt);
+                jMenuItemCSVActionPerformed(evt);
             }
         });
-        jPopupMenuSMS.add(jMenuItemSMSCSV);
+        jPopupMenu.add(jMenuItemCSV);
 
-        jMenuSMS.setText("Copy in-->");
+        jMenu.setText("Copy in-->");
 
-        jMenuItemSMSCPTXT.setText("Plain Text");
-        jMenuItemSMSCPTXT.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCPTXT.setText("Plain Text");
+        jMenuItemCPTXT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSMSCPTXTActionPerformed(evt);
+                jMenuItemCPTXTActionPerformed(evt);
             }
         });
-        jMenuSMS.add(jMenuItemSMSCPTXT);
+        jMenu.add(jMenuItemCPTXT);
 
-        jMenuItemSMSCPXML.setText("XML");
-        jMenuItemSMSCPXML.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCPXML.setText("XML");
+        jMenuItemCPXML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSMSCPXMLActionPerformed(evt);
+                jMenuItemCPXMLActionPerformed(evt);
             }
         });
-        jMenuSMS.add(jMenuItemSMSCPXML);
+        jMenu.add(jMenuItemCPXML);
 
-        jMenuItemSMSCPCSV.setText("CSV");
-        jMenuItemSMSCPCSV.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCPCSV.setText("CSV");
+        jMenuItemCPCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSMSCPCSVActionPerformed(evt);
+                jMenuItemCPCSVActionPerformed(evt);
             }
         });
-        jMenuSMS.add(jMenuItemSMSCPCSV);
+        jMenu.add(jMenuItemCPCSV);
 
-        jPopupMenuSMS.add(jMenuSMS);
-
-        jMenuItemContactsTxt.setText("View in PlainText");
-        jMenuItemContactsTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemContactsTxtActionPerformed(evt);
-            }
-        });
-        jPopupMenuContacts.add(jMenuItemContactsTxt);
-
-        jMenuItemContactsXML.setText("View in Xml");
-        jMenuItemContactsXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemContactsXMLActionPerformed(evt);
-            }
-        });
-        jPopupMenuContacts.add(jMenuItemContactsXML);
-
-        jMenuItemContactsCSV.setText("View in Csv");
-        jMenuItemContactsCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemContactsCSVActionPerformed(evt);
-            }
-        });
-        jPopupMenuContacts.add(jMenuItemContactsCSV);
-
-        jMenuContacts.setText("Copy in-->");
-
-        jMenuItemContactsCPTXT.setText("Plain Text");
-        jMenuItemContactsCPTXT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemContactsCPTXTActionPerformed(evt);
-            }
-        });
-        jMenuContacts.add(jMenuItemContactsCPTXT);
-
-        jMenuItemContactsCPXML.setText("XML");
-        jMenuItemContactsCPXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemContactsCPXMLActionPerformed(evt);
-            }
-        });
-        jMenuContacts.add(jMenuItemContactsCPXML);
-
-        jMenuItemContactsCPCSV.setText("CSV");
-        jMenuItemContactsCPCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemContactsCPCSVActionPerformed(evt);
-            }
-        });
-        jMenuContacts.add(jMenuItemContactsCPCSV);
-
-        jPopupMenuContacts.add(jMenuContacts);
-
-        jMenuItemCalendarTxt.setText("View in PlainText");
-        jMenuItemCalendarTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemCalendarTxtActionPerformed(evt);
-            }
-        });
-        jPopupMenuCalendar.add(jMenuItemCalendarTxt);
-
-        jMenuItemCalendarXML.setText("View in Xml");
-        jMenuItemCalendarXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemCalendarXMLActionPerformed(evt);
-            }
-        });
-        jPopupMenuCalendar.add(jMenuItemCalendarXML);
-
-        jMenuItemCalendarCSV.setText("View in Csv");
-        jMenuItemCalendarCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemCalendarCSVActionPerformed(evt);
-            }
-        });
-        jPopupMenuCalendar.add(jMenuItemCalendarCSV);
-
-        jMenuCalendar.setText("Copy in-->");
-
-        jMenuItemCalendarCPTXT.setText("Plain Text");
-        jMenuItemCalendarCPTXT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemCalendarCPTXTActionPerformed(evt);
-            }
-        });
-        jMenuCalendar.add(jMenuItemCalendarCPTXT);
-
-        jMenuItemCalendarCPXML.setText("XML");
-        jMenuItemCalendarCPXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemCalendarCPXMLActionPerformed(evt);
-            }
-        });
-        jMenuCalendar.add(jMenuItemCalendarCPXML);
-
-        jMenuItemCalendarCPCSV.setText("CSV");
-        jMenuItemCalendarCPCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemCalendarCPCSVActionPerformed(evt);
-            }
-        });
-        jMenuCalendar.add(jMenuItemCalendarCPCSV);
-
-        jPopupMenuCalendar.add(jMenuCalendar);
-
-        jMenuItemTasksTxt.setText("View in PlainText");
-        jMenuItemTasksTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemTasksTxtActionPerformed(evt);
-            }
-        });
-        jPopupMenuTasks.add(jMenuItemTasksTxt);
-
-        jMenuItemTasksXML.setText("View in Xml");
-        jMenuItemTasksXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemTasksXMLActionPerformed(evt);
-            }
-        });
-        jPopupMenuTasks.add(jMenuItemTasksXML);
-
-        jMenuItemTasksCSV.setText("View in Csv");
-        jMenuItemTasksCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemTasksCSVActionPerformed(evt);
-            }
-        });
-        jPopupMenuTasks.add(jMenuItemTasksCSV);
-
-        jMenuTasks.setText("Copy in-->");
-
-        jMenuItemTasksCPTXT.setText("Plain Text");
-        jMenuItemTasksCPTXT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemTasksCPTXTActionPerformed(evt);
-            }
-        });
-        jMenuTasks.add(jMenuItemTasksCPTXT);
-
-        jMenuItemTasksCPXML.setText("XML");
-        jMenuItemTasksCPXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemTasksCPXMLActionPerformed(evt);
-            }
-        });
-        jMenuTasks.add(jMenuItemTasksCPXML);
-
-        jMenuItemTasksCPCSV.setText("CSV");
-        jMenuItemTasksCPCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemTasksCPCSVActionPerformed(evt);
-            }
-        });
-        jMenuTasks.add(jMenuItemTasksCPCSV);
-
-        jPopupMenuTasks.add(jMenuTasks);
-
-        jMenuItemOptionsTxt.setText("View in PlainText");
-        jMenuItemOptionsTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemOptionsTxtActionPerformed(evt);
-            }
-        });
-        jPopupMenuOptions.add(jMenuItemOptionsTxt);
-
-        jMenuItemOptionsXML.setText("View in Xml");
-        jMenuItemOptionsXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemOptionsXMLActionPerformed(evt);
-            }
-        });
-        jPopupMenuOptions.add(jMenuItemOptionsXML);
-
-        jMenuItemOptionsCSV.setText("View in Csv");
-        jMenuItemOptionsCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemOptionsCSVActionPerformed(evt);
-            }
-        });
-        jPopupMenuOptions.add(jMenuItemOptionsCSV);
-
-        jMenuOptions.setText("Copy in-->");
-
-        jMenuItemOptionsCPTXT.setText("Plain Text");
-        jMenuItemOptionsCPTXT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemOptionsCPTXTActionPerformed(evt);
-            }
-        });
-        jMenuOptions.add(jMenuItemOptionsCPTXT);
-
-        jMenuItemOptionsCPXML.setText("XML");
-        jMenuItemOptionsCPXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemOptionsCPXMLActionPerformed(evt);
-            }
-        });
-        jMenuOptions.add(jMenuItemOptionsCPXML);
-
-        jMenuItemOptionsCPCSV.setText("CSV");
-        jMenuItemOptionsCPCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemOptionsCPCSVActionPerformed(evt);
-            }
-        });
-        jMenuOptions.add(jMenuItemOptionsCPCSV);
-
-        jPopupMenuOptions.add(jMenuOptions);
+        jPopupMenu.add(jMenu);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IpdDump");
@@ -477,7 +245,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelSMSLayout.setVerticalGroup(
             jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("SMS", jPanelSMS);
@@ -520,10 +288,57 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelContactsLayout.setVerticalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Contacts", jPanelContacts);
+
+        jTableMemos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title", "Memo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTableMemos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableMemosMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTableMemos);
+        jTableMemos.getColumnModel().getColumn(0).setPreferredWidth(150);
+        jTableMemos.getColumnModel().getColumn(0).setMaxWidth(150);
+
+        javax.swing.GroupLayout jPanelMemoLayout = new javax.swing.GroupLayout(jPanelMemo);
+        jPanelMemo.setLayout(jPanelMemoLayout);
+        jPanelMemoLayout.setHorizontalGroup(
+            jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
+        );
+        jPanelMemoLayout.setVerticalGroup(
+            jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelMemoLayout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Memos", jPanelMemo);
 
         status_label2.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label2.setText("Left Intentionally Blank");
@@ -542,7 +357,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCalendarLayout.createSequentialGroup()
                 .addGap(191, 191, 191)
                 .addComponent(status_label2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(180, 180, 180))
+                .addGap(239, 239, 239))
         );
 
         jTabbedPane1.addTab("Calendar", jPanelCalendar);
@@ -564,7 +379,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTasksLayout.createSequentialGroup()
                 .addGap(191, 191, 191)
                 .addComponent(status_label4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(180, 180, 180))
+                .addGap(239, 239, 239))
         );
 
         jTabbedPane1.addTab("Tasks", jPanelTasks);
@@ -586,7 +401,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelOptionsLayout.createSequentialGroup()
                 .addGap(191, 191, 191)
                 .addComponent(status_label3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(180, 180, 180))
+                .addGap(239, 239, 239))
         );
 
         jTabbedPane1.addTab("Options", jPanelOptions);
@@ -671,10 +486,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(status_label, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -684,6 +499,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 .addComponent(status_label)
                 .addContainerGap())
         );
+
+        jTabbedPane1.getAccessibleContext().setAccessibleName("tabbedPane");
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         setBounds((screenSize.width-650)/2, (screenSize.height-508)/2, 650, 508);
@@ -712,11 +529,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         SMSDataModel = jTableSMS.getModel();
         ContactsDataModel = jTableContacts.getModel();
+        MemosDataModel = jTableMemos.getModel();
         SMStabINDEX = jTabbedPane1.indexOfTab("SMS");
         ContactstabINDEX = jTabbedPane1.indexOfTab("Contacts");
         CalendartabINDEX = jTabbedPane1.indexOfTab("Calendar");
         TaskstabINDEX = jTabbedPane1.indexOfTab("Tasks");
         OptionstabINDEX = jTabbedPane1.indexOfTab("Options");
+        MemostabINDEX = jTabbedPane1.indexOfTab("Memos");
         ActiveTAB = jTabbedPane1.getSelectedIndex();
 
         status_label.setText(welcome);
@@ -752,6 +571,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             ContactsWriter = new ContactsWriters(database);
             //System.out.println(smsWriter.SMSToXML().asXML());
             totalContacts = ContactsWriter.getNumberOfContacts();
+            MemosWriter = new MemosWriters(database);
+            totalMemos = MemosWriter.getNumberOfMemos();
 
             contactFinder = new ContactFinder(database);
 
@@ -772,6 +593,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         fillSMSTable();
         fillContactsTable();
+        fillMemosTable();
     }
 
     private void fillSMSTable() {
@@ -807,7 +629,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         ContactsTablePrepair();
         jTabbedPane1.setTitleAt(ContactstabINDEX, "Contacts (" + totalContacts + ")");
         int i = 0;
-        String sSent = "";
 
         for (Contact record : database.contacts()) {
 
@@ -819,36 +640,25 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         }
     }
 
-    private void ShowSMSPopup(MouseEvent e) {
-        jPopupMenuSMS.show(e.getComponent(),
-                e.getX(), e.getY());
-    }
+    private void fillMemosTable() {
+        MemoTablePrepair();
+        jTabbedPane1.setTitleAt(MemostabINDEX, "Memos (" + totalMemos + ")");
+        int i = 0;
 
-    private void ShowContactsPopup(MouseEvent e) {
-        jPopupMenuContacts.show(e.getComponent(),
-                e.getX(), e.getY());
-    }
+        for (Memos record : database.memos()) {
 
-    private void ShowTasksPopup(MouseEvent e) {
-        jPopupMenuTasks.show(e.getComponent(),
-                e.getX(), e.getY());
-    }
-
-    private void ShowCalendarPopup(MouseEvent e) {
-        jPopupMenuCalendar.show(e.getComponent(),
-                e.getX(), e.getY());
-    }
-
-    private void ShowOptionsPopup(MouseEvent e) {
-        jPopupMenuOptions.show(e.getComponent(),
-                e.getX(), e.getY());
+            MemosDataModel.setValueAt(record.getTitle(), i, MemosTitleIndex);
+            MemosDataModel.setValueAt(record.getMemo(), i, MemosMemoIndex);
+            i++;//Go to next Line in the table
+        }
     }
 
     private void jTableSMSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableSMSMouseClicked
         SMSSelectedRows = jTableSMS.getSelectedRows();
+         ActiveTAB = jTabbedPane1.getSelectedIndex();
         if (evt.getButton() == MouseEvent.BUTTON3 && SMSSelectedRows.length > 0) {
             //System.out.println("right click");
-            ShowSMSPopup(evt);
+            ShowPopup(evt);
 
         } else {
             if (evt.getButton() == MouseEvent.BUTTON3 && SMSSelectedRows.length == 0) {
@@ -906,155 +716,117 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         setClipboardContents(ClipBoardTemp);
     }//GEN-LAST:event_copyMenuItemActionPerformed
 
-    private void jMenuItemSMSXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSMSXMLActionPerformed
-        String tmpXml = smsWriter.SMSToXML(SMSSelectedRows).asXML();
+    private void ShowPopup(MouseEvent e) {
+        jPopupMenu.show(e.getComponent(),
+                e.getX(), e.getY());
+    }
+
+    private void jMenuItemXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemXMLActionPerformed
+        String tmpXml = "";
+        if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
+            tmpXml = smsWriter.SMSToXML(SMSSelectedRows).asXML();
+        }
+        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+            tmpXml = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
+        }
+        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+            tmpXml = MemosWriter.MemosToXML(MemosSelectedRows).asXML();
+        }
+
+
+
         viewer.setXml(tmpXml);
         viewer.setTitle("SMS Viewer - XML");
         viewer.setVisible(true);
-}//GEN-LAST:event_jMenuItemSMSXMLActionPerformed
+}//GEN-LAST:event_jMenuItemXMLActionPerformed
 
-    private void jMenuItemSMSTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSMSTxtActionPerformed
-        String tmp = smsWriter.SMSToPlainText(SMSSelectedRows);
+    private void jMenuItemTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTxtActionPerformed
+
+        String tmp = "";
+        if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
+            tmp = smsWriter.SMSToPlainText(SMSSelectedRows);
+        }
+        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+            tmp = ContactsWriter.ContactsToPlainText(ContactsSelectedRows);
+        }
+        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+            tmp = MemosWriter.MemosToPlainText(MemosSelectedRows);
+        }
+
+
         viewer.setTxt(tmp);
         viewer.setTitle("SMS Viewer - Plain Text");
         viewer.setVisible(true);
-}//GEN-LAST:event_jMenuItemSMSTxtActionPerformed
+}//GEN-LAST:event_jMenuItemTxtActionPerformed
 
-    private void jMenuItemSMSCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSMSCSVActionPerformed
-        String tmp = smsWriter.SMSToCVS(SMSSelectedRows);
+    private void jMenuItemCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCSVActionPerformed
+        String tmp = "";
+        
+        if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
+            tmp = smsWriter.SMSToCVS(SMSSelectedRows);
+        }
+        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+            tmp = ContactsWriter.ContactsToCVS(ContactsSelectedRows);
+        }
+        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+            tmp = MemosWriter.MemosToCVS(MemosSelectedRows);
+        }
+
         viewer.setCvs(tmp);
         viewer.setTitle("SMS Viewer - Csv");
         viewer.setVisible(true);
-}//GEN-LAST:event_jMenuItemSMSCSVActionPerformed
+}//GEN-LAST:event_jMenuItemCSVActionPerformed
 
-    private void jMenuItemSMSCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSMSCPTXTActionPerformed
-        String tmp = smsWriter.SMSToPlainText(SMSSelectedRows);
+    private void jMenuItemCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPTXTActionPerformed
+         String tmp = "";
+        if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
+            tmp = smsWriter.SMSToPlainText(SMSSelectedRows);
+        }
+        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+            tmp = ContactsWriter.ContactsToPlainText(ContactsSelectedRows);
+        }
+        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+            tmp = MemosWriter.MemosToPlainText(MemosSelectedRows);
+        }
+        
         setClipboardContents(tmp);
-}//GEN-LAST:event_jMenuItemSMSCPTXTActionPerformed
+}//GEN-LAST:event_jMenuItemCPTXTActionPerformed
 
-    private void jMenuItemSMSCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSMSCPXMLActionPerformed
-        String tmp = smsWriter.SMSToXML(SMSSelectedRows).asXML();
+    private void jMenuItemCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPXMLActionPerformed
+        String tmpXml = "";
+        if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
+            tmpXml = smsWriter.SMSToXML(SMSSelectedRows).asXML();
+        }
+        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+            tmpXml = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
+        }
+        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+            tmpXml = MemosWriter.MemosToXML(MemosSelectedRows).asXML();
+        }
+        setClipboardContents(tmpXml);
+}//GEN-LAST:event_jMenuItemCPXMLActionPerformed
+
+    private void jMenuItemCPCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPCSVActionPerformed
+        String tmp = "";
+
+        if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
+            tmp = smsWriter.SMSToCVS(SMSSelectedRows);
+        }
+        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+            tmp = ContactsWriter.ContactsToCVS(ContactsSelectedRows);
+        }
+        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+            tmp = MemosWriter.MemosToCVS(MemosSelectedRows);
+        }
         setClipboardContents(tmp);
-}//GEN-LAST:event_jMenuItemSMSCPXMLActionPerformed
-
-    private void jMenuItemSMSCPCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSMSCPCSVActionPerformed
-        String tmp = smsWriter.SMSToCVS(SMSSelectedRows);
-        setClipboardContents(tmp);
-}//GEN-LAST:event_jMenuItemSMSCPCSVActionPerformed
-
-    private void jMenuItemContactsTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsTxtActionPerformed
-        String tmp = ContactsWriter.ContactsToPlainText(ContactsSelectedRows);
-        viewer.setTxt(tmp);
-        viewer.setTitle("Contacts Viewer - Plain Text");
-        viewer.setVisible(true);
-}//GEN-LAST:event_jMenuItemContactsTxtActionPerformed
-
-    private void jMenuItemContactsXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsXMLActionPerformed
-        String tmpXml = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
-        viewer.setXml(tmpXml);
-        viewer.setTitle("Contacts Viewer - XML");
-        viewer.setVisible(true);
-}//GEN-LAST:event_jMenuItemContactsXMLActionPerformed
-
-    private void jMenuItemContactsCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsCSVActionPerformed
-        String tmp = ContactsWriter.ContactsToCVS(ContactsSelectedRows);
-        viewer.setCvs(tmp);
-        viewer.setTitle("Contacts Viewer - Csv");
-        viewer.setVisible(true);
-}//GEN-LAST:event_jMenuItemContactsCSVActionPerformed
-
-    private void jMenuItemContactsCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsCPTXTActionPerformed
-        String tmp = ContactsWriter.ContactsToPlainText(ContactsSelectedRows);
-        setClipboardContents(tmp);
-}//GEN-LAST:event_jMenuItemContactsCPTXTActionPerformed
-
-    private void jMenuItemContactsCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsCPXMLActionPerformed
-        String tmp = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
-        setClipboardContents(tmp);
-}//GEN-LAST:event_jMenuItemContactsCPXMLActionPerformed
-
-    private void jMenuItemContactsCPCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemContactsCPCSVActionPerformed
-        String tmp = ContactsWriter.ContactsToCVS(ContactsSelectedRows);
-        setClipboardContents(tmp);
-}//GEN-LAST:event_jMenuItemContactsCPCSVActionPerformed
-
-    private void jMenuItemCalendarTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCalendarTxtActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemCalendarTxtActionPerformed
-
-    private void jMenuItemCalendarXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCalendarXMLActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemCalendarXMLActionPerformed
-
-    private void jMenuItemCalendarCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCalendarCSVActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemCalendarCSVActionPerformed
-
-    private void jMenuItemCalendarCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCalendarCPTXTActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemCalendarCPTXTActionPerformed
-
-    private void jMenuItemCalendarCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCalendarCPXMLActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemCalendarCPXMLActionPerformed
-
-    private void jMenuItemCalendarCPCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCalendarCPCSVActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemCalendarCPCSVActionPerformed
-
-    private void jMenuItemTasksTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTasksTxtActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemTasksTxtActionPerformed
-
-    private void jMenuItemTasksXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTasksXMLActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemTasksXMLActionPerformed
-
-    private void jMenuItemTasksCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTasksCSVActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemTasksCSVActionPerformed
-
-    private void jMenuItemTasksCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTasksCPTXTActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemTasksCPTXTActionPerformed
-
-    private void jMenuItemTasksCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTasksCPXMLActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemTasksCPXMLActionPerformed
-
-    private void jMenuItemTasksCPCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTasksCPCSVActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemTasksCPCSVActionPerformed
-
-    private void jMenuItemOptionsTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOptionsTxtActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemOptionsTxtActionPerformed
-
-    private void jMenuItemOptionsXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOptionsXMLActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemOptionsXMLActionPerformed
-
-    private void jMenuItemOptionsCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOptionsCSVActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemOptionsCSVActionPerformed
-
-    private void jMenuItemOptionsCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOptionsCPTXTActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemOptionsCPTXTActionPerformed
-
-    private void jMenuItemOptionsCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOptionsCPXMLActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemOptionsCPXMLActionPerformed
-
-    private void jMenuItemOptionsCPCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOptionsCPCSVActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_jMenuItemOptionsCPCSVActionPerformed
+}//GEN-LAST:event_jMenuItemCPCSVActionPerformed
 
     private void jTableContactsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableContactsMouseClicked
         ContactsSelectedRows = jTableContacts.getSelectedRows();
+         ActiveTAB = jTabbedPane1.getSelectedIndex();
         if (evt.getButton() == MouseEvent.BUTTON3 && ContactsSelectedRows.length > 0) {
             //System.out.println("right click");
-            ShowContactsPopup(evt);
+            ShowPopup(evt);
 
         } else {
             if (evt.getButton() == MouseEvent.BUTTON3 && ContactsSelectedRows.length == 0) {
@@ -1068,12 +840,29 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void ResolveCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResolveCheckBoxActionPerformed
         resolveNames = ResolveCheckBox.isSelected();
-        
+
         if (saveAsMenuItem.isEnabled()) {
             smsWriter = new SmsWriters(database, resolveNames);
             fillTables();
         }
     }//GEN-LAST:event_ResolveCheckBoxActionPerformed
+
+    private void jTableMemosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMemosMouseClicked
+        MemosSelectedRows = jTableMemos.getSelectedRows();
+        ActiveTAB = jTabbedPane1.getSelectedIndex();
+        if (evt.getButton() == MouseEvent.BUTTON3 && MemosSelectedRows.length > 0) {
+            //System.out.println("right click");
+            ShowPopup(evt);
+
+        } else {
+            if (evt.getButton() == MouseEvent.BUTTON3 && MemosSelectedRows.length == 0) {
+                JOptionPane.showMessageDialog(MessageFrame, "Select the Memos you want to View");
+            }
+        }
+        if (evt.getClickCount() == 2) {
+            //System.out.println("double click");
+        }
+}//GEN-LAST:event_jTableMemosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1086,6 +875,42 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 //        });
 //    }
     // <editor-fold defaultstate="collapsed" desc="Table Prepair Code - - NEED TO find alternative way of doing this??">
+    private void MemoTablePrepair() {
+        jTableMemos.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[totalMemos][1],
+                new String[]{
+                    "Title", "Memo"
+                }) {
+
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTableMemos);
+        jTableMemos.getColumnModel().getColumn(0).setPreferredWidth(150);
+        jTableMemos.getColumnModel().getColumn(0).setMaxWidth(150);
+
+        javax.swing.GroupLayout jPanelMemoLayout = new javax.swing.GroupLayout(jPanelMemo);
+        jPanelMemo.setLayout(jPanelMemoLayout);
+        jPanelMemoLayout.setHorizontalGroup(
+                jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE));
+        jPanelMemoLayout.setVerticalGroup(
+                jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanelMemoLayout.createSequentialGroup().addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+
+        MemosDataModel = jTableMemos.getModel();
+    }
+
     private void ContactsTablePrepair() {
         jTableContacts.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[totalContacts][3], new String[]{
@@ -1179,55 +1004,26 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JMenu jMenuCalendar;
-    private javax.swing.JMenu jMenuContacts;
-    private javax.swing.JMenuItem jMenuItemCalendarCPCSV;
-    private javax.swing.JMenuItem jMenuItemCalendarCPTXT;
-    private javax.swing.JMenuItem jMenuItemCalendarCPXML;
-    private javax.swing.JMenuItem jMenuItemCalendarCSV;
-    private javax.swing.JMenuItem jMenuItemCalendarTxt;
-    private javax.swing.JMenuItem jMenuItemCalendarXML;
-    private javax.swing.JMenuItem jMenuItemContactsCPCSV;
-    private javax.swing.JMenuItem jMenuItemContactsCPTXT;
-    private javax.swing.JMenuItem jMenuItemContactsCPXML;
-    private javax.swing.JMenuItem jMenuItemContactsCSV;
-    private javax.swing.JMenuItem jMenuItemContactsTxt;
-    private javax.swing.JMenuItem jMenuItemContactsXML;
-    private javax.swing.JMenuItem jMenuItemOptionsCPCSV;
-    private javax.swing.JMenuItem jMenuItemOptionsCPTXT;
-    private javax.swing.JMenuItem jMenuItemOptionsCPXML;
-    private javax.swing.JMenuItem jMenuItemOptionsCSV;
-    private javax.swing.JMenuItem jMenuItemOptionsTxt;
-    private javax.swing.JMenuItem jMenuItemOptionsXML;
-    private javax.swing.JMenuItem jMenuItemSMSCPCSV;
-    private javax.swing.JMenuItem jMenuItemSMSCPTXT;
-    private javax.swing.JMenuItem jMenuItemSMSCPXML;
-    private javax.swing.JMenuItem jMenuItemSMSCSV;
-    private javax.swing.JMenuItem jMenuItemSMSTxt;
-    private javax.swing.JMenuItem jMenuItemSMSXML;
-    private javax.swing.JMenuItem jMenuItemTasksCPCSV;
-    private javax.swing.JMenuItem jMenuItemTasksCPTXT;
-    private javax.swing.JMenuItem jMenuItemTasksCPXML;
-    private javax.swing.JMenuItem jMenuItemTasksCSV;
-    private javax.swing.JMenuItem jMenuItemTasksTxt;
-    private javax.swing.JMenuItem jMenuItemTasksXML;
-    private javax.swing.JMenu jMenuOptions;
-    private javax.swing.JMenu jMenuSMS;
-    private javax.swing.JMenu jMenuTasks;
+    private javax.swing.JMenu jMenu;
+    private javax.swing.JMenuItem jMenuItemCPCSV;
+    private javax.swing.JMenuItem jMenuItemCPTXT;
+    private javax.swing.JMenuItem jMenuItemCPXML;
+    private javax.swing.JMenuItem jMenuItemCSV;
+    private javax.swing.JMenuItem jMenuItemTxt;
+    private javax.swing.JMenuItem jMenuItemXML;
     private javax.swing.JPanel jPanelCalendar;
     private javax.swing.JPanel jPanelContacts;
+    private javax.swing.JPanel jPanelMemo;
     private javax.swing.JPanel jPanelOptions;
     private javax.swing.JPanel jPanelSMS;
     private javax.swing.JPanel jPanelTasks;
-    private javax.swing.JPopupMenu jPopupMenuCalendar;
-    private javax.swing.JPopupMenu jPopupMenuContacts;
-    private javax.swing.JPopupMenu jPopupMenuOptions;
-    private javax.swing.JPopupMenu jPopupMenuSMS;
-    private javax.swing.JPopupMenu jPopupMenuTasks;
+    private javax.swing.JPopupMenu jPopupMenu;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTableContacts;
+    private javax.swing.JTable jTableMemos;
     private javax.swing.JTable jTableSMS;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
