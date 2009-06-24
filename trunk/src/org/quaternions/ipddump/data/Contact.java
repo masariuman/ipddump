@@ -206,7 +206,11 @@ public class Contact extends Record implements Comparable<Contact> {
      */
     @Override
     public int compareTo(Contact o) {
-        return 0;
+        if ( getName().compareTo( o.getName() ) != 0 ) {
+      return getName().compareTo( o.getName() );
+    } else {
+      return o.getName().compareTo( getName());
+    }
     }
 
     /**

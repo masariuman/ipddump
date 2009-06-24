@@ -12,6 +12,12 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -72,6 +78,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private boolean resolveNames = true;
     private int MemosTitleIndex = 0;
     private int MemosMemoIndex = 1;
+    private Collection<Contact> xe;
+    private Object[] xe2;
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -567,7 +575,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             resolveNames = ResolveCheckBox.isSelected();
             smsWriter = new SmsWriters(database, resolveNames);
             totalSMS = smsWriter.getNumberOfSMS();
-
+            
             ContactsWriter = new ContactsWriters(database);
             //System.out.println(smsWriter.SMSToXML().asXML());
             totalContacts = ContactsWriter.getNumberOfContacts();
@@ -575,6 +583,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             totalMemos = MemosWriter.getNumberOfMemos();
 
             contactFinder = new ContactFinder(database);
+
+            database.shortContacts();
+           database.shortMemos();
 
             if (database != null) {
                 saveAsMenuItem.setEnabled(true);
@@ -655,7 +666,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void jTableSMSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableSMSMouseClicked
         SMSSelectedRows = jTableSMS.getSelectedRows();
-         ActiveTAB = jTabbedPane1.getSelectedIndex();
+        ActiveTAB = jTabbedPane1.getSelectedIndex();
         if (evt.getButton() == MouseEvent.BUTTON3 && SMSSelectedRows.length > 0) {
             //System.out.println("right click");
             ShowPopup(evt);
@@ -693,6 +704,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                     fileWriter.writeTxtToFile(fToSave, ContactsWriter.ContactsToCVS(ContactsSelectedRows));
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, ContactsWriter.ContactsToXML(ContactsSelectedRows));
+                }
+            }
+        } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+            if (saveDialog()) {
+                if (ext.equalsIgnoreCase("txt")) {
+                    fileWriter.writeTxtToFile(fToSave, MemosWriter.MemosToPlainText(MemosSelectedRows));
+                } else if (ext.equalsIgnoreCase("cvs")) {
+                    fileWriter.writeTxtToFile(fToSave, MemosWriter.MemosToCVS(MemosSelectedRows));
+                } else if (ext.equalsIgnoreCase("xml")) {
+                    fileWriter.writeXMLtoFile(fToSave, MemosWriter.MemosToXML(MemosSelectedRows));
                 }
             }
         } else {
@@ -761,7 +782,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void jMenuItemCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCSVActionPerformed
         String tmp = "";
-        
+
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = smsWriter.SMSToCVS(SMSSelectedRows);
         }
@@ -778,7 +799,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_jMenuItemCSVActionPerformed
 
     private void jMenuItemCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPTXTActionPerformed
-         String tmp = "";
+        String tmp = "";
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = smsWriter.SMSToPlainText(SMSSelectedRows);
         }
@@ -788,7 +809,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = MemosWriter.MemosToPlainText(MemosSelectedRows);
         }
-        
+
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPTXTActionPerformed
 
@@ -823,7 +844,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void jTableContactsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableContactsMouseClicked
         ContactsSelectedRows = jTableContacts.getSelectedRows();
-         ActiveTAB = jTabbedPane1.getSelectedIndex();
+        ActiveTAB = jTabbedPane1.getSelectedIndex();
         if (evt.getButton() == MouseEvent.BUTTON3 && ContactsSelectedRows.length > 0) {
             //System.out.println("right click");
             ShowPopup(evt);
