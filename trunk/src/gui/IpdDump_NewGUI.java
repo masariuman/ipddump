@@ -113,11 +113,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableMemos = new javax.swing.JTable();
         jPanelCalendar = new javax.swing.JPanel();
-        status_label2 = new javax.swing.JLabel();
+        status_label7 = new javax.swing.JLabel();
         jPanelTasks = new javax.swing.JPanel();
-        status_label4 = new javax.swing.JLabel();
+        status_label5 = new javax.swing.JLabel();
         jPanelOptions = new javax.swing.JPanel();
-        status_label3 = new javax.swing.JLabel();
+        status_label6 = new javax.swing.JLabel();
         status_label = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -348,73 +348,79 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Memos", jPanelMemo);
 
-        status_label2.setFont(new java.awt.Font("Tahoma", 0, 18));
-        status_label2.setText("Left Intentionally Blank");
+        status_label7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        status_label7.setText("Coming Soon");
 
         javax.swing.GroupLayout jPanelCalendarLayout = new javax.swing.GroupLayout(jPanelCalendar);
         jPanelCalendar.setLayout(jPanelCalendarLayout);
         jPanelCalendarLayout.setHorizontalGroup(
             jPanelCalendarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCalendarLayout.createSequentialGroup()
-                .addGap(219, 219, 219)
-                .addComponent(status_label2, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                .addGap(314, 314, 314))
+            .addGap(0, 749, Short.MAX_VALUE)
+            .addGap(0, 749, Short.MAX_VALUE)
+            .addGroup(jPanelCalendarLayout.createSequentialGroup()
+                .addGap(306, 306, 306)
+                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addGap(306, 306, 306))
         );
         jPanelCalendarLayout.setVerticalGroup(
             jPanelCalendarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCalendarLayout.createSequentialGroup()
-                .addGap(191, 191, 191)
-                .addComponent(status_label2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(239, 239, 239))
+            .addGap(0, 445, Short.MAX_VALUE)
+            .addGap(0, 445, Short.MAX_VALUE)
+            .addGroup(jPanelCalendarLayout.createSequentialGroup()
+                .addGap(211, 211, 211)
+                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(212, 212, 212))
         );
 
         jTabbedPane1.addTab("Calendar", jPanelCalendar);
 
-        status_label4.setFont(new java.awt.Font("Tahoma", 0, 18));
-        status_label4.setText("Left Intentionally Blank");
+        status_label5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        status_label5.setText("Coming Soon");
 
         javax.swing.GroupLayout jPanelTasksLayout = new javax.swing.GroupLayout(jPanelTasks);
         jPanelTasks.setLayout(jPanelTasksLayout);
         jPanelTasksLayout.setHorizontalGroup(
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTasksLayout.createSequentialGroup()
-                .addGap(219, 219, 219)
-                .addComponent(status_label4, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                .addGap(314, 314, 314))
+            .addGroup(jPanelTasksLayout.createSequentialGroup()
+                .addGap(306, 306, 306)
+                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addGap(306, 306, 306))
         );
         jPanelTasksLayout.setVerticalGroup(
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTasksLayout.createSequentialGroup()
-                .addGap(191, 191, 191)
-                .addComponent(status_label4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(239, 239, 239))
+            .addGroup(jPanelTasksLayout.createSequentialGroup()
+                .addGap(211, 211, 211)
+                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(212, 212, 212))
         );
 
         jTabbedPane1.addTab("Tasks", jPanelTasks);
 
-        status_label3.setFont(new java.awt.Font("Tahoma", 0, 18));
-        status_label3.setText("Left Intentionally Blank");
+        status_label6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        status_label6.setText("Coming Soon");
 
         javax.swing.GroupLayout jPanelOptionsLayout = new javax.swing.GroupLayout(jPanelOptions);
         jPanelOptions.setLayout(jPanelOptionsLayout);
         jPanelOptionsLayout.setHorizontalGroup(
             jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelOptionsLayout.createSequentialGroup()
-                .addGap(219, 219, 219)
-                .addComponent(status_label3, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                .addGap(314, 314, 314))
+            .addGap(0, 749, Short.MAX_VALUE)
+            .addGroup(jPanelOptionsLayout.createSequentialGroup()
+                .addGap(306, 306, 306)
+                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addGap(306, 306, 306))
         );
         jPanelOptionsLayout.setVerticalGroup(
             jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelOptionsLayout.createSequentialGroup()
-                .addGap(191, 191, 191)
-                .addComponent(status_label3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(239, 239, 239))
+            .addGap(0, 445, Short.MAX_VALUE)
+            .addGroup(jPanelOptionsLayout.createSequentialGroup()
+                .addGap(211, 211, 211)
+                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(212, 212, 212))
         );
 
         jTabbedPane1.addTab("Options", jPanelOptions);
 
-        status_label.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
         status_label.setText("Welcome to IpdDump - http://code.google.com/p/ipddump/");
 
         fileMenu.setText("File");
@@ -1051,8 +1057,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JLabel status_label;
-    private javax.swing.JLabel status_label2;
-    private javax.swing.JLabel status_label3;
-    private javax.swing.JLabel status_label4;
+    private javax.swing.JLabel status_label5;
+    private javax.swing.JLabel status_label6;
+    private javax.swing.JLabel status_label7;
     // End of variables declaration//GEN-END:variables
 }
