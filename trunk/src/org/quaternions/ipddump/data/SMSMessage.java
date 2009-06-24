@@ -1,5 +1,7 @@
 package org.quaternions.ipddump.data;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,205 +15,225 @@ import java.util.Map;
  * @date Jan 1, 2008
  */
 public class SMSMessage extends Record implements Comparable<SMSMessage> {
-  /**
-   * The map from the name of the field to the field value.
-   */
-  protected final Map<String, String> fields;
 
-  /**
-   * The date the SMS was sent;
-   */
-  protected Date                      sent;
+    /**
+     * The map from the name of the field to the field value.
+     */
+    protected final Map<String, String> fields;
 
-  /**
-   * The date the SMS was received.
-   */
-  protected Date                      received;
+    /**
+     * The date the SMS was sent;
+     */
+    protected Date sent;
 
-  /**
-   * Was the SMS sent from the phone, or received?
-   */
-  protected Boolean                   wasSent;
+    /**
+     * The date the SMS was received.
+     */
+    protected Date received;
 
-  /**
-   * The far number.
-   */
-  protected String                    number;
+    /**
+     * Was the SMS sent from the phone, or received?
+     */
+    protected Boolean wasSent;
 
-  /**
-   * The text of the SMS.
-   */
-  protected String                    text;
+    /**
+     * The far number.
+     */
+    protected String number;
 
-  /**
-   * Creates a new record with all provided data.
-   *
-   * @param dbID The database id
-   * @param dbVersion The database version
-   * @param uid The unique identifier of this record
-   * @param recordLength The length of the record
-   */
-  SMSMessage( int dbID, int dbVersion, int uid, int recordLength ) {
-    super( dbID, dbVersion, uid, recordLength );
-    fields = new HashMap<String, String>();
-  }
+    /**
+     * The text of the SMS.
+     */
+    protected String text;
 
-  /**
-   * Gets the date the SMS was sent.
-   *
-   * @return The sent date
-   */
-  public Date getSent() {
-    return sent;
-  }
+    //~--- constructors -------------------------------------------------------
 
-  /**
-   * Gets the date the SMS was received.
-   *
-   * @return The received date
-   */
-  public Date getReceived() {
-    return received;
-  }
+    /**
+     * Creates a new record with all provided data.
+     *
+     * @param dbID The database id
+     * @param dbVersion The database version
+     * @param uid The unique identifier of this record
+     * @param recordLength The length of the record
+     */
+    SMSMessage(int dbID, int dbVersion, int uid, int recordLength) {
+        super(dbID, dbVersion, uid, recordLength);
+        fields=new HashMap<String, String>();
+    }
 
-  /**
-   * Was the SMS sent from the phone or received.
-   *
-   * @return True if sent
-   */
-  public boolean wasSent() {
-    return wasSent;
-  }
+    //~--- methods ------------------------------------------------------------
 
-  /**
-   * Gets the far phone number.
-   *
-   * @return The phone number
-   */
-  public String getNumber() {
-    return number;
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addField(int type, char[] data) {
+        StringBuilder builder=null;
 
-  /**
-   * Gets the text of the SMS.
-   *
-   * @return The SMS text
-   */
-  public String getText() {
-    return text;
-  }
+        switch (type) {
+        case 4 :
+            Gsm2Iso.Gsm2Iso(data);
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addField( int type, char[] data ) {
-    StringBuilder builder = null;
+            // System.out.println(Gsm2Iso.ucs2ToUTF8(data));
 
-    switch ( type ) {
-      case 4:
+            byte[] d=new byte[data.length];
 
-        Gsm2Iso.Gsm2Iso(data);
-          //System.out.println(Gsm2Iso.ucs2ToUTF8(data));
+            for (int i=0; i<data.length; i++) {
+                d[i]=(byte) data[i];
+            }
 
-        byte[] d = new byte[ data.length ];
-        for ( int i = 0; i < data.length; i++ ) {
-          d[ i ] = (byte)data[ i ];
-        }
-          text = new String(d);
-          fields.put( "text", text );
+            text=new String(d);
+            fields.put("text", text);
 
-        break;
+            break;
 
-      case 2:
-        builder = new StringBuilder();
-        for ( char c : data ) {
-          if ( Character.isLetterOrDigit( c ) || c == '#' || c == '*' || c == '(' || c == ')' || c == '.' || c == '-' || c == '+'|| c == ' ' ) {
-            builder.append( c );
-          }
-        }
+        case 2 :
+            builder=new StringBuilder();
 
-        number = builder.toString();
-        fields.put( "number", number );
-        break;
+            for (char c : data) {
+                if (Character.isLetterOrDigit(c) || (c=='#') || (c=='*') || (c=='(') || (c==')') || (c=='.')
+                        || (c=='-') || (c=='+') || (c==' ')) {
+                    builder.append(c);
+                }
+            }
 
-      case 9:
-        // This is a sequence number and we don't care about it for now.
-        // The sequence number seems to apply only if it was sent from the
-        // phone in the IPD.
-        break;
+            number=builder.toString();
+            fields.put("number", number);
 
-      case 7:
-        // This is some fixed number for my phone, I probably don't care
-        // about it
-        break;
+            break;
 
-      case 11:
-        // This is also inconsequential, for me it's 0000 for the first sms,
-        // 1000 for all the rest
-        break;
+        case 9 :
 
-      case 1:
-        long val0 = 0;
-        for ( int i = 13; i < 21; i++ ) {
-          val0 |= (long) data[ i ] << ( ( i - 13 ) * 8 );
-        }
+            // This is a sequence number and we don't care about it for now.
+            // The sequence number seems to apply only if it was sent from the
+            // phone in the IPD.
+            break;
 
-        long val1 = 0;
-        for ( int i = 21; i < 29; i++ ) {
-          val1 |= (long) data[ i ] << ( ( i - 21 ) * 8 );
-        }
+        case 7 :
 
-        if ( data[ 0 ] == 0 ) {
-          sent = new Date( val0 );
-          received = new Date( val1 );
-          wasSent = true;
-        } else {
-          sent = new Date( val1 );
-          received = new Date( val0 );
-          wasSent = false;
-        }
+            // This is some fixed number for my phone, I probably don't care
+            // about it
+            break;
 
-        fields.put( "sent", sent.toString() );
-        fields.put( "received", received.toString() );
-        fields.put( "sent?", wasSent.toString() );
-        
-        break;
+        case 11 :
 
-      default:
+            // This is also inconsequential, for me it's 0000 for the first sms,
+            // 1000 for all the rest
+            break;
+
+        case 1 :
+            long val0=0;
+
+            for (int i=13; i<21; i++) {
+                val0|=(long) data[i] << ((i-13) * 8);
+            }
+
+            long val1=0;
+
+            for (int i=21; i<29; i++) {
+                val1|=(long) data[i] << ((i-21) * 8);
+            }
+
+            if (data[0]==0) {
+                sent    =new Date(val0);
+                received=new Date(val1);
+                wasSent =true;
+            } else {
+                sent    =new Date(val1);
+                received=new Date(val0);
+                wasSent =false;
+            }
+
+            fields.put("sent", sent.toString());
+            fields.put("received", received.toString());
+            fields.put("sent?", wasSent.toString());
+
+            break;
+
+        default :
+
         // Should be no default
+        }
     }
-  }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Map<String, String> fields() {
-    return Collections.<String, String> unmodifiableMap( fields );
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int compareTo( SMSMessage o ) {
-    if ( sent.compareTo( o.sent ) != 0 ) {
-      return sent.compareTo( o.sent );
-    } else {
-      return received.compareTo( o.received );
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int compareTo(SMSMessage o) {
+        if (sent.compareTo(o.sent)!=0) {
+            return sent.compareTo(o.sent);
+        } else {
+            return received.compareTo(o.received);
+        }
     }
-  }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    if ( wasSent() ) {
-      return "To: " + getNumber() + " - " + getText();
-    } else {
-      return "From: " + getNumber() + " - " + getText();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, String> fields() {
+        return Collections.<String, String>unmodifiableMap(fields);
     }
-  }
+
+    //~--- get methods --------------------------------------------------------
+
+    /**
+     * Gets the far phone number.
+     *
+     * @return The phone number
+     */
+    public String getNumber() {
+        return number;
+    }
+
+    /**
+     * Gets the date the SMS was received.
+     *
+     * @return The received date
+     */
+    public Date getReceived() {
+        return received;
+    }
+
+    /**
+     * Gets the date the SMS was sent.
+     *
+     * @return The sent date
+     */
+    public Date getSent() {
+        return sent;
+    }
+
+    /**
+     * Gets the text of the SMS.
+     *
+     * @return The SMS text
+     */
+    public String getText() {
+        return text;
+    }
+
+    //~--- methods ------------------------------------------------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        if (wasSent()) {
+            return "To: "+getNumber()+" - "+getText();
+        } else {
+            return "From: "+getNumber()+" - "+getText();
+        }
+    }
+
+    /**
+     * Was the SMS sent from the phone or received.
+     *
+     * @return True if sent
+     */
+    public boolean wasSent() {
+        return wasSent;
+    }
 }
