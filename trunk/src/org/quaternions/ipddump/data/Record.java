@@ -2,6 +2,8 @@ package org.quaternions.ipddump.data;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +15,6 @@ import java.util.Map;
  * @date Jan 1, 2008
  */
 public abstract class Record {
-
     /**
      * The 0-based index of the database to which this field belongs.
      */
@@ -39,6 +40,11 @@ public abstract class Record {
      * increasing sequence of integers within the IPD.
      */
     protected int recordDBHandle;
+
+    /**
+     * The map from the name of the field to the field value.
+     */
+    protected Map<String, String> fields = new HashMap<String, String>();
 
     //~--- constructors -------------------------------------------------------
 
@@ -81,7 +87,9 @@ public abstract class Record {
      *
      * @return An unmodifiable map from the name of the field to the field data
      */
-    public abstract Map<String, String> fields();
+    public Map<String, String> fields() {
+      return Collections.unmodifiableMap(fields);
+    }
 
     //~--- get methods --------------------------------------------------------
 

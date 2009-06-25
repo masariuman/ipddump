@@ -2,25 +2,19 @@ package org.quaternions.ipddump.data;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A contact is a record representing contact information stored in the address
  * book.
  *
- * @Jimmys Daskalakis
+ * @author Jimmys Daskalakis
  * @date Jun 20, 2009
  */
-public class Tasks extends Record implements Comparable<Tasks> {
-
-    /**
-     * The map from the name of the field to the field value.
-     */
-    protected final Map<String, String> fields;
+public class Task extends Record implements Comparable<Task> {
     String                              text;
+
     Date                                date;
 
     //~--- constructors -------------------------------------------------------
@@ -33,16 +27,13 @@ public class Tasks extends Record implements Comparable<Tasks> {
      * @param uid The unique identifier of this record
      * @param recordLength The length of the record
      */
-    Tasks(int dbID, int dbVersion, int uid, int recordLength) {
+    Task(int dbID, int dbVersion, int uid, int recordLength) {
         super(dbID, dbVersion, uid, recordLength);
         fields=new HashMap<String, String>();
     }
 
     //~--- methods ------------------------------------------------------------
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void addField(int type, char[] data) {
         String fieldName=null;
@@ -96,30 +87,13 @@ public class Tasks extends Record implements Comparable<Tasks> {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public int compareTo(Tasks o) {
+    public int compareTo(Task o) {
         return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Map<String, String> fields() {
-        return Collections.<String, String>unmodifiableMap(fields);
     }
 
     //~--- get methods --------------------------------------------------------
 
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
     public String getEmail() {
         if (fields.containsKey("Email")) {
             return fields.get("Email");
@@ -128,12 +102,6 @@ public class Tasks extends Record implements Comparable<Tasks> {
         return "";
     }
 
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
     public String getHomePhone() {
         if (fields.containsKey("Home Phone")) {
             return fields.get("Home Phone");
@@ -144,21 +112,11 @@ public class Tasks extends Record implements Comparable<Tasks> {
 
     //~--- methods ------------------------------------------------------------
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         return "";
     }
 
-    /**
-     * Method description
-     *
-     *
-     * @param key
-     * @param value
-     */
     protected void addField(String key, String value) {
         if (key.equalsIgnoreCase("name")) {
             String name=fields.get(key);
@@ -181,14 +139,6 @@ public class Tasks extends Record implements Comparable<Tasks> {
         }
     }
 
-    /**
-     * Method description
-     *
-     *
-     * @param data
-     *
-     * @return
-     */
     protected String makeString(char[] data) {
 
         // Gsm2Iso.Gsm2Iso(data);

@@ -15,7 +15,7 @@ import org.dom4j.io.XMLWriter;
 
 import org.quaternions.ipddump.data.ContactFinder;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
-import org.quaternions.ipddump.data.Memos;
+import org.quaternions.ipddump.data.Memo;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -50,7 +50,7 @@ public class MemosWriters {
         temp.delete(0, temp.capacity());
         temp.append("Title,Memo\n");
 
-        for (Memos record : database.memos()) {
+        for (Memo record : database.memos()) {
             temp.append(record.getTitle()+","+record.getMemo()+"\n");
         }
 
@@ -72,7 +72,7 @@ public class MemosWriters {
         int RecordIndex=0;
         int j          =0;
 
-        for (Memos record : database.memos()) {
+        for (Memo record : database.memos()) {
             if ((RecordIndex==selectedMemos[j]) && (selectedMemos[j]<database.memos().size())) {
                 temp.append(record.getTitle()+","+record.getMemo()+"\n");
                 j++;
@@ -101,7 +101,7 @@ public class MemosWriters {
         String tmp="";
 
         if (database!=null) {
-            for (Memos record : database.memos()) {
+            for (Memo record : database.memos()) {
                 String title=record.getTitle();
                 String memo =record.getMemo();
 
@@ -131,7 +131,7 @@ public class MemosWriters {
             int RecordIndex=0;
             int j          =0;
 
-            for (Memos record : database.memos()) {
+            for (Memo record : database.memos()) {
                 if ((RecordIndex==MemoselectedRows[j]) && (MemoselectedRows[j]<database.memos().size())) {
                     String title=record.getTitle();
                     String memo =record.getMemo();
@@ -168,7 +168,7 @@ public class MemosWriters {
         // Add the root
         Element root=document.addElement("Memos").addAttribute("TotalMemos", String.valueOf(database.memos().size()));
 
-        for (Memos record : database.memos()) {
+        for (Memo record : database.memos()) {
             Element message=root.addElement("MemoMessage").addAttribute("UID", String.valueOf(record.getUID()));
 
             message.addElement("Title").addText(record.getTitle());
@@ -223,7 +223,7 @@ public class MemosWriters {
         int RecordIndex=0;
         int j          =0;
 
-        for (Memos record : database.memos()) {
+        for (Memo record : database.memos()) {
             if ((RecordIndex==selectedMemos[j]) && (selectedMemos[j]<database.memos().size())) {
                 Element message=root.addElement("MemoMessage").addAttribute("UID", String.valueOf(record.getUID()));
 

@@ -1,8 +1,6 @@
 package org.quaternions.ipddump.data;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A contact is a record representing contact information stored in the address
@@ -81,11 +79,6 @@ public class Contact extends Record implements Comparable<Contact> {
   }
 
   /**
-   * The map from the name of the field to the field value.
-   */
-  protected final Map<String, String> fields;
-
-  /**
    * Creates a new record with all provided data.
    *
    * @param dbID
@@ -117,10 +110,6 @@ public class Contact extends Record implements Comparable<Contact> {
     return str.substring(0, str.length() - 1);
   }
 
-  @Override
-  public Map<String, String> fields() {
-    return Collections.unmodifiableMap(fields);
-  }
 
   @Override
   public int compareTo(Contact o) {
