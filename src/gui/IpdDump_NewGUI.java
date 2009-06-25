@@ -583,16 +583,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 saveAsMenuItem.setEnabled(false);
             }
             resolveNames = ResolveCheckBox.isSelected();
+
             smsWriter = new SmsWriters(database, resolveNames);
             totalSMS = smsWriter.getNumberOfSMS();
 
             ContactsWriter = new ContactsWriters(database);
-            //System.out.println(smsWriter.SMSToXML().asXML());
             totalContacts = ContactsWriter.getNumberOfContacts();
+            contactFinder = new ContactFinder(database);
+            
             MemosWriter = new MemosWriters(database);
             totalMemos = MemosWriter.getNumberOfMemos();
 
-            contactFinder = new ContactFinder(database);
+            
 
             if (database != null) {
                 saveAsMenuItem.setEnabled(true);

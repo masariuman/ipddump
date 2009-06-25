@@ -105,7 +105,7 @@ public class Gsm2Iso {
             } else if (data[i]==0x1B) {
 
                 // data[i]='';//<ESC>
-                System.out.println("esc character");
+               // System.out.println("esc character");
             } else if (data[i]==0x1C) {
                 data[i]='Æ';
             } else if (data[i]==0x1D) {
