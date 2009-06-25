@@ -1,5 +1,8 @@
 package org.quaternions.ipddump.data;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -37,7 +40,7 @@ public class Contact extends Record implements Comparable<Contact> {
     Home_State(70),
     Home_Postcode(71),
     Home_Country(72),
-    Contact_Image(false, 77),
+    Contact_Image(77),
     Notes(64),
     Birthday(82),
     Anniversary(83),
@@ -77,7 +80,7 @@ public class Contact extends Record implements Comparable<Contact> {
       return super.toString().replace('_', ' ');
     }
   }
-
+ private Image image;
   /**
    * Creates a new record with all provided data.
    *
@@ -98,8 +101,11 @@ public class Contact extends Record implements Comparable<Contact> {
   @Override
   public void addField(int type, char[] data) {
     for (Field field : Field.values()) {
-      if (field.accept(type)) {
+      if (field.accept(type) && type!=77) {
         addField(field, makeString(data));
+      } else if (field.accept(type) && type==77){
+      addField(field, null);
+      image=decodeBase64(String.valueOf(data));
       }
     }
   }
@@ -121,7 +127,7 @@ public class Contact extends Record implements Comparable<Contact> {
     return getName();
   }
 
-  protected void addField(Field key, String value) {
+  public void addField(Field key, String value) {
     String keyName = key.toString();
     if (key == Field.Name) {
       String name = fields.get(keyName);
@@ -141,7 +147,7 @@ public class Contact extends Record implements Comparable<Contact> {
     }
   }
 
-  protected String getField(Field field) {
+  private String getField(Field field) {
     String key = field.toString();
     if (fields.containsKey(key)) {
       return fields.get(key);
@@ -149,11 +155,30 @@ public class Contact extends Record implements Comparable<Contact> {
       return "";
     }
   }
-
+  
+ private Image decodeBase64(String sb) {
+        byte[] buffer_decode;
+        Image IMGdecode = null;
+        try {
+            buffer_decode=new sun.misc.BASE64Decoder().decodeBuffer(sb);
+            IMGdecode    =Toolkit.getDefaultToolkit().createImage(buffer_decode);
+            return IMGdecode;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+ return IMGdecode;
+ }
   public String getEmail() {
     return getField(Field.Email);
   }
 
+  public Image getImage() {
+    if (fields.containsKey(Field.Contact_Image)) {
+      return image;
+    }
+    return null;
+  }
+  
   public String getHomePhone() {
     return getField(Field.Home_Phone);
   }
