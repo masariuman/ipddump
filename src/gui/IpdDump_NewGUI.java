@@ -663,7 +663,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jTabbedPane1.setTitleAt(MemostabINDEX, "Memos (" + totalMemos + ")");
         int i = 0;
 
-        for (Memos record : database.memos()) {
+        for (Memo record : database.memos()) {
 
             MemosDataModel.setValueAt(record.getTitle(), i, MemosTitleIndex);
             MemosDataModel.setValueAt(record.getMemo(), i, MemosMemoIndex);

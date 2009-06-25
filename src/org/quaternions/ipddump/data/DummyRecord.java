@@ -32,25 +32,16 @@ public class DummyRecord extends Record {
 
     //~--- methods ------------------------------------------------------------
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void addField(int type, char[] data) {
         fields.add(""+type+"|"+new String(data));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Map<String, String> fields() {
         return Collections.<String, String>emptyMap();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         return fields.toString();

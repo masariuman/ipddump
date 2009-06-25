@@ -2,10 +2,8 @@ package org.quaternions.ipddump.data;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * An SMS message is a record representing an SMS sent or received from the
@@ -15,12 +13,6 @@ import java.util.Map;
  * @date Jan 1, 2008
  */
 public class SMSMessage extends Record implements Comparable<SMSMessage> {
-
-    /**
-     * The map from the name of the field to the field value.
-     */
-    protected final Map<String, String> fields;
-
     /**
      * The date the SMS was sent;
      */
@@ -63,9 +55,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
     //~--- methods ------------------------------------------------------------
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void addField(int type, char[] data) {
         StringBuilder builder=null;
@@ -147,9 +136,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int compareTo(SMSMessage o) {
         if (sent.compareTo(o.sent)!=0) {
@@ -157,14 +143,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
         } else {
             return received.compareTo(o.received);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Map<String, String> fields() {
-        return Collections.<String, String>unmodifiableMap(fields);
     }
 
     //~--- get methods --------------------------------------------------------
@@ -207,9 +185,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
     //~--- methods ------------------------------------------------------------
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         if (wasSent()) {

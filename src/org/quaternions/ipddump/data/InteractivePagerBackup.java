@@ -51,12 +51,12 @@ public class InteractivePagerBackup {
     /**
      * The set of Tasks Entries.
      */
-    protected final List<Tasks> tasks;
+    protected final List<Task> tasks;
 
     /**
      * The set of Memos.
      */
-    protected final List<Memos> memos;
+    protected final List<Memo> memos;
 
     //~--- constructors -------------------------------------------------------
 
@@ -72,8 +72,8 @@ public class InteractivePagerBackup {
         databases    =new ArrayList<String>();
         smsRecords   =new ArrayList<SMSMessage>();
         contacts     =new ArrayList<Contact>();
-        tasks        =new ArrayList<Tasks>();
-        memos        =new ArrayList<Memos>();
+        tasks        =new ArrayList<Task>();
+        memos        =new ArrayList<Memo>();
     }
 
     //~--- methods ------------------------------------------------------------
@@ -125,7 +125,7 @@ public class InteractivePagerBackup {
 //            tasks.add( record );
 //            return record;
         } else if ("Memos".equals(databases.get(dbIndex))) {
-            Memos record=new Memos(dbIndex, version, uid, length);
+            Memo record=new Memo(dbIndex, version, uid, length);
             memos.add(record);
             return record;
         } else {
@@ -147,8 +147,8 @@ public class InteractivePagerBackup {
      *
      * @return An unmodifiable collection of memos
      */
-    public Collection<Memos> memos() {
-        return Collections.<Memos>unmodifiableCollection(memos);
+    public Collection<Memo> memos() {
+        return Collections.<Memo>unmodifiableCollection(memos);
     }
 
     /**
