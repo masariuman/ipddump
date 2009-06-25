@@ -67,9 +67,6 @@ public abstract class Record {
      */
     public abstract void addField(int type, char[] data);
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Record) {
@@ -133,9 +130,6 @@ public abstract class Record {
 
     //~--- methods ------------------------------------------------------------
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         return uniqueID;

@@ -1,7 +1,5 @@
 package org.quaternions.ipddump.data;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,683 +12,264 @@ import java.util.Map;
  * @date Jun 6, 2009
  */
 public class Contact extends Record implements Comparable<Contact> {
+  enum Field {
+    Email(1),
+    Fax(3),
+    Work_Phone(6, 16),
+    Home_Phone(7, 17),
+    Mobile_Phone(8),
+    Pager(9),
+    PIN(10),
+    Other_Number(18),
+    Name(32),
+    Company(33),
+    Work_Address(35, 36),
+    Work_City(38),
+    Work_State(39),
+    Work_Postcode(40),
+    Work_Country(41),
+    Job_Title(42),
+    Webpage(54),
+    Title(55),
+    /* These are the Category tags. Null data if no tags. */
+    Categories(59),
+    Home_Address(61, 62),
+    User(65, 66, 67, 68),
+    Home_City(69),
+    Home_State(70),
+    Home_Postcode(71),
+    Home_Country(72),
+    Contact_Image(false, 77),
+    Notes(64),
+    Birthday(82),
+    Anniversary(83),
+    /* This is always the same 8 characters */
+    Unknown_8_Chars(false, 84),
+    /* Always 4 characters, date? */
+    Unknown_4_Chars(false, 85),
+    Google_Talk(90);
 
-    /**
-     * The map from the name of the field to the field value.
-     */
-    protected final Map<String, String> fields;
-    protected String                    firstName;
-    protected String                    lastName;
+    int[] indexes;
 
-    //~--- constructors -------------------------------------------------------
+    boolean supported;
 
-    /**
-     * Creates a new record with all provided data.
-     *
-     * @param dbID The database id
-     * @param dbVersion The database version
-     * @param uid The unique identifier of this record
-     * @param recordLength The length of the record
-     */
-    Contact(int dbID, int dbVersion, int uid, int recordLength) {
-        super(dbID, dbVersion, uid, recordLength);
-        fields=new HashMap<String, String>();
+    Field(int... indexes) {
+      this(true, indexes);
     }
 
-    //~--- methods ------------------------------------------------------------
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addField(int type, char[] data) {
-        String fieldName=null;
-
-        switch (type) {
-        case 1 :
-            fieldName="Email";
-
-            break;
-
-        case 3 :
-            fieldName="Fax";
-
-            break;
-
-        case 6 :
-        case 16 :
-            fieldName="Work Phone";
-
-            break;
-
-        case 7 :
-        case 17 :
-            fieldName="Home Phone";
-
-            break;
-
-        case 8 :
-            fieldName="Mobile Phone";
-
-            break;
-
-        case 9 :
-            fieldName="Pager";
-
-            break;
-
-        case 10 :
-            fieldName="PIN";
-
-            break;
-
-        case 18 :
-            fieldName="Other Number";
-
-            break;
-
-        case 32 :
-            fieldName="Name";
-
-            break;
-
-        case 33 :
-            fieldName="Company";
-
-            break;
-
-        case 35 :
-        case 36 :
-            fieldName="Work Address";
-
-            break;
-
-        case 38 :
-            fieldName="Work City";
-
-            break;
-
-        case 39 :
-            fieldName="Work State";
-
-            break;
-
-        case 40 :
-            fieldName="Work Postcode";
-
-            break;
-
-        case 41 :
-            fieldName="Work Country";
-
-            break;
-
-        case 42 :
-            fieldName="Job Title";
-
-            break;
-
-        case 54 :
-            fieldName="Webpage";
-
-            break;
-
-        case 55 :
-            fieldName="Title";
-
-            break;
-
-        case 59 :
-            if (data!=null) {
-                fieldName="Categories";
-            }
-
-            break;    // These are the Category tags. Null data if no tags
-
-        case 61 :
-        case 62 :
-            fieldName="Home Address";
-
-            break;
-
-        case 65 :
-        case 66 :
-        case 67 :
-        case 68 :
-            fieldName="User";
-
-            break;
-
-        case 69 :
-            fieldName="Home City";
-
-            break;
-
-        case 70 :
-            fieldName="Home State";
-
-            break;
-
-        case 71 :
-            fieldName="Home Postcode";
-
-            break;
-
-        case 72 :
-            fieldName="Home Country";
-
-            break;
-
-        case 77 :
-
-            // fieldName = null; //Jibrish?
-            break;
-
-        case 64 :
-            fieldName="Notes";
-
-            break;
-
-        case 82 :
-            fieldName="Birthday";
-
-            break;
-
-        case 83 :
-            fieldName="Anniversary";
-
-            break;
-
-        case 84 :
-
-            // This is always the same 8 characters
-            break;
-
-        case 85 :
-
-            // Always 4 characters, date?
-            break;
-
-        case 90 :
-            fieldName="Google Talk";
-
-            break;
-
-        default :
-            System.err.println(type+": "+makeString(data));
+    Field(boolean supported, int... indexes) {
+      this.indexes = indexes;
+      this.supported = supported;
+    }
+
+    public boolean accept(int code) {
+      if (supported) {
+        for (int index : indexes) {
+          if (index == code) {
+            return true;
+          }
         }
+      }
 
-        if (fieldName!=null /* && makeString( data )!=null */) {
-            addField(fieldName, makeString(data));
-        }
+      return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int compareTo(Contact o) {
-        if (getName().compareTo(o.getName())!=0) {
-            return getName().compareTo(o.getName());
-        } else {
-            return o.getName().compareTo(getName());
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Map<String, String> fields() {
-        return Collections.<String, String>unmodifiableMap(fields);
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getAnniversary() {
-        if (fields.containsKey("Anniversary")) {
-            return fields.get("Anniversary");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getBirthday() {
-        if (fields.containsKey("Birthday")) {
-            return fields.get("Birthday");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getCategories() {
-        if (fields.containsKey("Categories")) {
-            return fields.get("Categories");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getCompany() {
-        if (fields.containsKey("Company")) {
-            return fields.get("Company");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getEmail() {
-        if (fields.containsKey("Email")) {
-            return fields.get("Email");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getGoogleTalk() {
-        if (fields.containsKey("Google Talk")) {
-            return fields.get("Google Talk");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getHomeAddress() {
-        if (fields.containsKey("Home Address")) {
-            return fields.get("Home Address");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getHomeCity() {
-        if (fields.containsKey("Home City")) {
-            return fields.get("Home City");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getHomeCountry() {
-        if (fields.containsKey("Home Country")) {
-            return fields.get("Home Country");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getHomePhone() {
-        if (fields.containsKey("Home Phone")) {
-            return fields.get("Home Phone");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getHomePostcode() {
-        if (fields.containsKey("Home Postcode")) {
-            return fields.get("Home Postcode");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getHomeState() {
-        if (fields.containsKey("Home State")) {
-            return fields.get("Home State");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getJobTitle() {
-        if (fields.containsKey("Job Title")) {
-            return fields.get("Job Title");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getMobilePhone() {
-        if (fields.containsKey("Mobile Phone")) {
-            return fields.get("Mobile Phone");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getName() {
-        if (fields.containsKey("Name")) {
-            return fields.get("Name");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getNotes() {
-        if (fields.containsKey("Notes")) {
-            return fields.get("Notes");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getOtherNumber() {
-        if (fields.containsKey("Other Number")) {
-            return fields.get("Other Number");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getPIN() {
-        if (fields.containsKey("PIN")) {
-            return fields.get("PIN");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getPager() {
-        if (fields.containsKey("Pager")) {
-            return fields.get("Pager");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getTitle() {
-        if (fields.containsKey("Title")) {
-            return fields.get("Title");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getUser() {
-        if (fields.containsKey("User")) {
-            return fields.get("User");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getWebpage() {
-        if (fields.containsKey("Webpage")) {
-            return fields.get("Webpage");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getWorkAddress() {
-        if (fields.containsKey("Work Address")) {
-            return fields.get("Work Address");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getWorkCity() {
-        if (fields.containsKey("Work City")) {
-            return fields.get("Work City");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getWorkCountry() {
-        if (fields.containsKey("Work Country")) {
-            return fields.get("Work Country");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getWorkPhone() {
-        if (fields.containsKey("Work Phone")) {
-            return fields.get("Work Phone");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getWorkPostcode() {
-        if (fields.containsKey("Work Postcode")) {
-            return fields.get("Work Postcode");
-        }
-
-        return "";
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @return
-     */
-    public String getWorkState() {
-        if (fields.containsKey("Work State")) {
-            return fields.get("Work State");
-        }
-
-        return "";
-    }
-
-    //~--- methods ------------------------------------------------------------
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
-        return "";
+      return super.toString().replace('_', ' ');
     }
+  }
 
-    /**
-     * Method description
-     *
-     *
-     * @param key
-     * @param value
-     */
-    protected void addField(String key, String value) {
-        if (key.equalsIgnoreCase("name")) {
-            String name=fields.get(key);
+  /**
+   * The map from the name of the field to the field value.
+   */
+  protected final Map<String, String> fields;
 
-            if (name==null) {
-                fields.put(key, value);
-            } else {
-                fields.put(key, name+" "+value);
-            }
-        } else if (fields.containsKey(key)) {
-            int index=2;
+  /**
+   * Creates a new record with all provided data.
+   *
+   * @param dbID
+   *          The database id
+   * @param dbVersion
+   *          The database version
+   * @param uid
+   *          The unique identifier of this record
+   * @param recordLength
+   *          The length of the record
+   */
+  Contact(int dbID, int dbVersion, int uid, int recordLength) {
+    super(dbID, dbVersion, uid, recordLength);
+    fields = new HashMap<String, String>();
+  }
 
-            while (fields.containsKey(key+index)) {
-                index++;
-            }
-
-            fields.put(key+index, value);
-        } else {
-            fields.put(key, value);
-        }
+  @Override
+  public void addField(int type, char[] data) {
+    for (Field field : Field.values()) {
+      if (field.accept(type)) {
+        addField(field, makeString(data));
+      }
     }
+  }
 
-    /**
-     * Method description
-     *
-     *
-     * @param data
-     *
-     * @return
-     */
-    protected String makeString(char[] data) {
-        Gsm2Iso.Gsm2Iso(data);
+  protected String makeString(char[] data) {
+    Gsm2Iso.Gsm2Iso(data);
+    String str = new String(data);
+    return str.substring(0, str.length() - 1);
+  }
 
-        String str=new String(data);
+  @Override
+  public Map<String, String> fields() {
+    return Collections.unmodifiableMap(fields);
+  }
 
-        return str.substring(0, str.length()-1);
+  @Override
+  public int compareTo(Contact o) {
+    return getName().compareTo(o.getName());
+  }
+
+  @Override
+  public String toString() {
+    return getName();
+  }
+
+  protected void addField(Field key, String value) {
+    String keyName = key.toString();
+    if (key == Field.Name) {
+      String name = fields.get(keyName);
+      if (name == null) {
+        fields.put(keyName, value);
+      } else {
+        fields.put(keyName, name + " " + value);
+      }
+    } else if (fields.containsKey(keyName)) {
+      int index = 2;
+      while (fields.containsKey(keyName + index)) {
+        index++;
+      }
+      fields.put(keyName + index, value);
+    } else {
+      fields.put(keyName, value);
     }
+  }
+
+  protected String getField(Field field) {
+    String key = field.toString();
+    if (fields.containsKey(key)) {
+      return fields.get(key);
+    } else {
+      return "";
+    }
+  }
+
+  public String getEmail() {
+    return getField(Field.Email);
+  }
+
+  public String getHomePhone() {
+    return getField(Field.Home_Phone);
+  }
+
+  public String getWorkPhone() {
+    return getField(Field.Work_Phone);
+  }
+
+  public String getMobilePhone() {
+    return getField(Field.Mobile_Phone);
+  }
+
+  public String getPager() {
+    return getField(Field.Pager);
+  }
+
+  public String getPIN() {
+    return getField(Field.PIN);
+  }
+
+  public String getOtherNumber() {
+    return getField(Field.Other_Number);
+  }
+
+  public String getName() {
+    return getField(Field.Name);
+  }
+
+  public String getCompany() {
+    return getField(Field.Company);
+  }
+
+  public String getWorkAddress() {
+    return getField(Field.Work_Address);
+  }
+
+  public String getWorkCity() {
+    return getField(Field.Work_City);
+  }
+
+  public String getWorkState() {
+    return getField(Field.Work_State);
+  }
+
+  public String getWorkPostcode() {
+    return getField(Field.Work_Postcode);
+  }
+
+  public String getGoogleTalk() {
+    return getField(Field.Google_Talk);
+  }
+
+  public String getAnniversary() {
+    return getField(Field.Anniversary);
+  }
+
+  public String getBirthday() {
+    return getField(Field.Birthday);
+  }
+
+  public String getNotes() {
+    return getField(Field.Notes);
+  }
+
+  public String getHomeCountry() {
+    return getField(Field.Home_Country);
+  }
+
+  public String getWorkCountry() {
+    return getField(Field.Work_Country);
+  }
+
+  public String getJobTitle() {
+    return getField(Field.Job_Title);
+  }
+
+  public String getWebpage() {
+    return getField(Field.Webpage);
+  }
+
+  public String getHomePostcode() {
+    return getField(Field.Home_Postcode);
+  }
+
+  public String getHomeState() {
+    return getField(Field.Home_State);
+  }
+
+  public String getHomeCity() {
+    return getField(Field.Home_City);
+  }
+
+  public String getUser() {
+    return getField(Field.User);
+  }
+
+  public String getHomeAddress() {
+    return getField(Field.Home_Address);
+  }
+
+  public String getCategories() {
+    return getField(Field.Categories);
+  }
+
+  public String getTitle() {
+    return getField(Field.Title);
+  }
 }
