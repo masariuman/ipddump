@@ -62,7 +62,11 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
         switch (type) {
         case 4 :
             Gsm2Iso.Gsm2Iso(data);
-            text = new String(data);
+            byte[] d=new byte[data.length];
+            for (int i=0; i<data.length; i++) {
+                d[i]=(byte) data[i];
+                }
+            text=new String(d);
             fields.put( "text", text );
 
             break;
