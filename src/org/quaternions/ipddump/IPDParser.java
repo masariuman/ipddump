@@ -274,12 +274,11 @@ public class IPDParser {
             break;
         }
       }
-    } catch ( IOException exception ) {
-      throw exception;
     } finally {
       input.close();
     }
 
+    database.organize();
     return database;
   }
 }

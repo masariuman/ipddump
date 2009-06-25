@@ -12,12 +12,7 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -33,18 +28,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private String path;
     private String pathString;
-    private String welcome = "Welcome to IpdDump - http://code.google.com/p/ipddump/";
+    private final String welcome = "Welcome to IpdDump - http://code.google.com/p/ipddump/";
     private String ClipBoardTemp;
     private String ext;
     private String fToSave;
     private InteractivePagerBackup database;
     private TableModel SMSDataModel;
-    private int SMStabINDEX;
-    private int ContactstabINDEX;
-    private int CalendartabINDEX;
-    private int TaskstabINDEX;
-    private int OptionstabINDEX;
-    private int MemostabINDEX;
+    private final int SMStabINDEX;
+    private final int ContactstabINDEX;
+    private final int CalendartabINDEX;
+    private final int TaskstabINDEX;
+    private final int OptionstabINDEX;
+    private final int MemostabINDEX;
     final private int SMSWasSentIndex = 0;
     final private int SMSNumberIndex = 1;
     final private int SMSTextIndex = 2;
@@ -55,29 +50,29 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private int[] SMSSelectedRows;
     private int totalContacts = 0;
     private int[] ContactsSelectedRows;
-    private int totalCalendar = 0;
+    private final int totalCalendar = 0;
     private int[] CalendarSelectedRows;
     private int totalMemos = 0;
     private int[] MemosSelectedRows;
-    private int totalTasks = 0;
+    private final int totalTasks = 0;
     private int[] TasksSelectedRows;
-    private int totalOptions = 0;
+    private final int totalOptions = 0;
     private int[] OptionsSelectedRows;
-    private DataViewer viewer;
-    private FileWriters fileWriter = new FileWriters();
+    private final DataViewer viewer;
+    private final FileWriters fileWriter = new FileWriters();
     private SmsWriters smsWriter;
     private ContactsWriters ContactsWriter;
     private MemosWriters MemosWriter;
     private TableModel ContactsDataModel;
     private TableModel MemosDataModel;
-    private int ContactsNameIndex = 0;
-    private int ContactsEmailIndex = 1;
-    private int ContactsMobileIndex = 2;
-    private int ContactsHomeNumberIndex = 3;
+    private final int ContactsNameIndex = 0;
+    private final int ContactsEmailIndex = 1;
+    private final int ContactsMobileIndex = 2;
+    private final int ContactsHomeNumberIndex = 3;
     ContactFinder contactFinder;
     private boolean resolveNames = true;
-    private int MemosTitleIndex = 0;
-    private int MemosMemoIndex = 1;
+    private final int MemosTitleIndex = 0;
+    private final int MemosMemoIndex = 1;
     private Collection<Contact> xe;
     private Object[] xe2;
 
@@ -218,15 +213,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableSMS.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableSMSMouseClicked(evt);
             }
@@ -273,15 +271,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableContacts.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableContactsMouseClicked(evt);
             }
@@ -316,15 +317,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableMemos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableMemosMouseClicked(evt);
             }
@@ -589,9 +593,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             totalMemos = MemosWriter.getNumberOfMemos();
 
             contactFinder = new ContactFinder(database);
-
-            database.shortContacts();
-            database.shortMemos();
 
             if (database != null) {
                 saveAsMenuItem.setEnabled(true);
@@ -916,10 +917,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
@@ -951,16 +954,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
         });
         jTableContacts.addMouseListener(new java.awt.event.MouseAdapter() {
 
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableContactsMouseClicked(evt);
             }
@@ -988,6 +994,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 return types[columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
@@ -1010,7 +1017,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE));
 
         SMSDataModel = jTableSMS.getModel();
-    }// </editor-fold> 
+    }// </editor-fold>
 
     public static void setClipboardContents(String aString) {
         StringSelection stringSelection = new StringSelection(aString);

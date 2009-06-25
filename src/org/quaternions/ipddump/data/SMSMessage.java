@@ -73,17 +73,8 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
         switch (type) {
         case 4 :
             Gsm2Iso.Gsm2Iso(data);
-
-            // System.out.println(Gsm2Iso.ucs2ToUTF8(data));
-
-            byte[] d=new byte[data.length];
-
-            for (int i=0; i<data.length; i++) {
-                d[i]=(byte) data[i];
-            }
-
-            text=new String(d);
-            fields.put("text", text);
+            text = new String(data);
+            fields.put( "text", text );
 
             break;
 
