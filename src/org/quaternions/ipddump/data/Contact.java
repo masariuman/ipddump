@@ -80,7 +80,9 @@ public class Contact extends Record implements Comparable<Contact> {
       return super.toString().replace('_', ' ');
     }
   }
- private Image image;
+
+  private Image image;
+
   /**
    * Creates a new record with all provided data.
    *
@@ -101,11 +103,12 @@ public class Contact extends Record implements Comparable<Contact> {
   @Override
   public void addField(int type, char[] data) {
     for (Field field : Field.values()) {
-      if (field.accept(type) && type!=77) {
-        addField(field, makeString(data));
-      } else if (field.accept(type) && type==77){
-      addField(field, null);
-      image=decodeBase64(String.valueOf(data));
+      if (field.accept(type)) {
+        if (field == Field.Contact_Image) {
+          image = decodeBase64(String.valueOf(data));
+        } else {
+          addField(field, makeString(data));
+        }
       }
     }
   }
@@ -115,7 +118,6 @@ public class Contact extends Record implements Comparable<Contact> {
     String str = new String(data);
     return str.substring(0, str.length() - 1);
   }
-
 
   @Override
   public int compareTo(Contact o) {
@@ -155,30 +157,25 @@ public class Contact extends Record implements Comparable<Contact> {
       return "";
     }
   }
-  
- private Image decodeBase64(String sb) {
-        byte[] buffer_decode;
-        Image IMGdecode = null;
-        try {
-            buffer_decode=new sun.misc.BASE64Decoder().decodeBuffer(sb);
-            IMGdecode    =Toolkit.getDefaultToolkit().createImage(buffer_decode);
-            return IMGdecode;
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
- return IMGdecode;
- }
+
+  private Image decodeBase64(String sb) {
+    try {
+      byte[] buffer_decode = new sun.misc.BASE64Decoder().decodeBuffer(sb);
+      return Toolkit.getDefaultToolkit().createImage(buffer_decode);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
   public String getEmail() {
     return getField(Field.Email);
   }
 
   public Image getImage() {
-    if (fields.containsKey(Field.Contact_Image)) {
-      return image;
-    }
-    return null;
+    return image;
   }
-  
+
   public String getHomePhone() {
     return getField(Field.Home_Phone);
   }
