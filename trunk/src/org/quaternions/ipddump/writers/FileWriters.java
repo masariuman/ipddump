@@ -29,31 +29,7 @@ import java.io.IOException;
  */
 public class FileWriters {
 
-    /**
-     *     Method description
-     *
-     *
-     *     @param filename
-     *     @param stringToWrite
-     *
-     *     @return
-     */
-    public boolean writeCsvtoFile(String filename, String stringToWrite) {
-        try {
-            int last=filename.lastIndexOf('.');
-
-            filename=filename.substring(0, last);
-            filename=filename+".csv";
-            System.out.println("\n->Writing "+filename);
-
-            return writeStringToFile(filename, stringToWrite);
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-
-            return false;
-        }
-    }
-
+   
     /**
      * Method description
      *
@@ -108,12 +84,12 @@ public class FileWriters {
      *
      * @return
      */
-    public boolean writeTxtToFile(String filename, String stringToWrite) {
+    public boolean writeTextToFile(String filename, String stringToWrite, String fileExtension) {
         try {
             int last=filename.lastIndexOf('.');
 
             filename=filename.substring(0, last);
-            filename=filename+".txt";
+            filename=filename+fileExtension;
             System.out.println("\n->Writing "+filename);
 
             return writeStringToFile(filename, stringToWrite);

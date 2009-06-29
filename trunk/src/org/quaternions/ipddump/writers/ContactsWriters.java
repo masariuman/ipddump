@@ -48,45 +48,7 @@ public class ContactsWriters {
      * @return
      */
     public String ContactsToCVS() {
-        StringBuilder temp=new StringBuilder();    // fast builder!!
-
-        temp.delete(0, temp.capacity());
-        temp.append("uid,sent,received,sent?,far number,text\n");
-
-        for (Contact record : database.contacts()) {
-            String Email       =record.getEmail();
-            String HomePhone   =record.getHomePhone();
-            String WorkPhone   =record.getWorkPhone();
-            String MobilePhone =record.getMobilePhone();
-            String Pager       =record.getPager();
-            String PIN         =record.getPIN();
-            String OtherNumber =record.getOtherNumber();
-            String Name        =record.getName();
-            String Company     =record.getCompany();
-            String WorkAddress =record.getWorkAddress();
-            String WorkCity    =record.getWorkCity();
-            String WorkState   =record.getWorkState();
-            String WorkPostcode=record.getWorkPostcode();
-            String GoogleTalk  =record.getGoogleTalk();
-            String Anniversary =record.getAnniversary();
-            String Birthday    =record.getBirthday();
-            String Notes       =record.getNotes();
-            String HomeCountry =record.getHomeCountry();
-            String WorkCountry =record.getWorkCountry();
-            String JobTitle    =record.getJobTitle();
-            String Webpage     =record.getWebpage();
-            String HomePostcode=record.getHomePostcode();
-            String HomeState   =record.getHomeState();
-            String HomeCity    =record.getHomeCity();
-            String User        =record.getUser();
-            String HomeAddress =record.getHomeAddress();
-            String Categories  =record.getCategories();
-            String Title       =record.getTitle();
-
-            temp.append(Name+","+MobilePhone+"\n");
-        }
-
-        return temp.toString();
+        return ContactsToCVS(getAllRecords());
     }
 
     /**
@@ -159,25 +121,7 @@ public class ContactsWriters {
      * @return
      */
     public String ContactsToPlainText() {
-        String tmp="";
-
-        if (database!=null) {
-            for (Contact record : database.contacts()) {
-                Iterator iterator2=record.fields().entrySet().iterator();
-
-                for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
-                    Map.Entry entry=(Map.Entry) iterator.next();
-
-                    tmp+=entry.getKey()+": "+entry.getValue()+"\n";
-                }
-
-                tmp+="\n";
-            }
-
-            return tmp;
-        }
-
-        return tmp;
+        return ContactsToPlainText(getAllRecords());
     }
 
     /**
@@ -231,51 +175,7 @@ public class ContactsWriters {
      * @return
      */
     public Document ContactsToXML() {
-        String sSent="";
-
-        // System.out.println("uid,sent,received,sent?,far number,text");
-        Document document=DocumentHelper.createDocument();
-
-        // Add the root
-        Element root=document.addElement("Contacts").addAttribute("TotalContacts",
-                                         String.valueOf(database.contacts().size()));
-
-        for (Contact record : database.contacts()) {
-            Element  message  =root.addElement("Contact").addAttribute("UID", String.valueOf(record.getUID()));
-            Iterator iterator2=record.fields().entrySet().iterator();
-
-            for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
-                Map.Entry entry=(Map.Entry) iterator.next();
-                String    type =removeSpaces(entry.getKey().toString());
-                String    value=removeSpaces(entry.getValue().toString());
-
-                message.addElement(type).addText(value);
-            }
-        }
-
-        OutputFormat format=OutputFormat.createPrettyPrint();
-
-        format.setEncoding("UTF-8");
-
-        // format.setTrimText(true);
-//      Save it
-        XMLWriter    writer;
-        StringWriter str=new StringWriter();
-
-        writer=new XMLWriter(str, format);
-
-        try {
-            writer.write(document);
-            writer.close();
-            document=DocumentHelper.parseText(str.toString());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        } catch (DocumentException ex) {
-            System.out.println(ex.getMessage());
-        }
-
-        // System.out.println(document.getDocument().getText());
-        return document;
+        return ContactsToXML(getAllRecords());
     }
 
     /**
@@ -395,5 +295,31 @@ public class ContactsWriters {
      */
     public void setDatabase(InteractivePagerBackup database) {
         this.database=database;
+    }
+
+    //~--- get methods --------------------------------------------------------
+
+    /*
+     * Fills a int array with the instructions
+     * for 'choosing' all the records from a database
+     *
+     *
+     * @return
+     */
+
+    /**
+     * Method description
+     *
+     *
+     * @return
+     */
+    private int[] getAllRecords() {
+        int[] allRecords=new int[getNumberOfContacts()];
+
+        for (int i=0; i<allRecords.length; i++) {
+            allRecords[i]=i;
+        }
+
+        return allRecords;
     }
 }
