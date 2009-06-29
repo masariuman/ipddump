@@ -198,6 +198,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         setTitle("IpdDump");
         setMinimumSize(new java.awt.Dimension(100, 500));
 
+        jTabbedPane1.setName("null"); // NOI18N
+
         jTableSMS.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -213,18 +215,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false
             };
 
-            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
-            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTableSMS.setName("SMS"); // NOI18N
         jTableSMS.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableSMSMouseClicked(evt);
             }
@@ -251,7 +251,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelSMSLayout.setVerticalGroup(
             jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("SMS", jPanelSMS);
@@ -271,18 +271,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false
             };
 
-            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
-            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTableContacts.setName("Contacts"); // NOI18N
         jTableContacts.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableContactsMouseClicked(evt);
             }
@@ -297,7 +295,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelContactsLayout.setVerticalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Contacts", jPanelContacts);
@@ -317,18 +315,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false
             };
 
-            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
-            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTableMemos.setName("Memos"); // NOI18N
         jTableMemos.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableMemosMouseClicked(evt);
             }
@@ -352,15 +348,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Memos", jPanelMemo);
 
-        status_label7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        status_label7.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label7.setText("Coming Soon");
 
         javax.swing.GroupLayout jPanelCalendarLayout = new javax.swing.GroupLayout(jPanelCalendar);
         jPanelCalendar.setLayout(jPanelCalendarLayout);
         jPanelCalendarLayout.setHorizontalGroup(
             jPanelCalendarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 749, Short.MAX_VALUE)
-            .addGap(0, 749, Short.MAX_VALUE)
             .addGroup(jPanelCalendarLayout.createSequentialGroup()
                 .addGap(306, 306, 306)
                 .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
@@ -368,17 +362,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelCalendarLayout.setVerticalGroup(
             jPanelCalendarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 445, Short.MAX_VALUE)
-            .addGap(0, 445, Short.MAX_VALUE)
             .addGroup(jPanelCalendarLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
-                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
         );
 
         jTabbedPane1.addTab("Calendar", jPanelCalendar);
 
-        status_label5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        status_label5.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label5.setText("Coming Soon");
 
         javax.swing.GroupLayout jPanelTasksLayout = new javax.swing.GroupLayout(jPanelTasks);
@@ -394,20 +386,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelTasksLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
-                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
         );
 
         jTabbedPane1.addTab("Tasks", jPanelTasks);
 
-        status_label6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        status_label6.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label6.setText("Coming Soon");
 
         javax.swing.GroupLayout jPanelOptionsLayout = new javax.swing.GroupLayout(jPanelOptions);
         jPanelOptions.setLayout(jPanelOptionsLayout);
         jPanelOptionsLayout.setHorizontalGroup(
             jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 749, Short.MAX_VALUE)
             .addGroup(jPanelOptionsLayout.createSequentialGroup()
                 .addGap(306, 306, 306)
                 .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
@@ -415,10 +406,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelOptionsLayout.setVerticalGroup(
             jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 445, Short.MAX_VALUE)
             .addGroup(jPanelOptionsLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
-                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
         );
 
@@ -512,7 +502,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(status_label)
                 .addContainerGap())
@@ -590,11 +580,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             ContactsWriter = new ContactsWriters(database);
             totalContacts = ContactsWriter.getNumberOfContacts();
             contactFinder = new ContactFinder(database);
-            
+
             MemosWriter = new MemosWriters(database);
             totalMemos = MemosWriter.getNumberOfMemos();
 
-            
+
 
             if (database != null) {
                 saveAsMenuItem.setEnabled(true);
@@ -674,20 +664,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }
 
     private void jTableSMSMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableSMSMouseClicked
-        SMSSelectedRows = jTableSMS.getSelectedRows();
-        ActiveTAB = jTabbedPane1.getSelectedIndex();
-        if (evt.getButton() == MouseEvent.BUTTON3 && SMSSelectedRows.length > 0) {
-            //System.out.println("right click");
-            ShowPopup(evt);
-
-        } else {
-            if (evt.getButton() == MouseEvent.BUTTON3 && SMSSelectedRows.length == 0) {
-                JOptionPane.showMessageDialog(MessageFrame, "Select the Messages you want to View");
-            }
-        }
-        if (evt.getClickCount() == 2) {
-            //System.out.println("double click");
-        }
+        tableClick(evt);
 }//GEN-LAST:event_jTableSMSMouseClicked
 
     private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
@@ -700,9 +677,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
-                    fileWriter.writeTextToFile(fToSave, smsWriter.SMSToPlainText(SMSSelectedRows),".txt");
+                    fileWriter.writeTextToFile(fToSave, smsWriter.SMSToPlainText(SMSSelectedRows), ".txt");
                 } else if (ext.equalsIgnoreCase("cvs")) {
-                    fileWriter.writeTextToFile(fToSave, smsWriter.SMSToCVS(SMSSelectedRows),".csv");
+                    fileWriter.writeTextToFile(fToSave, smsWriter.SMSToCVS(SMSSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, smsWriter.SMSToXML(SMSSelectedRows));
                 }
@@ -710,9 +687,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
-                    fileWriter.writeTextToFile(fToSave, ContactsWriter.ContactsToPlainText(ContactsSelectedRows),".txt");
+                    fileWriter.writeTextToFile(fToSave, ContactsWriter.ContactsToPlainText(ContactsSelectedRows), ".txt");
                 } else if (ext.equalsIgnoreCase("cvs")) {
-                    fileWriter.writeTextToFile(fToSave, ContactsWriter.ContactsToCVS(ContactsSelectedRows),".csv");
+                    fileWriter.writeTextToFile(fToSave, ContactsWriter.ContactsToCVS(ContactsSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, ContactsWriter.ContactsToXML(ContactsSelectedRows));
                 }
@@ -720,9 +697,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
-                    fileWriter.writeTextToFile(fToSave, MemosWriter.MemosToPlainText(MemosSelectedRows),".txt");
+                    fileWriter.writeTextToFile(fToSave, MemosWriter.MemosToPlainText(MemosSelectedRows), ".txt");
                 } else if (ext.equalsIgnoreCase("cvs")) {
-                    fileWriter.writeTextToFile(fToSave, MemosWriter.MemosToCVS(MemosSelectedRows),".csv");
+                    fileWriter.writeTextToFile(fToSave, MemosWriter.MemosToCVS(MemosSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, MemosWriter.MemosToXML(MemosSelectedRows));
                 }
@@ -754,20 +731,20 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }
 
     private void jMenuItemXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemXMLActionPerformed
-        String tmpXml = "";
+        String tmp = "";
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
-            tmpXml = smsWriter.SMSToXML(SMSSelectedRows).asXML();
+            tmp = smsWriter.SMSToXML(SMSSelectedRows).asXML();
         }
-        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
-            tmpXml = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
+        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+            tmp = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
         }
-        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
-            tmpXml = MemosWriter.MemosToXML(MemosSelectedRows).asXML();
+        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+            tmp = MemosWriter.MemosToXML(MemosSelectedRows).asXML();
         }
 
 
 
-        viewer.setXml(tmpXml);
+        viewer.setXml(tmp);
         viewer.setTitle("SMS Viewer - XML");
         viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemXMLActionPerformed
@@ -778,10 +755,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = smsWriter.SMSToPlainText(SMSSelectedRows);
         }
-        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = ContactsWriter.ContactsToPlainText(ContactsSelectedRows);
         }
-        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = MemosWriter.MemosToPlainText(MemosSelectedRows);
         }
 
@@ -797,10 +774,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = smsWriter.SMSToCVS(SMSSelectedRows);
         }
-        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = ContactsWriter.ContactsToCVS(ContactsSelectedRows);
         }
-        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = MemosWriter.MemosToCVS(MemosSelectedRows);
         }
 
@@ -814,10 +791,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = smsWriter.SMSToPlainText(SMSSelectedRows);
         }
-        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = ContactsWriter.ContactsToPlainText(ContactsSelectedRows);
         }
-        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = MemosWriter.MemosToPlainText(MemosSelectedRows);
         }
 
@@ -825,17 +802,17 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_jMenuItemCPTXTActionPerformed
 
     private void jMenuItemCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPXMLActionPerformed
-        String tmpXml = "";
+        String tmp = "";
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
-            tmpXml = smsWriter.SMSToXML(SMSSelectedRows).asXML();
+            tmp = smsWriter.SMSToXML(SMSSelectedRows).asXML();
         }
-        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
-            tmpXml = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
+        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+            tmp = ContactsWriter.ContactsToXML(ContactsSelectedRows).asXML();
         }
-        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
-            tmpXml = MemosWriter.MemosToXML(MemosSelectedRows).asXML();
+        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+            tmp = MemosWriter.MemosToXML(MemosSelectedRows).asXML();
         }
-        setClipboardContents(tmpXml);
+        setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPXMLActionPerformed
 
     private void jMenuItemCPCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPCSVActionPerformed
@@ -844,56 +821,59 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = smsWriter.SMSToCVS(SMSSelectedRows);
         }
-        if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = ContactsWriter.ContactsToCVS(ContactsSelectedRows);
         }
-        if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = MemosWriter.MemosToCVS(MemosSelectedRows);
         }
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPCSVActionPerformed
 
     private void jTableContactsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableContactsMouseClicked
-        ContactsSelectedRows = jTableContacts.getSelectedRows();
+        tableClick(evt);
+}//GEN-LAST:event_jTableContactsMouseClicked
+    private void tableClick(java.awt.event.MouseEvent evt) {
+        int[] SelectedRows = new int[0];
+        String evtObj = null;
         ActiveTAB = jTabbedPane1.getSelectedIndex();
-        if (evt.getButton() == MouseEvent.BUTTON3 && ContactsSelectedRows.length > 0) {
-            //System.out.println("right click");
+
+        if (ActiveTAB == SMStabINDEX) {
+            SelectedRows = SMSSelectedRows = jTableSMS.getSelectedRows();
+            evtObj = "SMS";
+        } else if (ActiveTAB == ContactstabINDEX) {
+            SelectedRows = ContactsSelectedRows = jTableContacts.getSelectedRows();
+            evtObj = "Contacts";
+        } else if (ActiveTAB == MemostabINDEX) {
+            SelectedRows = MemosSelectedRows = jTableMemos.getSelectedRows();
+            evtObj = "Memos";
+        }
+
+
+        if (evt.getButton() == MouseEvent.BUTTON3 && SelectedRows.length > 0) {
             ShowPopup(evt);
 
         } else {
-            if (evt.getButton() == MouseEvent.BUTTON3 && ContactsSelectedRows.length == 0) {
-                JOptionPane.showMessageDialog(MessageFrame, "Select the Contacts you want to View");
+            if (evt.getButton() == MouseEvent.BUTTON3 && SelectedRows.length == 0) {
+                JOptionPane.showMessageDialog(MessageFrame, "Select the " + evtObj + " you want to View");
             }
         }
         if (evt.getClickCount() == 2) {
             //System.out.println("double click");
         }
-}//GEN-LAST:event_jTableContactsMouseClicked
 
+    }
     private void ResolveCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResolveCheckBoxActionPerformed
         resolveNames = ResolveCheckBox.isSelected();
 
         if (saveAsMenuItem.isEnabled()) {
             smsWriter = new SmsWriters(database, resolveNames);
-            fillTables();
+            fillSMSTable();
         }
     }//GEN-LAST:event_ResolveCheckBoxActionPerformed
 
     private void jTableMemosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMemosMouseClicked
-        MemosSelectedRows = jTableMemos.getSelectedRows();
-        ActiveTAB = jTabbedPane1.getSelectedIndex();
-        if (evt.getButton() == MouseEvent.BUTTON3 && MemosSelectedRows.length > 0) {
-            //System.out.println("right click");
-            ShowPopup(evt);
-
-        } else {
-            if (evt.getButton() == MouseEvent.BUTTON3 && MemosSelectedRows.length == 0) {
-                JOptionPane.showMessageDialog(MessageFrame, "Select the Memos you want to View");
-            }
-        }
-        if (evt.getClickCount() == 2) {
-            //System.out.println("double click");
-        }
+        tableClick(evt);
 }//GEN-LAST:event_jTableMemosMouseClicked
 
     /**

@@ -299,17 +299,9 @@ public class ContactsWriters {
 
     //~--- get methods --------------------------------------------------------
 
-    /*
+    /**
      * Fills a int array with the instructions
      * for 'choosing' all the records from a database
-     *
-     *
-     * @return
-     */
-
-    /**
-     * Method description
-     *
      *
      * @return
      */
