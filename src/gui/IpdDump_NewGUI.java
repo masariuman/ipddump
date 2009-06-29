@@ -692,15 +692,17 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
         SMSSelectedRows = jTableSMS.getSelectedRows();
+        ContactsSelectedRows = jTableContacts.getSelectedRows();
+        MemosSelectedRows = jTableMemos.getSelectedRows();
         ActiveTAB = jTabbedPane1.getSelectedIndex();
 
 
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
-                    fileWriter.writeTxtToFile(fToSave, smsWriter.SMSToPlainText(SMSSelectedRows));
+                    fileWriter.writeTextToFile(fToSave, smsWriter.SMSToPlainText(SMSSelectedRows),".txt");
                 } else if (ext.equalsIgnoreCase("cvs")) {
-                    fileWriter.writeTxtToFile(fToSave, smsWriter.SMSToCVS(SMSSelectedRows));
+                    fileWriter.writeTextToFile(fToSave, smsWriter.SMSToCVS(SMSSelectedRows),".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, smsWriter.SMSToXML(SMSSelectedRows));
                 }
@@ -708,9 +710,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
-                    fileWriter.writeTxtToFile(fToSave, ContactsWriter.ContactsToPlainText(ContactsSelectedRows));
+                    fileWriter.writeTextToFile(fToSave, ContactsWriter.ContactsToPlainText(ContactsSelectedRows),".txt");
                 } else if (ext.equalsIgnoreCase("cvs")) {
-                    fileWriter.writeTxtToFile(fToSave, ContactsWriter.ContactsToCVS(ContactsSelectedRows));
+                    fileWriter.writeTextToFile(fToSave, ContactsWriter.ContactsToCVS(ContactsSelectedRows),".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, ContactsWriter.ContactsToXML(ContactsSelectedRows));
                 }
@@ -718,9 +720,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
-                    fileWriter.writeTxtToFile(fToSave, MemosWriter.MemosToPlainText(MemosSelectedRows));
+                    fileWriter.writeTextToFile(fToSave, MemosWriter.MemosToPlainText(MemosSelectedRows),".txt");
                 } else if (ext.equalsIgnoreCase("cvs")) {
-                    fileWriter.writeTxtToFile(fToSave, MemosWriter.MemosToCVS(MemosSelectedRows));
+                    fileWriter.writeTextToFile(fToSave, MemosWriter.MemosToCVS(MemosSelectedRows),".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, MemosWriter.MemosToXML(MemosSelectedRows));
                 }

@@ -45,16 +45,7 @@ public class MemosWriters {
      * @return
      */
     public String MemosToCVS() {
-        StringBuilder temp=new StringBuilder();    // fast builder!!
-
-        temp.delete(0, temp.capacity());
-        temp.append("Title,Memo\n");
-
-        for (Memo record : database.memos()) {
-            temp.append(record.getTitle()+","+record.getMemo()+"\n");
-        }
-
-        return temp.toString();
+        return MemosToCVS(getAllRecords());
     }
 
     /**
@@ -98,20 +89,7 @@ public class MemosWriters {
      * @return
      */
     public String MemosToPlainText() {
-        String tmp="";
-
-        if (database!=null) {
-            for (Memo record : database.memos()) {
-                String title=record.getTitle();
-                String memo =record.getMemo();
-
-                tmp=tmp+"Title: "+title+"\nMemo:\n"+memo+"\n\n";
-            }
-
-            return tmp;
-        }
-
-        return tmp;
+        return MemosToPlainText(getAllRecords());
     }
 
     /**
@@ -162,44 +140,7 @@ public class MemosWriters {
      * @return
      */
     public Document MemosToXML() {
-        String   sSent   ="";
-        Document document=DocumentHelper.createDocument();
-
-        // Add the root
-        Element root=document.addElement("Memos").addAttribute("TotalMemos", String.valueOf(database.memos().size()));
-
-        for (Memo record : database.memos()) {
-            Element message=root.addElement("MemoMessage").addAttribute("UID", String.valueOf(record.getUID()));
-
-            message.addElement("Title").addText(record.getTitle());
-            message.addElement("Memo").addText(record.getMemo());
-        }
-
-        OutputFormat format=OutputFormat.createPrettyPrint();
-
-        format.setEncoding("UTF-8");
-
-        // format.setTrimText(true);
-//      Save it
-        XMLWriter    writer;
-        StringWriter str=new StringWriter();
-
-        writer=new XMLWriter(str, format);
-
-        try {
-            writer.write(document);
-            writer.close();
-            document=DocumentHelper.parseText(str.toString());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        } catch (DocumentException ex) {
-            System.out.println(ex.getMessage());
-        }
-
-        // System.out.println(document.getDocument().getText());
-        return document;
-
-        // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
+        return MemosToXML(getAllRecords());
     }
 
     /**
@@ -292,5 +233,24 @@ public class MemosWriters {
      */
     public void setDatabase(InteractivePagerBackup database) {
         this.database=database;
+    }
+
+    //~--- get methods --------------------------------------------------------
+
+    /**
+     * Fills a int array with the instructions
+     * for 'choosing' all the records from a database
+     *
+     *
+     * @return
+     */
+    private int[] getAllRecords() {
+        int[] allRecords=new int[getNumberOfMemos()];
+
+        for (int i=0; i<allRecords.length; i++) {
+            allRecords[i]=i;
+        }
+
+        return allRecords;
     }
 }
