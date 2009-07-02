@@ -13,7 +13,6 @@ import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.BufferedWriter;
@@ -22,58 +21,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
-
 /**
  *
  * @author Jimmys Daskalakis
  */
 public class FileWriters {
-
-   
-    /**
-     * Method description
-     *
-     *
-     * @param pathfile
-     * @param content
-     *
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    private static boolean writeStringToFile(String pathfile, String content) {
-        BufferedWriter fos;
-        String         strFilePath=pathfile;
-        String         strContent =content;
-
-        try {
-
-//          System.out.println(strFilePath);
-            File out=new File(strFilePath);
-
-            if (!out.exists()) {
-                out.createNewFile();
-                fos=new BufferedWriter(new FileWriter(out));
-            } else {
-                fos=new BufferedWriter(new FileWriter(out));
-            }
-
-//          FileOutputStream fos = new FileOutputStream(strFilePath);
-            fos.write(strContent);
-
-//          fos.write(strContent.getBytes());
-            fos.close();
-
-            return true;
-        } catch (FileNotFoundException ex) {
-            System.out.println("FileNotFoundException : "+ex);
-
-            return false;
-        } catch (IOException ioe) {
-            System.out.println("IOException : "+ioe);
-
-            return false;
-        }
-    }
 
     /**
      * Method description
@@ -86,10 +38,19 @@ public class FileWriters {
      */
     public boolean writeTextToFile(String filename, String stringToWrite, String fileExtension) {
         try {
-            int last=filename.lastIndexOf('.');
-
-            filename=filename.substring(0, last);
+            
+            filename=filename.substring(0, filename.lastIndexOf('.'));
+            System.out.println("\nsubsting "+filename);
+            if (!filename.toLowerCase().endsWith(fileExtension.toLowerCase())) {
+                System.out.println("Doesnt end the same");
             filename=filename+fileExtension;
+                
+            }
+            else {
+                System.out.println("Ends The Same");
+            }
+
+
             System.out.println("\n->Writing "+filename);
 
             return writeStringToFile(filename, stringToWrite);
@@ -135,6 +96,51 @@ public class FileWriters {
             return true;
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+     * Method description
+     *
+     *
+     * @param pathfile
+     * @param content
+     *
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    private static boolean writeStringToFile(String pathfile, String content) {
+        BufferedWriter fos;
+        String         strFilePath=pathfile;
+        String         strContent =content;
+
+        try {
+
+//          System.out.println(strFilePath);
+            File out=new File(strFilePath);
+
+            if (!out.exists()) {
+                out.createNewFile();
+                fos=new BufferedWriter(new FileWriter(out));
+            } else {
+                fos=new BufferedWriter(new FileWriter(out));
+            }
+
+//          FileOutputStream fos = new FileOutputStream(strFilePath);
+            fos.write(strContent);
+
+//          fos.write(strContent.getBytes());
+            fos.close();
+
+            return true;
+        } catch (FileNotFoundException ex) {
+            System.out.println("FileNotFoundException : "+ex);
+
+            return false;
+        } catch (IOException ioe) {
+            System.out.println("IOException : "+ioe);
 
             return false;
         }
