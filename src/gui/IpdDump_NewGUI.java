@@ -198,8 +198,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         setTitle("IpdDump");
         setMinimumSize(new java.awt.Dimension(100, 500));
 
-        jTabbedPane1.setName("null"); // NOI18N
-
         jTableSMS.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -251,7 +249,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelSMSLayout.setVerticalGroup(
             jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("SMS", jPanelSMS);
@@ -295,7 +293,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelContactsLayout.setVerticalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Contacts", jPanelContacts);
@@ -341,9 +339,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelMemoLayout.setVerticalGroup(
             jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelMemoLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Memos", jPanelMemo);
@@ -364,7 +360,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPanelCalendarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCalendarLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
-                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
         );
 
@@ -386,7 +382,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelTasksLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
-                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
         );
 
@@ -408,7 +404,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelOptionsLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
-                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
         );
 
@@ -502,7 +498,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(status_label)
                 .addContainerGap())

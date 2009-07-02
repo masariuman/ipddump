@@ -34,20 +34,20 @@ public class ContactFinder {
     public String findContactByPhoneNumber(String phoneNumber) {
         for (Contact record : database.contacts()) {
             String name       =record.getName();
-            if (phoneNumber == null) {
-              return null;
-            } else if (phoneNumber.equalsIgnoreCase(record.getOtherNumber())) {
-                return name;
+             if (phoneNumber.equalsIgnoreCase(record.getMobilePhone())) {
+                return name+" (M)";
             } else if (phoneNumber.equalsIgnoreCase(record.getHomePhone())) {
-                return name;
+                return name+" (H)";
             } else if (phoneNumber.equalsIgnoreCase(record.getWorkPhone())) {
-                return name;
-            } else if (phoneNumber.equalsIgnoreCase(record.getMobilePhone())) {
-                return name;
+                return name+" (W)";
+            } else if (phoneNumber.equalsIgnoreCase(record.getOtherNumber())) {
+                return name+" (O)";
             } else if (phoneNumber.equalsIgnoreCase(record.getPager())) {
-                return name;
+                return name+" (P)";
             } else if (phoneNumber.equalsIgnoreCase(record.getPIN())) {
-                return name;
+                return name+" (Pin)";
+            } else if (phoneNumber == null) {
+              return "";
             }
         }
 
