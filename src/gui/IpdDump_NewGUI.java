@@ -213,16 +213,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableSMS.setName("SMS"); // NOI18N
         jTableSMS.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableSMSMouseClicked(evt);
             }
@@ -269,16 +272,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableContacts.setName("Contacts"); // NOI18N
         jTableContacts.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableContactsMouseClicked(evt);
             }
@@ -313,16 +319,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableMemos.setName("Memos"); // NOI18N
         jTableMemos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableMemosMouseClicked(evt);
             }
@@ -674,7 +683,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
                     fileWriter.writeTextToFile(fToSave, smsWriter.SMSToPlainText(SMSSelectedRows), ".txt");
-                } else if (ext.equalsIgnoreCase("cvs")) {
+                } else if (ext.equalsIgnoreCase("csv")) {
                     fileWriter.writeTextToFile(fToSave, smsWriter.SMSToCVS(SMSSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, smsWriter.SMSToXML(SMSSelectedRows));
@@ -684,7 +693,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
                     fileWriter.writeTextToFile(fToSave, ContactsWriter.ContactsToPlainText(ContactsSelectedRows), ".txt");
-                } else if (ext.equalsIgnoreCase("cvs")) {
+                } else if (ext.equalsIgnoreCase("csv")) {
                     fileWriter.writeTextToFile(fToSave, ContactsWriter.ContactsToCVS(ContactsSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, ContactsWriter.ContactsToXML(ContactsSelectedRows));
@@ -694,7 +703,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
                     fileWriter.writeTextToFile(fToSave, MemosWriter.MemosToPlainText(MemosSelectedRows), ".txt");
-                } else if (ext.equalsIgnoreCase("cvs")) {
+                } else if (ext.equalsIgnoreCase("csv")) {
                     fileWriter.writeTextToFile(fToSave, MemosWriter.MemosToCVS(MemosSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fToSave, MemosWriter.MemosToXML(MemosSelectedRows));
