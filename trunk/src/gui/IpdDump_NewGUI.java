@@ -523,7 +523,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jFileChooser1.setFileHidingEnabled(false);
         jFileChooser1.addChoosableFileFilter(
                 new ExtensionFileFilter(
-                new String[]{".cvs"}, "Cvs Document *.cvs"));
+                new String[]{".csv"}, "Cvs Document *.csv"));
         jFileChooser1.addChoosableFileFilter(
                 new ExtensionFileFilter(
                 new String[]{".xml"}, "Xml Document *.xml"));
