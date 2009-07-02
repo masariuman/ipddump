@@ -21,9 +21,13 @@ import org.quaternions.ipddump.data.InteractivePagerBackup;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 /**
  *
@@ -60,57 +64,49 @@ public class ContactsWriters {
      * @return
      */
     public String ContactsToCVS(int[] selectedContacts) {
-        StringBuilder temp=new StringBuilder();    // fast builder!!
+        StringBuilder builder=new StringBuilder();    // fast builder!!
 
-        temp.delete(0, temp.capacity());
-        temp.append("uid,sent,received,sent?,far number,text\n");
-
-        int RecordIndex=0;
-        int j          =0;
-
-        for (Contact record : database.contacts()) {
-            if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
-                String Email       =record.getEmail();
-                String HomePhone   =record.getHomePhone();
-                String WorkPhone   =record.getWorkPhone();
-                String MobilePhone =record.getMobilePhone();
-                String Pager       =record.getPager();
-                String PIN         =record.getPIN();
-                String OtherNumber =record.getOtherNumber();
-                String Name        =record.getName();
-                String Company     =record.getCompany();
-                String WorkAddress =record.getWorkAddress();
-                String WorkCity    =record.getWorkCity();
-                String WorkState   =record.getWorkState();
-                String WorkPostcode=record.getWorkPostcode();
-                String GoogleTalk  =record.getGoogleTalk();
-                String Anniversary =record.getAnniversary();
-                String Birthday    =record.getBirthday();
-                String Notes       =record.getNotes();
-                String HomeCountry =record.getHomeCountry();
-                String WorkCountry =record.getWorkCountry();
-                String JobTitle    =record.getJobTitle();
-                String Webpage     =record.getWebpage();
-                String HomePostcode=record.getHomePostcode();
-                String HomeState   =record.getHomeState();
-                String HomeCity    =record.getHomeCity();
-                String User        =record.getUser();
-                String HomeAddress =record.getHomeAddress();
-                String Categories  =record.getCategories();
-                String Title       =record.getTitle();
-
-                temp.append(Name+","+MobilePhone+"\n");//TODO: Correct CVS
-                j++;
-
-                if (j>=selectedContacts.length) {
-                    break;
-                }
-            }
-
-            RecordIndex++;
+        /*
+         * Get all the keys since we don't know all of them ahead
+         * of time.  Some fields might be duplicated several times.
+         */
+        Set<String> keys = new TreeSet<String>();
+        for (Contact record: database.contacts()) {
+          keys.addAll(record.fields().keySet());
         }
 
-        return temp.toString();
+        List<String> names = new ArrayList<String>(keys);
+        boolean first = true;
+        for (String name : names ) {
+          if (first) {
+            first=false;
+          } else {
+            builder.append(",");
+          }
+
+          builder.append(name);
+        }
+
+        builder.append("\n");
+        for (Contact record : database.contacts()) {
+          first = true;
+          Map<String, String> fields = record.fields();
+          for (String name : names) {
+            if (first) {
+              first = false;
+            } else {
+              builder.append(",");
+            }
+
+            String value = fields.get(name);
+            if ( value !=null) {
+              builder.append(value);
+            }
+          }
+          builder.append("\n");
+        }
+
+        return builder.toString();
     }
 
     /**
