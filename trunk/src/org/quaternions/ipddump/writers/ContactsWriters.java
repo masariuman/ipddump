@@ -99,7 +99,7 @@ public class ContactsWriters {
                 String Categories  =record.getCategories();
                 String Title       =record.getTitle();
 
-                temp.append(Name+","+MobilePhone+"\n");
+                temp.append(Name+","+MobilePhone+"\n");//TODO: Correct CVS
                 j++;
 
                 if (j>=selectedContacts.length) {
@@ -274,7 +274,7 @@ public class ContactsWriters {
      *
      * @return
      */
-    public String removeSpaces(String s) {
+    private String removeSpaces(String s) {
         StringTokenizer st=new StringTokenizer(s, " ", false);
         String          t ="";
 
