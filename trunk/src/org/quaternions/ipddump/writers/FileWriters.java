@@ -40,15 +40,11 @@ public class FileWriters {
         try {
             
             filename=filename.substring(0, filename.lastIndexOf('.'));
-            System.out.println("\nsubsting "+filename);
             if (!filename.toLowerCase().endsWith(fileExtension.toLowerCase())) {
                 System.out.println("Doesnt end the same");
-            filename=filename+fileExtension;
-                
+            filename=filename+fileExtension; 
             }
-            else {
-                System.out.println("Ends The Same");
-            }
+
 
 
             System.out.println("\n->Writing "+filename);
