@@ -71,21 +71,12 @@ public class ContactsWriters {
          * of time.  Some fields might be duplicated several times.
          */
         Set<String> keys       =new TreeSet<String>();
+        for (Contact record : database.contacts()) {
+          keys.addAll(record.fields().keySet());
+        }
+
         int         RecordIndex=0;
         int         j          =0;
-
-        for (Contact record : database.contacts()) {
-            if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
-                //Here add your code
-                j++;
-
-                if (j>=selectedContacts.length) {
-                    break;
-                }
-            }
-
-            RecordIndex++;
-        }
 
         List<String> names=new ArrayList<String>(keys);
         boolean      first=true;
@@ -103,25 +94,34 @@ public class ContactsWriters {
         builder.append("\n");
 
         for (Contact record : database.contacts()) {
-            first=true;
+            if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
+                first=true;
 
-            Map<String, String> fields=record.fields();
+                Map<String, String> fields=record.fields();
 
-            for (String name : names) {
-                if (first) {
-                    first=false;
-                } else {
-                    builder.append(",");
+                for (String name : names) {
+                    if (first) {
+                        first=false;
+                    } else {
+                        builder.append(",");
+                    }
+
+                    String value=fields.get(name);
+
+                    if (value!=null) {
+                        builder.append(value);
+                    }
                 }
 
-                String value=fields.get(name);
+                builder.append("\n");
+                j++;
 
-                if (value!=null) {
-                    builder.append(value);
+                if (j>=selectedContacts.length) {
+                    break;
                 }
             }
 
-            builder.append("\n");
+            RecordIndex++;
         }
 
         return builder.toString();
