@@ -38,14 +38,11 @@ public class FileWriters {
      */
     public boolean writeTextToFile(String filename, String stringToWrite, String fileExtension) {
         try {
-            
             filename=filename.substring(0, filename.lastIndexOf('.'));
+
             if (!filename.toLowerCase().endsWith(fileExtension.toLowerCase())) {
-                System.out.println("Doesnt end the same");
-            filename=filename+fileExtension; 
+                filename=filename+fileExtension;
             }
-
-
 
             System.out.println("\n->Writing "+filename);
 
@@ -69,10 +66,12 @@ public class FileWriters {
      * @throws IOException
      */
     public boolean writeXMLtoFile(String filename, Document document) {
-        int last=filename.lastIndexOf('.');
-
-        filename=filename.substring(0, last);
-        filename=filename+".xml";
+        filename=filename.substring(0, filename.lastIndexOf('.'));
+        String fileExtension=".xml";
+        
+            if (!filename.toLowerCase().endsWith(fileExtension.toLowerCase())) {
+                filename=filename+fileExtension;
+            }
         System.out.println("\n->Writing "+filename);
 
         // Make a pretty output
