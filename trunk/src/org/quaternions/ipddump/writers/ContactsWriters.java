@@ -208,7 +208,7 @@ public class ContactsWriters {
                 for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
                     Map.Entry entry=(Map.Entry) iterator.next();
                     String    type =removeSpaces(entry.getKey().toString());
-                    String    value=removeSpaces(entry.getValue().toString());
+                    String    value=entry.getValue().toString();
 
                     message.addElement(type).addText(value);
                 }
