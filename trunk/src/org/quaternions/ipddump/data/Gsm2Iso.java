@@ -30,6 +30,8 @@ public class Gsm2Iso {
         for (int i=0; i<data.length; i++) {
             if (data[i]==0x40) {
                 data[i]='@';
+            } else if (data[i]==0x00) {
+                data[i]='@';
             } else if (data[i]==0x01) {
                 data[i]='£';
             } else if (data[i]==0x02) {
@@ -346,7 +348,6 @@ public class Gsm2Iso {
             else if (data[i]==0x9F) {}
             else if (data[i]==0x9A) {}
             else if (data[i]==0x8f) {}
-            else if (data[i]==0x0) {}
             else {}
         }
     }
