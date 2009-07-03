@@ -10,10 +10,6 @@ I started ipddump because I wanted to pull my SMS messages off my phone and back
 
 As I was working on 0.1.0 I realized that it would make a lot of sense and be useful to create a library to read in an IPD, in addition to the immediate goals of dumping SMS message.  So that's what this project aims to provide with 1.0.0, a complete library that can read any type of record in an IPD.
 
-== Goals/Roadmap ==
-=== 0.2.0 ===
-  * Implement a "correct" program structure with a parser class and a record object factory
-  * Support exporting to XML or CSV
-  * Support more records than just SMS (FeatureRequests)
-=== Long Term ===
+== Additional Information ==
   * FeatureRequests
+  * ReleasePage
