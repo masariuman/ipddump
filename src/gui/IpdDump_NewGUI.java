@@ -120,11 +120,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         ResolveCheckBox = new javax.swing.JCheckBoxMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
-        cutMenuItem = new javax.swing.JMenuItem();
-        copyMenuItem = new javax.swing.JMenuItem();
-        pasteMenuItem = new javax.swing.JMenuItem();
-        deleteMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentsMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -252,7 +247,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelSMSLayout.setVerticalGroup(
             jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("SMS", jPanelSMS);
@@ -299,7 +294,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelContactsLayout.setVerticalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Contacts", jPanelContacts);
@@ -348,7 +343,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelMemoLayout.setVerticalGroup(
             jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Memos", jPanelMemo);
@@ -369,7 +364,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPanelCalendarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCalendarLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
-                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
         );
 
@@ -391,7 +386,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelTasksLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
-                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
         );
 
@@ -413,7 +408,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelOptionsLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
-                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
                 .addGap(212, 212, 212))
         );
 
@@ -462,27 +457,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         menuBar.add(fileMenu);
 
-        editMenu.setText("Edit");
-
-        cutMenuItem.setText("Cut");
-        editMenu.add(cutMenuItem);
-
-        copyMenuItem.setText("Copy");
-        copyMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                copyMenuItemActionPerformed(evt);
-            }
-        });
-        editMenu.add(copyMenuItem);
-
-        pasteMenuItem.setText("Paste");
-        editMenu.add(pasteMenuItem);
-
-        deleteMenuItem.setText("Delete");
-        editMenu.add(deleteMenuItem);
-
-        menuBar.add(editMenu);
-
         helpMenu.setText("Help");
 
         contentsMenuItem.setText("Contents");
@@ -491,7 +465,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         aboutMenuItem.setText("About");
         helpMenu.add(aboutMenuItem);
 
-        menuBar.add(helpMenu);
+        /*
+         * TODO Commented out until we put in dialog boxes to
+         * do something.
+         */
+//        menuBar.add(helpMenu);
 
         setJMenuBar(menuBar);
 
@@ -507,7 +485,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(status_label)
                 .addContainerGap())
@@ -726,10 +704,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         }
         return false;
     }
-    private void copyMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyMenuItemActionPerformed
-        setClipboardContents(ClipBoardTemp);
-    }//GEN-LAST:event_copyMenuItemActionPerformed
-
     private void ShowPopup(MouseEvent e) {
         jPopupMenu.show(e.getComponent(),
                 e.getX(), e.getY());
@@ -1019,10 +993,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem ResolveCheckBox;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JMenuItem contentsMenuItem;
-    private javax.swing.JMenuItem copyMenuItem;
-    private javax.swing.JMenuItem cutMenuItem;
-    private javax.swing.JMenuItem deleteMenuItem;
-    private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
@@ -1050,7 +1020,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JTable jTableSMS;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
-    private javax.swing.JMenuItem pasteMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JLabel status_label;
     private javax.swing.JLabel status_label5;
