@@ -1,13 +1,45 @@
 package org.quaternions.ipddump;
 
-//~--- non-JDK imports --------------------------------------------------------
+import java.io.IOException;
 
-import gui.IpdDump_NewGUI;
+import org.quaternions.ipddump.data.InteractivePagerBackup;
+import org.quaternions.ipddump.data.SMSMessage;
 
-public class Main {
-  // ~--- methods ------------------------------------------------------------
+public class Main
+{
 
-  public static void main(String[] args) throws Exception {
-    new IpdDump_NewGUI().setVisible(true);
-  }
+   public static void main( String[] args )
+   {
+      if ( args.length > 0 )
+      {
+         try
+         {
+            InteractivePagerBackup db = new IPDParser( args[ 0 ] ).parse();
+
+            if ( db != null )
+            {
+               dump( db, null );
+            }
+         }
+         catch ( IOException ex )
+         {
+            System.err.println( ex.getMessage() );
+         }
+      }
+      else
+      {
+         System.out.println( "Usage: java -jar ipdump.jar <path to ipd>" );
+         System.out.println( "  Dumps a csv to stdout." );
+      }
+   }
+
+   public static void dump( InteractivePagerBackup database, String fileName )
+   {
+      System.out.println( "sent,received,sent?,far number,text" );
+      for ( SMSMessage record : database.smsRecords() )
+      {
+         System.out.println( "" + record.getSent() + "," + record.getReceived() + "," + record.wasSent() + "," + record.getNumber() + ",\"" +
+                             record.getText() + "\"" );
+      }
+   }
 }
