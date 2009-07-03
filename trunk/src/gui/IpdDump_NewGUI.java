@@ -28,7 +28,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private String path;
     private String pathString;
-    private final String welcome = "Welcome to IpdDump - http://code.google.com/p/ipddump/";
+    private final String welcome = "Welcome to IPDdump - http://code.google.com/p/ipddump/";
     private String ClipBoardTemp;
     private String ext;
     private String fToSave;
@@ -190,7 +190,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPopupMenu.add(jMenu);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("IpdDump");
+        setTitle("IPDdump");
         setMinimumSize(new java.awt.Dimension(100, 500));
 
         jTableSMS.setModel(new javax.swing.table.DefaultTableModel(
@@ -415,7 +415,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jTabbedPane1.addTab("Options", jPanelOptions);
 
         status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
-        status_label.setText("Welcome to IpdDump - http://code.google.com/p/ipddump/");
+        status_label.setText("Welcome to IPDdump - http://code.google.com/p/ipddump/");
 
         fileMenu.setText("File");
 
