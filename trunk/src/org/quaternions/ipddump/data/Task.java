@@ -9,11 +9,11 @@ import java.util.HashMap;
  * A contact is a record representing contact information stored in the address
  * book.
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  * @date Jun 20, 2009
  */
 public class Task extends Record implements Comparable<Task> {
-    String                              text;
+    String                              text="";
 
     Date                                date;
 

@@ -31,15 +31,38 @@ import java.util.TreeSet;
 
 /**
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
-public class ContactsWriters {
-    FileWriters            filewriter=new FileWriters();
-    InteractivePagerBackup database;
-
-    //~--- constructors -------------------------------------------------------
-
+public class ContactsWriters extends BasicWriter {
     public ContactsWriters(InteractivePagerBackup database) {
+        super(database);
+    }
+
+    //~--- get methods --------------------------------------------------------
+
+    /**
+     * Returns the total of the SMS messages
+     *
+     *
+     * @return
+     */
+    public int getSize() {
+        if (database!=null) {
+            return database.contacts().size();
+        } else {
+            return -1;
+        }
+    }
+
+    //~--- set methods --------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @param database
+     */
+    public void setDatabase(InteractivePagerBackup database) {
         this.database=database;
     }
 
@@ -51,8 +74,8 @@ public class ContactsWriters {
      *
      * @return
      */
-    public String ContactsToCVS() {
-        return ContactsToCVS(getAllRecords());
+    public String toCVS() {
+        return toCVS(getAllRecords(database.contacts().size()));
     }
 
     /**
@@ -63,23 +86,23 @@ public class ContactsWriters {
      *
      * @return
      */
-    public String ContactsToCVS(int[] selectedContacts) {
+    public String toCVS(int[] selectedContacts) {
         StringBuilder builder=new StringBuilder();    // fast builder!!
 
         /*
          * Get all the keys since we don't know all of them ahead
          * of time.  Some fields might be duplicated several times.
          */
-        Set<String> keys       =new TreeSet<String>();
+        Set<String> keys=new TreeSet<String>();
+
         for (Contact record : database.contacts()) {
-          keys.addAll(record.fields().keySet());
+            keys.addAll(record.fields().keySet());
         }
 
-        int         RecordIndex=0;
-        int         j          =0;
-
-        List<String> names=new ArrayList<String>(keys);
-        boolean      first=true;
+        int          RecordIndex=0;
+        int          j          =0;
+        List<String> names      =new ArrayList<String>(keys);
+        boolean      first      =true;
 
         for (String name : names) {
             if (first) {
@@ -134,8 +157,8 @@ public class ContactsWriters {
      *
      * @return
      */
-    public String ContactsToPlainText() {
-        return ContactsToPlainText(getAllRecords());
+    public String toPlainText() {
+        return toPlainText(getAllRecords(database.contacts().size()));
     }
 
     /**
@@ -146,7 +169,7 @@ public class ContactsWriters {
      *
      * @return
      */
-    public String ContactsToPlainText(int[] selectedContacts) {
+    public String toPlainText(int[] selectedContacts) {
         String tmp="";
 
         if (database!=null) {
@@ -188,8 +211,8 @@ public class ContactsWriters {
      *
      * @return
      */
-    public Document ContactsToXML() {
-        return ContactsToXML(getAllRecords());
+    public Document toXML() {
+        return toXML(getAllRecords(database.contacts().size()));
     }
 
     /**
@@ -200,7 +223,7 @@ public class ContactsWriters {
      *
      * @return
      */
-    public Document ContactsToXML(int[] selectedMessages) {
+    public Document toXML(int[] selectedMessages) {
         String sSent="";
 
         // System.out.println("uid,sent,received,sent?,far number,text");
@@ -261,54 +284,6 @@ public class ContactsWriters {
         // System.out.println(document.getDocument().getText());
         return document;
     }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Returns the total of the SMS messages
-     *
-     *
-     * @return
-     */
-    public int getNumberOfContacts() {
-        if (database!=null) {
-            return database.contacts().size();
-        } else {
-            return -1;
-        }
-    }
-
-    //~--- set methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @param database
-     */
-    public void setDatabase(InteractivePagerBackup database) {
-        this.database=database;
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Fills a int array with the instructions
-     * for 'choosing' all the records from a database
-     *
-     * @return
-     */
-    private int[] getAllRecords() {
-        int[] allRecords=new int[getNumberOfContacts()];
-
-        for (int i=0; i<allRecords.length; i++) {
-            allRecords[i]=i;
-        }
-
-        return allRecords;
-    }
-
-    //~--- methods ------------------------------------------------------------
 
     /**
      * Method description

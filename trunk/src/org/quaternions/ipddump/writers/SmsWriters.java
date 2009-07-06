@@ -24,36 +24,56 @@ import java.io.StringWriter;
 
 /**
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
-public class SmsWriters {
-    FileWriters            filewriter=new FileWriters();
-    InteractivePagerBackup database;
-    boolean                resolveNames=false;
-    ContactFinder          contactFinder;
+public class SmsWriters extends BasicWriter {
+    private boolean       resolveNames=false;
+    private ContactFinder contactFinder;
 
     //~--- constructors -------------------------------------------------------
 
-    public SmsWriters(InteractivePagerBackup database) {
-        this.database    =database;
-        this.resolveNames=false;
-    }
     public SmsWriters(InteractivePagerBackup database, boolean resolveNames) {
-        this.database    =database;
+        super(database);
         this.resolveNames=resolveNames;
-        contactFinder    =new ContactFinder(database);
+        contactFinder    =new ContactFinder(super.database);
+    }
+
+    //~--- get methods --------------------------------------------------------
+
+    /**
+     * Returns the total of the SMS messages
+     *
+     *
+     * @return
+     */
+    public int getSize() {
+        if (database!=null) {
+            return database.smsRecords().size();
+        } else {
+            return -1;
+        }
+    }
+
+    //~--- set methods --------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @param database
+     */
+    public void setDatabase(InteractivePagerBackup database) {
+        this.database=database;
     }
 
     //~--- methods ------------------------------------------------------------
 
     /**
-     * Get the cvs of the parsed SMS's
-     *
-     *
+     * {@inheritDoc}
      * @return
      */
-    public String SMSToCVS() {
-        return SMSToCVS(getAllRecords());
+    public String toCVS() {
+        return toCVS(getAllRecords(database.smsRecords().size()));
     }
 
     /**
@@ -62,7 +82,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public String SMSToCVS(int[] selectedMessages) {
+    public String toCVS(int[] selectedMessages) {
         StringBuilder temp=new StringBuilder();    // fast builder!!
 
         temp.delete(0, temp.capacity());
@@ -105,8 +125,8 @@ public class SmsWriters {
      *
      * @return
      */
-    public String SMSToPlainText() {
-        return SMSToPlainText(getAllRecords());
+    public String toPlainText() {
+        return toPlainText(getAllRecords(database.smsRecords().size()));
     }
 
     /**
@@ -119,7 +139,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public String SMSToPlainText(int[] SMSselectedRows) {
+    public String toPlainText(int[] SMSselectedRows) {
         String tmp="";
 
         if (database!=null) {
@@ -172,8 +192,8 @@ public class SmsWriters {
      *
      * @return
      */
-    public Document SMSToXML() {
-        return SMSToXML(getAllRecords());
+    public Document toXML() {
+        return toXML(getAllRecords(database.smsRecords().size()));
     }
 
     /**
@@ -184,7 +204,7 @@ public class SmsWriters {
      *
      * @return
      */
-    public Document SMSToXML(int[] selectedMessages) {
+    public Document toXML(int[] selectedMessages) {
         String sSent="";
 
         // System.out.println("uid,sent,received,sent?,far number,text");
@@ -270,52 +290,5 @@ public class SmsWriters {
         return document;
 
         // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Returns the total of the SMS messages
-     *
-     *
-     * @return
-     */
-    public int getNumberOfSMS() {
-        if (database!=null) {
-            return database.smsRecords().size();
-        } else {
-            return -1;
-        }
-    }
-
-    //~--- set methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @param database
-     */
-    public void setDatabase(InteractivePagerBackup database) {
-        this.database=database;
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Fills a int array with the instructions
-     * for 'choosing' all the records from a database
-     *
-     *
-     * @return
-     */
-    private int[] getAllRecords() {
-        int[] allRecords=new int[getNumberOfSMS()];
-
-        for (int i=0; i<allRecords.length; i++) {
-            allRecords[i]=i;
-        }
-
-        return allRecords;
     }
 }

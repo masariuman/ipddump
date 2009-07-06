@@ -23,7 +23,7 @@ import java.io.IOException;
 
 /**
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
 public class FileWriters {
 
@@ -67,11 +67,13 @@ public class FileWriters {
      */
     public boolean writeXMLtoFile(String filename, Document document) {
         filename=filename.substring(0, filename.lastIndexOf('.'));
+
         String fileExtension=".xml";
-        
-            if (!filename.toLowerCase().endsWith(fileExtension.toLowerCase())) {
-                filename=filename+fileExtension;
-            }
+
+        if (!filename.toLowerCase().endsWith(fileExtension.toLowerCase())) {
+            filename=filename+fileExtension;
+        }
+
         System.out.println("\n->Writing "+filename);
 
         // Make a pretty output

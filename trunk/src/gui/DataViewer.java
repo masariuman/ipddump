@@ -19,7 +19,7 @@ import java.awt.event.MouseEvent;
 
 /**
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
 public class DataViewer extends javax.swing.JFrame {
 
@@ -50,12 +50,12 @@ public class DataViewer extends javax.swing.JFrame {
         TextArea.setLineWrap(false);
         TextArea.setText(strCsv);
     }
- private void ShowMenuPopup(MouseEvent e) {
+
+    private void ShowMenuPopup(MouseEvent e) {
         jPopupMenu1.show(e.getComponent(),
                 e.getX(), e.getY());
     }
 
- 
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -118,20 +118,19 @@ public class DataViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_TextAreaMouseClicked
 
     private void CopyJmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CopyJmenuActionPerformed
-      setClipboardContents(TextArea.getSelectedText());
+        setClipboardContents(TextArea.getSelectedText());
     }//GEN-LAST:event_CopyJmenuActionPerformed
 
     private void TextAreaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextAreaKeyPressed
-        if (evt.isControlDown()&& evt.getKeyCode()==KeyEvent.VK_C){
-         setClipboardContents(TextArea.getSelectedText());
+        if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_C) {
+            setClipboardContents(TextArea.getSelectedText());
         }
     }//GEN-LAST:event_TextAreaKeyPressed
-        public static void setClipboardContents(String aString) {
+    public static void setClipboardContents(String aString) {
         StringSelection stringSelection = new StringSelection(aString);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, (ClipboardOwner) null);
     }
-
     /**
      * @param args the command line arguments
      */
