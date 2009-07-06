@@ -31,7 +31,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final String welcome = "Welcome to IPDdump - http://code.google.com/p/ipddump/";
     private String ClipBoardTemp;
     private String ext;
-    private String fToSave;
+    private String fileToSave;
     private InteractivePagerBackup database;
     private TableModel SMSDataModel;
     private final int SMStabINDEX;
@@ -60,9 +60,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private int[] OptionsSelectedRows;
     private final DataViewer viewer;
     private final FileWriters fileWriter = new FileWriters();
-    private SmsWriters smsWriter;
-    private ContactsWriters ContactsWriter;
-    private MemosWriters MemosWriter;
+    private SmsWriters SMS;
+    private ContactsWriters Contacts;
+    private MemosWriters Memos;
     private TableModel ContactsDataModel;
     private TableModel MemosDataModel;
     private final int ContactsNameIndex = 0;
@@ -531,15 +531,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
             resolveNames = ResolveCheckBox.isSelected();
 
-            smsWriter = new SmsWriters(database, resolveNames);
-            totalSMS = smsWriter.getSize();
+            SMS = new SmsWriters(database, resolveNames);
+            totalSMS = SMS.getSize();
 
-            ContactsWriter = new ContactsWriters(database);
-            totalContacts = ContactsWriter.getSize();
+            Contacts = new ContactsWriters(database);
+            totalContacts = Contacts.getSize();
             contactFinder = new ContactFinder(database);
 
-            MemosWriter = new MemosWriters(database);
-            totalMemos = MemosWriter.getSize();
+            Memos = new MemosWriters(database);
+            totalMemos = Memos.getSize();
 
 
 
@@ -634,31 +634,31 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
-                    fileWriter.writeTextToFile(fToSave, smsWriter.toPlainText(SMSSelectedRows), ".txt");
+                    fileWriter.writeTextToFile(fileToSave, SMS.toPlainText(SMSSelectedRows), ".txt");
                 } else if (ext.equalsIgnoreCase("csv")) {
-                    fileWriter.writeTextToFile(fToSave, smsWriter.toCVS(SMSSelectedRows), ".csv");
+                    fileWriter.writeTextToFile(fileToSave, SMS.toCSV(SMSSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
-                    fileWriter.writeXMLtoFile(fToSave, smsWriter.toXML(SMSSelectedRows));
+                    fileWriter.writeXMLtoFile(fileToSave, SMS.toXML(SMSSelectedRows));
                 }
             }
         } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
-                    fileWriter.writeTextToFile(fToSave, ContactsWriter.toPlainText(ContactsSelectedRows), ".txt");
+                    fileWriter.writeTextToFile(fileToSave, Contacts.toPlainText(ContactsSelectedRows), ".txt");
                 } else if (ext.equalsIgnoreCase("csv")) {
-                    fileWriter.writeTextToFile(fToSave, ContactsWriter.toCVS(ContactsSelectedRows), ".csv");
+                    fileWriter.writeTextToFile(fileToSave, Contacts.toCSV(ContactsSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
-                    fileWriter.writeXMLtoFile(fToSave, ContactsWriter.toXML(ContactsSelectedRows));
+                    fileWriter.writeXMLtoFile(fileToSave, Contacts.toXML(ContactsSelectedRows));
                 }
             }
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             if (saveDialog()) {
                 if (ext.equalsIgnoreCase("txt")) {
-                    fileWriter.writeTextToFile(fToSave, MemosWriter.toPlainText(MemosSelectedRows), ".txt");
+                    fileWriter.writeTextToFile(fileToSave, Memos.toPlainText(MemosSelectedRows), ".txt");
                 } else if (ext.equalsIgnoreCase("csv")) {
-                    fileWriter.writeTextToFile(fToSave, MemosWriter.toCVS(MemosSelectedRows), ".csv");
+                    fileWriter.writeTextToFile(fileToSave, Memos.toCSV(MemosSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
-                    fileWriter.writeXMLtoFile(fToSave, MemosWriter.toXML(MemosSelectedRows));
+                    fileWriter.writeXMLtoFile(fileToSave, Memos.toXML(MemosSelectedRows));
                 }
             }
         } else {
@@ -672,12 +672,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
             int lastDot = jFileChooser1.getFileFilter().getDescription().lastIndexOf(".") + 1;
             ext = jFileChooser1.getFileFilter().getDescription().substring(lastDot);
-            fToSave = jFileChooser1.getSelectedFile().getAbsolutePath() + "." + ext;
+            fileToSave = jFileChooser1.getSelectedFile().getAbsolutePath() + "." + ext;
             //System.out.println(fToSave+" - "+ext);
             return true;
         }
         return false;
     }
+    
     private void ShowPopup(MouseEvent e) {
         jPopupMenu.show(e.getComponent(),
                 e.getX(), e.getY());
@@ -686,19 +687,20 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private void jMenuItemXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemXMLActionPerformed
         String tmp = "";
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
-            tmp = smsWriter.toXML(SMSSelectedRows).asXML();
+            tmp = SMS.toXML(SMSSelectedRows).asXML();
+            viewer.setTitle("SMS Viewer - XML");
         }
         else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
-            tmp = ContactsWriter.toXML(ContactsSelectedRows).asXML();
+            tmp = Contacts.toXML(ContactsSelectedRows).asXML();
+            viewer.setTitle("Contacts Viewer - XML");
         }
         else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
-            tmp = MemosWriter.toXML(MemosSelectedRows).asXML();
+            tmp = Memos.toXML(MemosSelectedRows).asXML();
+            viewer.setTitle("Memos Viewer - XML");
         }
-
 
 
         viewer.setXml(tmp);
-        viewer.setTitle("SMS Viewer - XML");
         viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemXMLActionPerformed
 
@@ -706,18 +708,21 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         String tmp = "";
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
-            tmp = smsWriter.toPlainText(SMSSelectedRows);
+            tmp = SMS.toPlainText(SMSSelectedRows);
+            viewer.setTitle("SMS Viewer - Plain Text");
         }
         else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
-            tmp = ContactsWriter.toPlainText(ContactsSelectedRows);
+            tmp = Contacts.toPlainText(ContactsSelectedRows);
+            viewer.setTitle("Contacts Viewer - Plain Text");
         }
         else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
-            tmp = MemosWriter.toPlainText(MemosSelectedRows);
+            tmp = Memos.toPlainText(MemosSelectedRows);
+            viewer.setTitle("Memos Viewer - Plain Text");
         }
 
 
         viewer.setTxt(tmp);
-        viewer.setTitle("SMS Viewer - Plain Text");
+        
         viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemTxtActionPerformed
 
@@ -725,30 +730,33 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         String tmp = "";
 
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
-            tmp = smsWriter.toCVS(SMSSelectedRows);
+            tmp = SMS.toCSV(SMSSelectedRows);
+            viewer.setTitle("SMS Viewer - Csv");
         }
         else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
-            tmp = ContactsWriter.toCVS(ContactsSelectedRows);
+            tmp = Contacts.toCSV(ContactsSelectedRows);
+            viewer.setTitle("Contacts Viewer - Csv");
         }
         else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
-            tmp = MemosWriter.toCVS(MemosSelectedRows);
+            tmp = Memos.toCSV(MemosSelectedRows);
+            viewer.setTitle("Memos Viewer - Csv");
         }
 
         viewer.setCvs(tmp);
-        viewer.setTitle("SMS Viewer - Csv");
+        
         viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemCSVActionPerformed
 
     private void jMenuItemCPTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPTXTActionPerformed
         String tmp = "";
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
-            tmp = smsWriter.toPlainText(SMSSelectedRows);
+            tmp = SMS.toPlainText(SMSSelectedRows);
         }
         else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
-            tmp = ContactsWriter.toPlainText(ContactsSelectedRows);
+            tmp = Contacts.toPlainText(ContactsSelectedRows);
         }
         else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
-            tmp = MemosWriter.toPlainText(MemosSelectedRows);
+            tmp = Memos.toPlainText(MemosSelectedRows);
         }
 
         setClipboardContents(tmp);
@@ -757,13 +765,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private void jMenuItemCPXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCPXMLActionPerformed
         String tmp = "";
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
-            tmp = smsWriter.toXML(SMSSelectedRows).asXML();
+            tmp = SMS.toXML(SMSSelectedRows).asXML();
         }
         else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
-            tmp = ContactsWriter.toXML(ContactsSelectedRows).asXML();
+            tmp = Contacts.toXML(ContactsSelectedRows).asXML();
         }
         else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
-            tmp = MemosWriter.toXML(MemosSelectedRows).asXML();
+            tmp = Memos.toXML(MemosSelectedRows).asXML();
         }
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPXMLActionPerformed
@@ -772,13 +780,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         String tmp = "";
 
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
-            tmp = smsWriter.toCVS(SMSSelectedRows);
+            tmp = SMS.toCSV(SMSSelectedRows);
         }
         else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
-            tmp = ContactsWriter.toCVS(ContactsSelectedRows);
+            tmp = Contacts.toCSV(ContactsSelectedRows);
         }
         else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
-            tmp = MemosWriter.toCVS(MemosSelectedRows);
+            tmp = Memos.toCSV(MemosSelectedRows);
         }
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPCSVActionPerformed
@@ -820,7 +828,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         resolveNames = ResolveCheckBox.isSelected();
 
         if (saveAsMenuItem.isEnabled()) {
-            smsWriter = new SmsWriters(database, resolveNames);
+            SMS = new SmsWriters(database, resolveNames);
             fillSMSTable();
         }
     }//GEN-LAST:event_ResolveCheckBoxActionPerformed

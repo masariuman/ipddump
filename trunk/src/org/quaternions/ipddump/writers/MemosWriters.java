@@ -43,20 +43,8 @@ public class MemosWriters extends BasicWriter {
         if (database!=null) {
             return database.memos().size();
         } else {
-            return -1;
+            return 0;
         }
-    }
-
-    //~--- set methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @param database
-     */
-    public void setDatabase(InteractivePagerBackup database) {
-        this.database=database;
     }
 
     //~--- methods ------------------------------------------------------------
@@ -67,8 +55,8 @@ public class MemosWriters extends BasicWriter {
      *
      * @return
      */
-    public String toCVS() {
-        return toCVS(getAllRecords(database.memos().size()));
+    public String toCSV() {
+        return toCSV(getAllRecords());
     }
 
     /**
@@ -77,7 +65,7 @@ public class MemosWriters extends BasicWriter {
      *
      * @return
      */
-    public String toCVS(int[] selectedMemos) {
+    public String toCSV(int[] selectedMemos) {
         StringBuilder temp=new StringBuilder();    // fast builder!!
 
         temp.delete(0, temp.capacity());
@@ -112,7 +100,7 @@ public class MemosWriters extends BasicWriter {
      * @return
      */
     public String toPlainText() {
-        return toPlainText(getAllRecords(database.memos().size()));
+        return toPlainText(getAllRecords());
     }
 
     /**
@@ -163,7 +151,7 @@ public class MemosWriters extends BasicWriter {
      * @return
      */
     public Document toXML() {
-        return toXML(getAllRecords(database.memos().size()));
+        return toXML(getAllRecords());
     }
 
     /**

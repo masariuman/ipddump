@@ -50,20 +50,8 @@ public class SmsWriters extends BasicWriter {
         if (database!=null) {
             return database.smsRecords().size();
         } else {
-            return -1;
+            return 0;
         }
-    }
-
-    //~--- set methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @param database
-     */
-    public void setDatabase(InteractivePagerBackup database) {
-        this.database=database;
     }
 
     //~--- methods ------------------------------------------------------------
@@ -72,8 +60,8 @@ public class SmsWriters extends BasicWriter {
      * {@inheritDoc}
      * @return
      */
-    public String toCVS() {
-        return toCVS(getAllRecords(database.smsRecords().size()));
+    public String toCSV() {
+        return toCSV(getAllRecords());
     }
 
     /**
@@ -82,7 +70,7 @@ public class SmsWriters extends BasicWriter {
      *
      * @return
      */
-    public String toCVS(int[] selectedMessages) {
+    public String toCSV(int[] selectedMessages) {
         StringBuilder temp=new StringBuilder();    // fast builder!!
 
         temp.delete(0, temp.capacity());
@@ -126,7 +114,7 @@ public class SmsWriters extends BasicWriter {
      * @return
      */
     public String toPlainText() {
-        return toPlainText(getAllRecords(database.smsRecords().size()));
+        return toPlainText(getAllRecords());
     }
 
     /**
@@ -193,7 +181,7 @@ public class SmsWriters extends BasicWriter {
      * @return
      */
     public Document toXML() {
-        return toXML(getAllRecords(database.smsRecords().size()));
+        return toXML(getAllRecords());
     }
 
     /**

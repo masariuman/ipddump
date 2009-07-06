@@ -50,20 +50,8 @@ public class ContactsWriters extends BasicWriter {
         if (database!=null) {
             return database.contacts().size();
         } else {
-            return -1;
+            return 0;
         }
-    }
-
-    //~--- set methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @param database
-     */
-    public void setDatabase(InteractivePagerBackup database) {
-        this.database=database;
     }
 
     //~--- methods ------------------------------------------------------------
@@ -74,8 +62,8 @@ public class ContactsWriters extends BasicWriter {
      *
      * @return
      */
-    public String toCVS() {
-        return toCVS(getAllRecords(database.contacts().size()));
+    public String toCSV() {
+        return toCSV(getAllRecords());
     }
 
     /**
@@ -86,7 +74,7 @@ public class ContactsWriters extends BasicWriter {
      *
      * @return
      */
-    public String toCVS(int[] selectedContacts) {
+    public String toCSV(int[] selectedContacts) {
         StringBuilder builder=new StringBuilder();    // fast builder!!
 
         /*
@@ -158,7 +146,7 @@ public class ContactsWriters extends BasicWriter {
      * @return
      */
     public String toPlainText() {
-        return toPlainText(getAllRecords(database.contacts().size()));
+        return toPlainText(getAllRecords());
     }
 
     /**
@@ -212,7 +200,7 @@ public class ContactsWriters extends BasicWriter {
      * @return
      */
     public Document toXML() {
-        return toXML(getAllRecords(database.contacts().size()));
+        return toXML(getAllRecords());
     }
 
     /**
