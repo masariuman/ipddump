@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
 public class Gsm2Iso {
 

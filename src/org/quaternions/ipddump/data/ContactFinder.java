@@ -9,7 +9,7 @@ package org.quaternions.ipddump.data;
 
 /**
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
 public class ContactFinder {
     private final InteractivePagerBackup database;

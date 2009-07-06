@@ -24,15 +24,38 @@ import java.io.StringWriter;
 
 /**
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
-public class MemosWriters {
-    FileWriters            filewriter=new FileWriters();
-    InteractivePagerBackup database;
-
-    //~--- constructors -------------------------------------------------------
-
+public class MemosWriters extends BasicWriter {
     public MemosWriters(InteractivePagerBackup database) {
+        super(database);
+    }
+
+    //~--- get methods --------------------------------------------------------
+
+    /**
+     * Returns the total of the Memo messages
+     *
+     *
+     * @return
+     */
+    public int getSize() {
+        if (database!=null) {
+            return database.memos().size();
+        } else {
+            return -1;
+        }
+    }
+
+    //~--- set methods --------------------------------------------------------
+
+    /**
+     * Method description
+     *
+     *
+     * @param database
+     */
+    public void setDatabase(InteractivePagerBackup database) {
         this.database=database;
     }
 
@@ -44,8 +67,8 @@ public class MemosWriters {
      *
      * @return
      */
-    public String MemosToCVS() {
-        return MemosToCVS(getAllRecords());
+    public String toCVS() {
+        return toCVS(getAllRecords(database.memos().size()));
     }
 
     /**
@@ -54,7 +77,7 @@ public class MemosWriters {
      *
      * @return
      */
-    public String MemosToCVS(int[] selectedMemos) {
+    public String toCVS(int[] selectedMemos) {
         StringBuilder temp=new StringBuilder();    // fast builder!!
 
         temp.delete(0, temp.capacity());
@@ -88,8 +111,8 @@ public class MemosWriters {
      *
      * @return
      */
-    public String MemosToPlainText() {
-        return MemosToPlainText(getAllRecords());
+    public String toPlainText() {
+        return toPlainText(getAllRecords(database.memos().size()));
     }
 
     /**
@@ -102,7 +125,7 @@ public class MemosWriters {
      *
      * @return
      */
-    public String MemosToPlainText(int[] MemoselectedRows) {
+    public String toPlainText(int[] MemoselectedRows) {
         String tmp="";
 
         if (database!=null) {
@@ -139,8 +162,8 @@ public class MemosWriters {
      *
      * @return
      */
-    public Document MemosToXML() {
-        return MemosToXML(getAllRecords());
+    public Document toXML() {
+        return toXML(getAllRecords(database.memos().size()));
     }
 
     /**
@@ -151,7 +174,7 @@ public class MemosWriters {
      *
      * @return
      */
-    public Document MemosToXML(int[] selectedMemos) {
+    public Document toXML(int[] selectedMemos) {
         String sSent="";
 
         // System.out.println("uid,sent,received,sent?,far number,text");
@@ -205,52 +228,5 @@ public class MemosWriters {
         return document;
 
         // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Returns the total of the Memo messages
-     *
-     *
-     * @return
-     */
-    public int getNumberOfMemos() {
-        if (database!=null) {
-            return database.memos().size();
-        } else {
-            return -1;
-        }
-    }
-
-    //~--- set methods --------------------------------------------------------
-
-    /**
-     * Method description
-     *
-     *
-     * @param database
-     */
-    public void setDatabase(InteractivePagerBackup database) {
-        this.database=database;
-    }
-
-    //~--- get methods --------------------------------------------------------
-
-    /**
-     * Fills a int array with the instructions
-     * for 'choosing' all the records from a database
-     *
-     *
-     * @return
-     */
-    private int[] getAllRecords() {
-        int[] allRecords=new int[getNumberOfMemos()];
-
-        for (int i=0; i<allRecords.length; i++) {
-            allRecords[i]=i;
-        }
-
-        return allRecords;
     }
 }

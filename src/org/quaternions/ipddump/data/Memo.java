@@ -3,7 +3,7 @@ package org.quaternions.ipddump.data;
 /**
  * A memo is a record with title and text.
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  * @date Jun 20, 2009
  */
 public class Memo extends Record implements Comparable<Memo> {
