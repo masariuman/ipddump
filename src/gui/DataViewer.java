@@ -86,6 +86,7 @@ public class DataViewer extends javax.swing.JFrame {
         TextArea.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         TextArea.setLineWrap(true);
         TextArea.setRows(5);
+        TextArea.setAutoscrolls(false);
         TextArea.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TextAreaMouseClicked(evt);

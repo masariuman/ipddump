@@ -18,7 +18,6 @@ import org.quaternions.ipddump.data.InteractivePagerBackup;
  * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
 abstract class BasicWriter {
-    protected FileWriters            filewriter=new FileWriters();
     protected InteractivePagerBackup database;
 
     //~--- constructors -------------------------------------------------------
@@ -45,7 +44,9 @@ abstract class BasicWriter {
      *
      * @param database
      */
-    abstract public void setDatabase(InteractivePagerBackup database);
+    public void setDatabase(InteractivePagerBackup database){
+    this.database=database;
+    }
 
     //~--- methods ------------------------------------------------------------
 
@@ -55,7 +56,7 @@ abstract class BasicWriter {
      *
      * @return
      */
-    abstract public String toCVS();
+    abstract public String toCSV();
 
     /**
      * Method description
@@ -65,7 +66,7 @@ abstract class BasicWriter {
      *
      * @return
      */
-    abstract public String toCVS(int[] totalnumber);
+    abstract public String toCSV(int[] totalnumber);
 
     /**
      * Method description
@@ -111,8 +112,8 @@ abstract class BasicWriter {
      *
      * @return
      */
-    protected int[] getAllRecords(int totalnumber) {
-        int[] allRecords=new int[totalnumber];
+    protected int[] getAllRecords() {
+        int[] allRecords=new int[getSize()];
 
         for (int i=0; i<allRecords.length; i++) {
             allRecords[i]=i;
