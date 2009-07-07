@@ -16,27 +16,27 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
     /**
      * The date the SMS was sent;
      */
-    protected Date sent;
+    protected Date sent=new Date(0);
 
     /**
      * The date the SMS was received.
      */
-    protected Date received;
+    protected Date received=new Date(0);
 
     /**
      * Was the SMS sent from the phone, or received?
      */
-    protected Boolean wasSent;
+    protected Boolean wasSent=true;
 
     /**
      * The far number.
      */
-    protected String number;
+    protected String number="ERROR";
 
     /**
      * The text of the SMS.
      */
-    protected String text;
+    protected String text="ERROR";
 
     //~--- constructors -------------------------------------------------------
 

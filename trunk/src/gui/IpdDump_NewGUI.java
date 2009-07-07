@@ -476,6 +476,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         viewer = new DataViewer();
         IpdChooser.setAcceptAllFileFilterUsed(false);
         IpdChooser.setFileHidingEnabled(false);
+        IpdChooser.setMultiSelectionEnabled(false);
         IpdChooser.addChoosableFileFilter(
                 new ExtensionFileFilter(
                 new String[]{".IPD"}, "BB Backup Files"));
@@ -511,20 +512,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
-        //jTextArea1.setText(thnx+"\n\nWORKING...  be patient!");
-        IpdChooser.setMultiSelectionEnabled(false);
+        status_label.setText("WORKING...  be patient!");
         if (JFileChooser.APPROVE_OPTION == IpdChooser.showOpenDialog(null)) {
 
 
-            path = IpdChooser.getSelectedFile().getAbsolutePath().toString();
-            int last = path.lastIndexOf('.');
-            pathString = path.substring(0, last);
             jFileChooser1.setSelectedFile(IpdChooser.getSelectedFile());
-
+            setTitle("IPDdump " + jFileChooser1.getSelectedFile().getPath());
 
             String[] args = {IpdChooser.getSelectedFile().getPath()};
             try {
-                database = new IPDParser(args[0]).parse();
+                IPDParser parser = new IPDParser(args[0]);
+                parser.enableDebuging(); // TODO: Comment This Line Before Publish
+                database = parser.parse();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(MessageFrame, "ERROR: " + ex.getMessage());
                 saveAsMenuItem.setEnabled(false);
@@ -552,8 +551,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
 
             fillTables();
-        }
 
+        }
+        status_label.setText(welcome);
     }//GEN-LAST:event_openMenuItemActionPerformed
     private void fillTables() {
         resolveNames = ResolveCheckBox.isSelected();
@@ -678,7 +678,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         }
         return false;
     }
-    
+
     private void ShowPopup(MouseEvent e) {
         jPopupMenu.show(e.getComponent(),
                 e.getX(), e.getY());
@@ -689,12 +689,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = SMS.toXML(SMSSelectedRows).asXML();
             viewer.setTitle("SMS Viewer - XML");
-        }
-        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = Contacts.toXML(ContactsSelectedRows).asXML();
             viewer.setTitle("Contacts Viewer - XML");
-        }
-        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toXML(MemosSelectedRows).asXML();
             viewer.setTitle("Memos Viewer - XML");
         }
@@ -710,19 +708,17 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = SMS.toPlainText(SMSSelectedRows);
             viewer.setTitle("SMS Viewer - Plain Text");
-        }
-        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = Contacts.toPlainText(ContactsSelectedRows);
             viewer.setTitle("Contacts Viewer - Plain Text");
-        }
-        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toPlainText(MemosSelectedRows);
             viewer.setTitle("Memos Viewer - Plain Text");
         }
 
 
         viewer.setTxt(tmp);
-        
+
         viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemTxtActionPerformed
 
@@ -732,18 +728,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = SMS.toCSV(SMSSelectedRows);
             viewer.setTitle("SMS Viewer - Csv");
-        }
-        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = Contacts.toCSV(ContactsSelectedRows);
             viewer.setTitle("Contacts Viewer - Csv");
-        }
-        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toCSV(MemosSelectedRows);
             viewer.setTitle("Memos Viewer - Csv");
         }
 
         viewer.setCvs(tmp);
-        
+
         viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemCSVActionPerformed
 
@@ -751,11 +745,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         String tmp = "";
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = SMS.toPlainText(SMSSelectedRows);
-        }
-        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = Contacts.toPlainText(ContactsSelectedRows);
-        }
-        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toPlainText(MemosSelectedRows);
         }
 
@@ -766,11 +758,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         String tmp = "";
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = SMS.toXML(SMSSelectedRows).asXML();
-        }
-        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = Contacts.toXML(ContactsSelectedRows).asXML();
-        }
-        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toXML(MemosSelectedRows).asXML();
         }
         setClipboardContents(tmp);
@@ -781,11 +771,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
             tmp = SMS.toCSV(SMSSelectedRows);
-        }
-        else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
+        } else if (ActiveTAB == ContactstabINDEX && totalContacts != 0 && ContactsSelectedRows.length > 0) {
             tmp = Contacts.toCSV(ContactsSelectedRows);
-        }
-        else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
+        } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toCSV(MemosSelectedRows);
         }
         setClipboardContents(tmp);

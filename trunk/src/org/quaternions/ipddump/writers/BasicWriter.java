@@ -84,7 +84,7 @@ abstract class BasicWriter {
      *
      * @return
      */
-    abstract public String toPlainText(int[] totalnumber);
+    abstract public String toPlainText(int[] SelectedRecords);
 
     /**
      * Method description
@@ -102,7 +102,7 @@ abstract class BasicWriter {
      *
      * @return
      */
-    abstract public Document toXML(int[] totalnumber);
+    abstract public Document toXML(int[] SelectedRecords);
 
     //~--- get methods --------------------------------------------------------
 
