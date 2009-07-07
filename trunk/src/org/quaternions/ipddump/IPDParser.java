@@ -24,6 +24,7 @@ public class IPDParser {
      */
     private int lastValidDBid=-1;
     private boolean debuging=false;
+    private int lastValidDBHandle=0;
 
   /**
    * Specifies the state of the parser, that is, the current part of the IPD
@@ -247,6 +248,7 @@ public class IPDParser {
             
             if (dbID<database.databaseNames().size() && dbID>0){
             lastValidDBid=dbID;
+            lastValidDBHandle=databaseHandle;
             }
             record = database.createRecord( dbID, recordDBVersion, uid, recordLength );
             record.setRecordDBHandle( databaseHandle );
@@ -280,7 +282,7 @@ public class IPDParser {
                         "database Size: %3d -- Last valid DBid:%3d Name: %s -- "
                         ,dbID,dbID,database.databaseNames().size(),
                         lastValidDBid,dbname);
-             System.err.print("BD handle: "+databaseHandle+"\n");
+             System.err.println("\n    Last Valid BD handle: "+lastValidDBHandle+" BD handle:"+databaseHandle);
               //System.out.print("Field:"+fieldType+" Data: "+String.valueOf(dataBuffer));
             }
             record.addField( fieldType, dataBuffer );
