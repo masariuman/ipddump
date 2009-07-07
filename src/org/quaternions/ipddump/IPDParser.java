@@ -19,6 +19,11 @@ public class IPDParser {
    * The name/path of the file to parse.
    */
   protected final String fileName;
+  /**
+     * Stores the lase valid batabase id that was parced.
+     */
+    private int lastValidDBid=-1;
+    private boolean debuging=false;
 
   /**
    * Specifies the state of the parser, that is, the current part of the IPD
@@ -239,8 +244,13 @@ public class IPDParser {
             uid |= input.read() << 16;
             uid |= input.read() << 24;
             recordRead += 4;
+            
+            if (dbID<database.databaseNames().size() && dbID>0){
+            lastValidDBid=dbID;
+            }
             record = database.createRecord( dbID, recordDBVersion, uid, recordLength );
             record.setRecordDBHandle( databaseHandle );
+            
             state = ReadingState.FIELDLENGTH;
             break;
 
@@ -262,8 +272,20 @@ public class IPDParser {
             for ( int i = 0; i < fieldLength; i++ ) {
               dataBuffer[ i ] = (char) input.read();
             }
-
+            if ((dbID>database.databaseNames().size() || dbID<0) && debuging){
+             database.setErrorFlag();
+             String dbname=String.valueOf(lastValidDBid);
+             if (lastValidDBid>0){dbname=database.databaseNames().get(lastValidDBid);}
+             System.err.format("Problematic dbIndex: hex: %4h dec: %5d " +
+                        "database Size: %3d -- Last valid DBid:%3d Name: %s -- "
+                        ,dbID,dbID,database.databaseNames().size(),
+                        lastValidDBid,dbname);
+             System.err.print("BD handle: "+databaseHandle+"\n");
+              //System.out.print("Field:"+fieldType+" Data: "+String.valueOf(dataBuffer));
+            }
             record.addField( fieldType, dataBuffer );
+            
+
             recordRead += fieldLength;
 
             if ( recordRead < record.getLength() ) {
@@ -280,6 +302,10 @@ public class IPDParser {
 
     database.organize();
     return database;
+  }
+
+  public void enableDebuging(){
+  debuging=true;
   }
 }
 

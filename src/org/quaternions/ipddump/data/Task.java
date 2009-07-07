@@ -13,9 +13,9 @@ import java.util.HashMap;
  * @date Jun 20, 2009
  */
 public class Task extends Record implements Comparable<Task> {
-    String                              text="";
+    String                              text="ERROR";
 
-    Date                                date;
+    Date                                date=new Date(0);
 
     //~--- constructors -------------------------------------------------------
 

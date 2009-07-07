@@ -9,7 +9,7 @@ package org.quaternions.ipddump.data;
 public class Memo extends Record implements Comparable<Memo> {
     protected String                    text="";
 
-    protected String                    title="";
+    protected String                    title="ERROR";
 
     //~--- constructors -------------------------------------------------------
 

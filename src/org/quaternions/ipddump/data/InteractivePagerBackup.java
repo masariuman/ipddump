@@ -57,6 +57,10 @@ public class InteractivePagerBackup {
      * The set of Memos.
      */
     protected final List<Memo> memos;
+    /**
+     * Reports If there were Errors while parsing
+     */
+    private boolean errorFlag=false;
 
     //~--- constructors -------------------------------------------------------
 
@@ -110,7 +114,7 @@ public class InteractivePagerBackup {
       /*
        * Fix for bug #2, there might be an error in parsing, but for now, this seems to fix it.
        */
-        if (dbIndex>=databases.size()) {
+        if (dbIndex>=databases.size() || dbIndex<0) {
             return new DummyRecord(dbIndex, version, uid, length);
         } else if ("SMS Messages".equals(databases.get(dbIndex))) {
             SMSMessage record=new SMSMessage(dbIndex, version, uid, length);
@@ -165,5 +169,12 @@ public class InteractivePagerBackup {
       Collections.sort(smsRecords);
       Collections.sort(tasks);
       Collections.sort(contacts);
+    }
+      public boolean wereErrors(){
+        return errorFlag;
+    }
+
+      public void setErrorFlag(){
+        errorFlag=true;
     }
 }
