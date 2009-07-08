@@ -120,6 +120,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         ResolveCheckBox = new javax.swing.JCheckBoxMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
+        jMenuHelp = new javax.swing.JMenu();
+        jMenuItemAbout = new javax.swing.JMenuItem();
 
         IpdChooser.setAcceptAllFileFilterUsed(false);
 
@@ -402,7 +404,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Options", jPanelOptions);
 
-        status_label.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
         status_label.setText("Welcome to IPDdump - http://code.google.com/p/ipddump/");
 
         fileMenu.setText("File");
@@ -444,6 +446,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
+
+        jMenuHelp.setText("Help");
+
+        jMenuItemAbout.setText("About");
+        jMenuItemAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAboutActionPerformed(evt);
+            }
+        });
+        jMenuHelp.add(jMenuItemAbout);
+
+        menuBar.add(jMenuHelp);
 
         setJMenuBar(menuBar);
 
@@ -825,6 +839,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         tableClick(evt);
 }//GEN-LAST:event_jTableMemosMouseClicked
 
+    private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
+    new IPDdumpAboutBox(this).setVisible(true);
+    }//GEN-LAST:event_jMenuItemAboutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -965,6 +983,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JMenu jMenu;
+    private javax.swing.JMenu jMenuHelp;
+    private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemCPCSV;
     private javax.swing.JMenuItem jMenuItemCPTXT;
     private javax.swing.JMenuItem jMenuItemCPXML;
