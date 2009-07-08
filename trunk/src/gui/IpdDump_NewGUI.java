@@ -840,7 +840,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_jTableMemosMouseClicked
 
     private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
-    new IPDdumpAboutBox(this).setVisible(true);
+//    new IPDdumpAboutBox(this).setVisible(true);
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     /**
