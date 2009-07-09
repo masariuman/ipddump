@@ -128,8 +128,8 @@ public class SmsWriters extends BasicWriter {
      * @return
      */
     public String toPlainText(int[] SMSselectedRows) {
-        String tmp="";
-
+        StringBuilder tmp=new StringBuilder();
+        tmp.append("<html>");
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;
@@ -149,11 +149,11 @@ public class SmsWriters extends BasicWriter {
                     }
 
                     if (!record.wasSent()) {
-                        tmp=tmp+"From: "+Name+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                            +"\n\n";
+                        tmp.append("From: "+Name+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                            +"\n\n");
                     } else {
-                        tmp=tmp+"From: My Phone"+"\nTo: "+Name+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                            +"\n\n";
+                        tmp.append("From: My Phone"+"\nTo: "+Name+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
+                            +"\n\n");
                     }
 
                     j++;
@@ -165,11 +165,11 @@ public class SmsWriters extends BasicWriter {
 
                 RecordIndex++;
             }
-
-            return tmp;
+            tmp.append("</html>");
+            return tmp.toString();
         }
-
-        return tmp;
+        tmp.append("</html>");
+        return tmp.toString();
     }
 
     /**

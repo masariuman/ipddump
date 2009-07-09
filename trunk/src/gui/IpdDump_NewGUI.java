@@ -13,6 +13,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -75,7 +77,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final int MemosMemoIndex = 1;
     private Collection<Contact> xe;
     private Object[] xe2;
-
+    private String baseName = "gui.resources.IPDdumpAboutBox";
+    private ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
      * initialize the form.
@@ -487,6 +490,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     public IpdDump_NewGUI() {
         initComponents();
+        setTitle("IPDdump v"+rb.getString("version"));
         viewer = new DataViewer();
         IpdChooser.setAcceptAllFileFilterUsed(false);
         IpdChooser.setFileHidingEnabled(false);
@@ -499,7 +503,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jFileChooser1.setFileHidingEnabled(false);
         jFileChooser1.addChoosableFileFilter(
                 new ExtensionFileFilter(
-                new String[]{".csv"}, "Cvs Document *.csv"));
+                new String[]{".csv"}, "Csv Document *.csv"));
         jFileChooser1.addChoosableFileFilter(
                 new ExtensionFileFilter(
                 new String[]{".xml"}, "Xml Document *.xml"));

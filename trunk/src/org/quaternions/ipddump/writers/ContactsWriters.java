@@ -158,7 +158,7 @@ public class ContactsWriters extends BasicWriter {
      * @return
      */
     public String toPlainText(int[] selectedContacts) {
-        String tmp="";
+        StringBuilder tmp=new StringBuilder();
 
         if (database!=null) {
             int RecordIndex=0;
@@ -171,10 +171,10 @@ public class ContactsWriters extends BasicWriter {
                     for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
                         Map.Entry entry=(Map.Entry) iterator.next();
 
-                        tmp+=entry.getKey()+": "+entry.getValue()+"\n";
+                        tmp.append(entry.getKey()+": "+entry.getValue()+"\n");
                     }
 
-                    tmp+="\n";
+                    tmp.append("\n");
                     j++;
 
                     if (j>=selectedContacts.length) {
@@ -185,10 +185,10 @@ public class ContactsWriters extends BasicWriter {
                 RecordIndex++;
             }
 
-            return tmp;
+            return tmp.toString();
         }
 
-        return tmp;
+        return tmp.toString();
     }
 
     /**
