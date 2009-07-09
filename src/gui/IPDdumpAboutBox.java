@@ -11,10 +11,8 @@
 package gui;
 
 import java.awt.Font;
-import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javax.swing.ImageIcon;
 
 /**
  *

@@ -114,7 +114,7 @@ public class MemosWriters extends BasicWriter {
      * @return
      */
     public String toPlainText(int[] MemoselectedRows) {
-        String tmp="";
+        StringBuilder tmp=new StringBuilder();
 
         if (database!=null) {
             int RecordIndex=0;
@@ -125,7 +125,7 @@ public class MemosWriters extends BasicWriter {
                     String title=record.getTitle();
                     String memo =record.getMemo();
 
-                    tmp=tmp+"Title: "+title+"\nMemo:\n"+memo+"\n\n";
+                    tmp.append("Title: "+title+"\nMemo:\n"+memo+"\n\n");
                     j++;
 
                     if (j>=MemoselectedRows.length) {
@@ -136,10 +136,10 @@ public class MemosWriters extends BasicWriter {
                 RecordIndex++;
             }
 
-            return tmp;
+            return tmp.toString();
         }
 
-        return tmp;
+        return tmp.toString();
     }
 
     /**
