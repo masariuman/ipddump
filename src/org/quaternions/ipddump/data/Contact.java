@@ -106,6 +106,10 @@ public class Contact extends Record implements Comparable<Contact> {
       if (field.accept(type)) {
         if (field == Field.Contact_Image) {
           image = decodeBase64(String.valueOf(data));
+        }
+        else if (field == Field.Categories) {
+           //Microsoft Outlook Style. If sepated by commas then the CSV brakes.
+          addField(field, makeString(data).replace(',', ';'));
         } else {
           addField(field, makeString(data));
         }

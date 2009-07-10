@@ -107,7 +107,8 @@ public class Task extends Record implements Comparable<Task> {
       if (existing == null) {
         existing = "";
       } else {
-        existing += ",";
+        //Microsoft Outlook Style. If sepated by commas then the CSV brakes.
+        existing += ";";
       }
 
       fields.put("Categories", existing + makeString(data));
