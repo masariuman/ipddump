@@ -1,10 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-
 package org.quaternions.ipddump.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
@@ -44,8 +37,8 @@ abstract class BasicWriter {
      *
      * @param database
      */
-    public void setDatabase(InteractivePagerBackup database){
-    this.database=database;
+    public void setDatabase(InteractivePagerBackup database) {
+        this.database=database;
     }
 
     //~--- methods ------------------------------------------------------------
@@ -56,7 +49,9 @@ abstract class BasicWriter {
      *
      * @return
      */
-    abstract public String toCSV();
+    public String toCSV() {
+        return toCSV(getAllRecords());
+    }
 
     /**
      * Method description
@@ -66,7 +61,7 @@ abstract class BasicWriter {
      *
      * @return
      */
-    abstract public String toCSV(int[] totalnumber);
+    abstract public String toCSV(int[] selectedRecords);
 
     /**
      * Method description
@@ -74,7 +69,9 @@ abstract class BasicWriter {
      *
      * @return
      */
-    abstract public String toPlainText();
+    public String toPlainText() {
+        return toPlainText(getAllRecords());
+    }
 
     /**
      * Method description
@@ -92,7 +89,9 @@ abstract class BasicWriter {
      *
      * @return
      */
-    abstract public Document toXML();
+    public Document toXML() {
+        return toXML(getAllRecords());
+    }
 
     /**
      * Method description
