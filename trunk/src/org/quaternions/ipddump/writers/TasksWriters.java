@@ -6,14 +6,13 @@ import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
-import org.quaternions.ipddump.data.Contact;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
+import org.quaternions.ipddump.data.Task;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 import java.io.StringWriter;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,24 +23,25 @@ import java.util.TreeSet;
 
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis
  */
-public class ContactsWriters extends BasicWriter {
-    public ContactsWriters(InteractivePagerBackup database) {
+public class TasksWriters extends BasicWriter {
+    public TasksWriters(InteractivePagerBackup database) {
         super(database);
     }
 
     //~--- get methods --------------------------------------------------------
 
     /**
-     * Returns the total of the SMS messages
+     * Method description
      *
      *
      * @return
      */
+    @Override
     public int getSize() {
         if (database!=null) {
-            return database.contacts().size();
+            return database.tasks().size();
         } else {
             return 0;
         }
@@ -53,29 +53,30 @@ public class ContactsWriters extends BasicWriter {
      * Method description
      *
      *
-     * @param selectedContacts
+     * @param selectedRecords
      *
      * @return
      */
-    public String toCSV(int[] selectedContacts) {
+    @Override
+    public String toCSV(int[] selectedRecords) {
         StringBuilder builder=new StringBuilder();    // fast builder!!
 
-        /*
+        builder.delete(0, builder.capacity());
+         /*
          * Get all the keys since we don't know all of them ahead
          * of time.  Some fields might be duplicated several times.
          */
         Set<String> keys=new TreeSet<String>();
 
-        for (Contact record : database.contacts()) {
+        for (Task record : database.tasks()) {
             keys.addAll(record.fields().keySet());
         }
-
-        int          RecordIndex=0;
-        int          j          =0;
+        
+        int RecordIndex=0;
+        int j          =0;
         List<String> names      =new ArrayList<String>(keys);
         boolean      first      =true;
-
-        for (String name : names) {
+         for (String name : names) {
             if (first) {
                 first=false;
             } else {
@@ -84,11 +85,10 @@ public class ContactsWriters extends BasicWriter {
 
             builder.append(name);
         }
-
-        builder.append("\n");
-
-        for (Contact record : database.contacts()) {
-            if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
+          builder.append("\n");
+        for (Task record : database.tasks()) {
+            if ((RecordIndex==selectedRecords[j]) && (selectedRecords[j]<database.tasks().size())) {
+                j++;
                 first=true;
 
                 Map<String, String> fields=record.fields();
@@ -108,9 +108,7 @@ public class ContactsWriters extends BasicWriter {
                 }
 
                 builder.append("\n");
-                j++;
-
-                if (j>=selectedContacts.length) {
+                if (j>=selectedRecords.length) {
                     break;
                 }
             }
@@ -125,19 +123,23 @@ public class ContactsWriters extends BasicWriter {
      * Method description
      *
      *
-     * @param selectedContacts
+     * @param SelectedRecords
      *
      * @return
      */
-    public String toPlainText(int[] selectedContacts) {
+    @Override
+    public String toPlainText(int[] SelectedRecords) {
         StringBuilder tmp=new StringBuilder();
 
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;
 
-            for (Contact record : database.contacts()) {
-                if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
+            for (Task record : database.tasks()) {
+                if ((RecordIndex==SelectedRecords[j]) && (SelectedRecords[j]<database.tasks().size())) {
+                    j++;
+
+
                     Iterator iterator2=record.fields().entrySet().iterator();
 
                     for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
@@ -147,9 +149,9 @@ public class ContactsWriters extends BasicWriter {
                     }
 
                     tmp.append("\n");
-                    j++;
 
-                    if (j>=selectedContacts.length) {
+                    
+                    if (j>=SelectedRecords.length) {
                         break;
                     }
                 }
@@ -167,28 +169,25 @@ public class ContactsWriters extends BasicWriter {
      * Method description
      *
      *
-     * @param selectedMessages
+     * @param SelectedRecords
      *
      * @return
      */
-    public Document toXML(int[] selectedMessages) {
-        String sSent="";
-
-        // System.out.println("uid,sent,received,sent?,far number,text");
+    @Override
+    public Document toXML(int[] SelectedRecords) {
+        String   sSent   ="";
         Document document=DocumentHelper.createDocument();
 
         // Add the root
-        Element root=document.addElement("Contacts").addAttribute("TotalContacts",
-                                         String.valueOf(selectedMessages.length));
+        Element root       =document.addElement("Tasks").addAttribute("TotalTasks",
+                                String.valueOf(SelectedRecords.length));
+        int     RecordIndex=0;
+        int     j          =0;
 
-        // System.out.println("uid,sent,received,sent?,far number,text");
-        int RecordIndex=0;
-        int j          =0;
-
-        for (Contact record : database.contacts()) {
-            if ((RecordIndex==selectedMessages[j]) && (selectedMessages[j]<database.contacts().size())) {
-                Element  message  =root.addElement("Contact").addAttribute("UID", String.valueOf(record.getUID()));
-                Iterator iterator2=record.fields().entrySet().iterator();
+        for (Task record : database.tasks()) {
+            if ((RecordIndex==SelectedRecords[j]) && (SelectedRecords[j]<database.tasks().size())) {
+                Element message=root.addElement("Task").addAttribute("UID", String.valueOf(record.getUID()));
+ Iterator iterator2=record.fields().entrySet().iterator();
 
                 for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
                     Map.Entry entry=(Map.Entry) iterator.next();
@@ -197,10 +196,9 @@ public class ContactsWriters extends BasicWriter {
 
                     message.addElement(type).addText(value);
                 }
-
                 j++;
 
-                if (j>=selectedMessages.length) {
+                if (j>=SelectedRecords.length) {
                     break;
                 }
             }
@@ -231,6 +229,8 @@ public class ContactsWriters extends BasicWriter {
 
         // System.out.println(document.getDocument().getText());
         return document;
+
+        // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
     }
 
     /**

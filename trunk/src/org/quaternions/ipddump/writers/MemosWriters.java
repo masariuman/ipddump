@@ -55,16 +55,6 @@ public class MemosWriters extends BasicWriter {
      *
      * @return
      */
-    public String toCSV() {
-        return toCSV(getAllRecords());
-    }
-
-    /**
-     * Get the cvs of the parsed Memo's
-     *
-     *
-     * @return
-     */
     public String toCSV(int[] selectedMemos) {
         StringBuilder temp=new StringBuilder();    // fast builder!!
 
@@ -88,19 +78,6 @@ public class MemosWriters extends BasicWriter {
         }
 
         return temp.toString();
-    }
-
-    /**
-     * Get a represantation of the parsed Memo's
-     * in plain text
-     *
-     * @param database
-     * @param MemoselectedRows
-     *
-     * @return
-     */
-    public String toPlainText() {
-        return toPlainText(getAllRecords());
     }
 
     /**
@@ -140,18 +117,6 @@ public class MemosWriters extends BasicWriter {
         }
 
         return tmp.toString();
-    }
-
-    /**
-     * Get the XML of the parsed Memo's
-     *
-     *
-     * @param database
-     *
-     * @return
-     */
-    public Document toXML() {
-        return toXML(getAllRecords());
     }
 
     /**

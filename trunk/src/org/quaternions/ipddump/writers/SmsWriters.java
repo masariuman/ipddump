@@ -1,10 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-
 package org.quaternions.ipddump.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
@@ -57,14 +50,6 @@ public class SmsWriters extends BasicWriter {
     //~--- methods ------------------------------------------------------------
 
     /**
-     * {@inheritDoc}
-     * @return
-     */
-    public String toCSV() {
-        return toCSV(getAllRecords());
-    }
-
-    /**
      * Get the cvs of the parsed SMS's
      *
      *
@@ -108,19 +93,6 @@ public class SmsWriters extends BasicWriter {
      * Get a represantation of the parsed SMS's
      * in plain text
      *
-     * @param database
-     * @param SMSselectedRows
-     *
-     * @return
-     */
-    public String toPlainText() {
-        return toPlainText(getAllRecords());
-    }
-
-    /**
-     * Get a represantation of the parsed SMS's
-     * in plain text
-     *
      *
      * @param database
      * @param SMSselectedRows
@@ -129,7 +101,9 @@ public class SmsWriters extends BasicWriter {
      */
     public String toPlainText(int[] SMSselectedRows) {
         StringBuilder tmp=new StringBuilder();
+
         tmp.append("<html>");
+
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;
@@ -149,11 +123,11 @@ public class SmsWriters extends BasicWriter {
                     }
 
                     if (!record.wasSent()) {
-                        tmp.append("From: "+Name+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                            +"\n\n");
+                        tmp.append("From: "+Name+"\nTo: My Phone"+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
+                                   +text+"\n\n");
                     } else {
-                        tmp.append("From: My Phone"+"\nTo: "+Name+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"+text
-                            +"\n\n");
+                        tmp.append("From: My Phone"+"\nTo: "+Name+"\nSent: "+sent+"\nReceived: "+recieved+"\nText:\n"
+                                   +text+"\n\n");
                     }
 
                     j++;
@@ -165,23 +139,15 @@ public class SmsWriters extends BasicWriter {
 
                 RecordIndex++;
             }
+
             tmp.append("</html>");
+
             return tmp.toString();
         }
-        tmp.append("</html>");
-        return tmp.toString();
-    }
 
-    /**
-     * Get the XML of the parsed SMS's
-     *
-     *
-     * @param database
-     *
-     * @return
-     */
-    public Document toXML() {
-        return toXML(getAllRecords());
+        tmp.append("</html>");
+
+        return tmp.toString();
     }
 
     /**
