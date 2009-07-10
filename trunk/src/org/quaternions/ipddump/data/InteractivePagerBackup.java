@@ -132,6 +132,10 @@ public class InteractivePagerBackup {
             Memo record=new Memo(dbIndex, version, uid, length);
             memos.add(record);
             return record;
+        } else if ("Tasks".equals(databases.get(dbIndex))) {
+            Task record = new Task(dbIndex, version, uid, length);
+            tasks.add(record);
+            return record;
         } else {
             return new DummyRecord(dbIndex, version, uid, length);
         }
@@ -162,6 +166,15 @@ public class InteractivePagerBackup {
      */
     public Collection<SMSMessage> smsRecords() {
         return Collections.<SMSMessage>unmodifiableCollection(smsRecords);
+    }
+
+    /**
+     * Gets the collection of task records.
+     *
+     * @return An unmodifiable collection of task records
+     */
+    public Collection<Task> tasks() {
+      return Collections.unmodifiableCollection(tasks);
     }
 
     public void organize() {
