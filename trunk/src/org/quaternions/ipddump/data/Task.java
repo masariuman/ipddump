@@ -36,8 +36,31 @@ public class Task extends Record implements Comparable<Task> {
       break;
 
     case 3:
-      fields.put("Notes", makeString(data));
+//      fields.put("Notes", makeString(data));
       break;
+
+//    case 5:
+//    case 6:
+      // seem to be the same all the time
+      // time due
+//      break;
+
+    case 8:
+      boolean due = data[0] > 0;
+//      fields.put("Due", due ? "true" : "false");
+      break;
+
+    case 10:
+      // ignore, 0 for first, 1 for the rest
+      break;
+
+//    case 12:
+//      long val = 0;
+//      for (int i =0; i < 8; i++) {
+//        val |= (long)data[i] << (i * 8);
+//      }
+//      fields.put("K:" + type, new Date(val).toString());
+//      break;
 
     // Status
     case 9:
@@ -45,27 +68,27 @@ public class Task extends Record implements Comparable<Task> {
       status |= data[1] << 8;
       status |= data[2] << 16;
       status |= data[3] << 24;
-      switch (status) {
-      case 0:
-        fields.put("Status", "Not Started");
-        break;
-
-      case 1:
-        fields.put("Status", "In Progress");
-        break;
-
-      case 2:
-        fields.put("Status", "Completed");
-        break;
-
-      case 3:
-        fields.put("Status", "Waiting");
-        break;
-
-      case 4:
-        fields.put("Status", "Deferred");
-        break;
-      }
+//      switch (status) {
+//      case 0:
+//        fields.put("Status", "Not Started");
+//        break;
+//
+//      case 1:
+//        fields.put("Status", "In Progress");
+//        break;
+//
+//      case 2:
+//        fields.put("Status", "Completed");
+//        break;
+//
+//      case 3:
+//        fields.put("Status", "Waiting");
+//        break;
+//
+//      case 4:
+//        fields.put("Status", "Deferred");
+//        break;
+//      }
       break;
 
     // Priority
@@ -74,19 +97,23 @@ public class Task extends Record implements Comparable<Task> {
       priority |= data[1] << 8;
       priority |= data[2] << 16;
       priority |= data[3] << 24;
-      switch (priority) {
-      case 0:
-        fields.put("Priority", "Low");
-        break;
+//      switch (priority) {
+//      case 0:
+//        fields.put("Priority", "Low");
+//        break;
+//
+//      case 1:
+//        fields.put("Priority", "Normal");
+//        break;
+//
+//      case 2:
+//        fields.put("Priority", "High");
+//        break;
+//      }
+      break;
 
-      case 1:
-        fields.put("Priority", "Normal");
-        break;
-
-      case 2:
-        fields.put("Priority", "High");
-        break;
-      }
+    case 15:
+      // Reminder time
       break;
 
     // Timezone
@@ -95,11 +122,11 @@ public class Task extends Record implements Comparable<Task> {
       break;
 
     default:
-      System.out.print(type + ": ");
+      StringBuilder builder = new StringBuilder();
       for (char c : data) {
-        System.out.format("%1h", c);
+        builder.append(String.format("%2h", c));
       }
-      System.out.println("");
+      fields.put("" + type, builder.toString());
       break;
 
     case 17:
@@ -111,7 +138,7 @@ public class Task extends Record implements Comparable<Task> {
         existing += ";";
       }
 
-      fields.put("Categories", existing + makeString(data));
+//      fields.put("Categories", existing + makeString(data));
       break;
     }
   }
