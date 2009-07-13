@@ -61,14 +61,9 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
         switch (type) {
         case 4 :
-            Gsm2Iso.Gsm2Iso(data);
-            byte[] d=new byte[data.length];
-            for (int i=0; i<data.length; i++) {
-                d[i]=(byte) data[i];
-                }
-            text=new String(d);
-            fields.put( "text", text );
-
+            text= Gsm2Iso.Gsm2Iso(data);
+            fields.put( "text", text);
+//            viewIt(type, text);
             break;
 
         case 2 :
@@ -86,24 +81,32 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
             break;
 
-        case 9 :
-
+        case 9 :{
+//            viewIt(type, data);
             // This is a sequence number and we don't care about it for now.
             // The sequence number seems to apply only if it was sent from the
             // phone in the IPD.
-            break;
+            break;}
 
-        case 7 :
+        case 7 :{
+            //This marks a USC2 text number
+//            if (String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")){
+//                System.out.println("USC2FOUND");
+//                if (fields.containsKey("text")){
+//                fields.remove("text");
+//                }
+//                text=Gsm2Iso.UCS2toISO(data);
+//                fields.put("text", text);
+//            }
+//           viewIt(type, text);
+            
+            break;}
 
-            // This is some fixed number for my phone, I probably don't care
-            // about it
-            break;
-
-        case 11 :
-
+        case 11 :{
+//            viewIt(type, data);
             // This is also inconsequential, for me it's 0000 for the first sms,
             // 1000 for all the rest
-            break;
+            break;}
 
         case 1 :
             long val0=0;
@@ -134,7 +137,8 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
             break;
 
-        default :
+            default :
+//               viewIt(type, data);
 
         // Should be no default
         }

@@ -19,6 +19,24 @@ import java.util.logging.Logger;
  * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
 public class Gsm2Iso {
+ private static char[] data;
+ 
+ public static String UCS2toISO(char[] data){
+
+     System.out.println(String.valueOf(data));
+     char[] newData = new char[data.length];
+     for (int i=0;i<data.length;i++){
+        if (i%2==0){
+        //newData[i-1]= (char) (data[i] >> 4);
+        } else{
+            newData[i-1]=Gsm2Iso(data[i]).charAt(0);
+        
+        }
+    }
+    
+     return String.valueOf(newData);
+ }
+
 
     /**
      * GSM 03.38 to ISO standart converter
@@ -26,12 +44,17 @@ public class Gsm2Iso {
      *
      * @param data
      */
-    public static void Gsm2Iso(char[] data) {
+    public static String Gsm2Iso(char[] data) {
+
+        Gsm2Iso.data = data.clone();
+
         for (int i=0; i<data.length; i++) {
             if (data[i]==0x40) {
                 data[i]='@';
             } else if (data[i]==0x00) {
                 data[i]='@';
+            } else if (data[i]==0x80) {    // FIX
+                data[i]='€';
             } else if (data[i]==0x01) {
                 data[i]='£';
             } else if (data[i]==0x02) {
@@ -331,9 +354,8 @@ public class Gsm2Iso {
             } else if (data[i]==0xA1) {
                 data[i]='΅';
             } else if (data[i]=='?') {}
-            else if (data[i]==0x80) {    // FIX
-                data[i]='€';
-            } else if (data[i]=='¨') {}
+
+            else if (data[i]=='¨') {}
             else if (data[i]=='¦') {}
             else if (data[i]=='±') {}
             else if (data[i]=='½') {}
@@ -350,6 +372,12 @@ public class Gsm2Iso {
             else if (data[i]==0x8f) {}
             else {}
         }
+         byte[] d=new byte[data.length];
+            for (int i=0; i<data.length; i++) {
+                d[i]=(byte) data[i];
+                }
+
+            return new String(d);
     }
 
     /**
@@ -377,5 +405,11 @@ public class Gsm2Iso {
         }
 
         return utf8;
+    }
+
+    private static String Gsm2Iso(char c) {
+        char[] ch=new char[1];
+        ch[0]=c;
+        return Gsm2Iso.Gsm2Iso(ch);
     }
 }
