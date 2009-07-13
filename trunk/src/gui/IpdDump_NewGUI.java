@@ -52,19 +52,20 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private int[] SMSSelectedRows;
     private int totalContacts = 0;
     private int[] ContactsSelectedRows;
-    private final int totalCalendar = 0;
+    private int totalCalendar = 0;
     private int[] CalendarSelectedRows;
     private int totalMemos = 0;
     private int[] MemosSelectedRows;
-    private final int totalTasks = 0;
+    private int totalTasks = 0;
     private int[] TasksSelectedRows;
-    private final int totalOptions = 0;
+    private int totalOptions = 0;
     private int[] OptionsSelectedRows;
     private final DataViewer viewer;
     private final FileWriters fileWriter = new FileWriters();
     private SmsWriters SMS;
     private ContactsWriters Contacts;
     private MemosWriters Memos;
+    private TasksWriters Tasks;
     private TableModel ContactsDataModel;
     private TableModel MemosDataModel;
     private final int ContactsNameIndex = 0;
@@ -110,10 +111,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelMemo = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableMemos = new javax.swing.JTable();
+        jPanelTasks = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jPanelCalendar = new javax.swing.JPanel();
         status_label7 = new javax.swing.JLabel();
-        jPanelTasks = new javax.swing.JPanel();
-        status_label5 = new javax.swing.JLabel();
         jPanelOptions = new javax.swing.JPanel();
         status_label6 = new javax.swing.JLabel();
         status_label = new javax.swing.JLabel();
@@ -341,6 +343,44 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Memos", jPanelMemo);
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Task", "Priority", "Status", "Notes", "Due Date", "Reminder"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(jTable1);
+
+        javax.swing.GroupLayout jPanelTasksLayout = new javax.swing.GroupLayout(jPanelTasks);
+        jPanelTasks.setLayout(jPanelTasksLayout);
+        jPanelTasksLayout.setHorizontalGroup(
+            jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
+        );
+        jPanelTasksLayout.setVerticalGroup(
+            jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Tasks", jPanelTasks);
+
         status_label7.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label7.setText("Coming Soon");
 
@@ -358,32 +398,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addGroup(jPanelCalendarLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
                 .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(212, 212, 212))
+                .addGap(219, 219, 219))
         );
 
         jTabbedPane1.addTab("Calendar", jPanelCalendar);
-
-        status_label5.setFont(new java.awt.Font("Tahoma", 0, 18));
-        status_label5.setText("Coming Soon");
-
-        javax.swing.GroupLayout jPanelTasksLayout = new javax.swing.GroupLayout(jPanelTasks);
-        jPanelTasks.setLayout(jPanelTasksLayout);
-        jPanelTasksLayout.setHorizontalGroup(
-            jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTasksLayout.createSequentialGroup()
-                .addGap(306, 306, 306)
-                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                .addGap(306, 306, 306))
-        );
-        jPanelTasksLayout.setVerticalGroup(
-            jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTasksLayout.createSequentialGroup()
-                .addGap(211, 211, 211)
-                .addComponent(status_label5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(212, 212, 212))
-        );
-
-        jTabbedPane1.addTab("Tasks", jPanelTasks);
 
         status_label6.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label6.setText("Coming Soon");
@@ -402,12 +420,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addGroup(jPanelOptionsLayout.createSequentialGroup()
                 .addGap(211, 211, 211)
                 .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(212, 212, 212))
+                .addGap(219, 219, 219))
         );
 
         jTabbedPane1.addTab("Options", jPanelOptions);
 
-        status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
+        status_label.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         status_label.setText("Welcome to IPDdump - http://code.google.com/p/ipddump/");
 
         fileMenu.setText("File");
@@ -558,7 +576,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             Memos = new MemosWriters(database);
             totalMemos = Memos.getSize();
 
+            Tasks = new TasksWriters(database);
+            totalTasks = Tasks.getSize();
 
+//            System.out.println(Tasks.toPlainText());
+//            System.out.println(Tasks.toXML());
+//            System.out.println(Tasks.toCSV());
 
             if (database != null) {
                 saveAsMenuItem.setEnabled(true);
@@ -1005,7 +1028,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTableContacts;
     private javax.swing.JTable jTableMemos;
     private javax.swing.JTable jTableSMS;
@@ -1013,7 +1038,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JLabel status_label;
-    private javax.swing.JLabel status_label5;
     private javax.swing.JLabel status_label6;
     private javax.swing.JLabel status_label7;
     // End of variables declaration//GEN-END:variables

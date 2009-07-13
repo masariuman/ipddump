@@ -73,6 +73,21 @@ public abstract class Record {
      */
     public abstract void addField(int type, char[] data);
 
+  /**
+     *Displays the type and the value of the given
+     * unknown field
+     *
+     * @param type The type of field
+     * @param data The field data
+     */
+     public void viewIt(int type, char[] data){
+      System.out.format("Type:%d Data HEX:%h\n", type,String.valueOf(data));
+     }
+
+      public void viewIt(int type, String string) {
+        System.out.format("Type %d Data String:%s\n", type, string);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Record) {

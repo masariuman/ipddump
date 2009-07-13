@@ -124,10 +124,6 @@ public class InteractivePagerBackup {
             Contact record=new Contact(dbIndex, version, uid, length);
             contacts.add(record);
             return record;
-//          } else if ( "Tasks".equals( databases.get( dbIndex ) ) ) {
-//            Tasks record = new Tasks( dbIndex, version, uid, length );
-//            tasks.add( record );
-//            return record;
         } else if ("Memos".equals(databases.get(dbIndex))) {
             Memo record=new Memo(dbIndex, version, uid, length);
             memos.add(record);
