@@ -23,18 +23,18 @@ public class Gsm2Iso {
  
  public static String UCS2toISO(char[] data){
 
-     System.out.println(String.valueOf(data));
-     char[] newData = new char[data.length];
-     for (int i=0;i<data.length;i++){
-        if (i%2==0){
-        //newData[i-1]= (char) (data[i] >> 4);
-        } else{
-            newData[i-1]=Gsm2Iso(data[i]).charAt(0);
-        
+        Gsm2Iso.data = data.clone();
+        byte[] d=new byte[data.length];
+        for (int i=0; i<data.length; i++) {
+            d[i]=(byte) data[i];
         }
-    }
-    
-     return String.valueOf(newData);
+        String text = null;
+        try {
+            text = new String(d, "Unicode");
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
+        return text;
  }
 
 
