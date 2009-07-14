@@ -37,6 +37,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
      * The text of the SMS.
      */
     protected String text="ERROR";
+    private char[] data;
 
     //~--- constructors -------------------------------------------------------
 
@@ -62,6 +63,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
         switch (type) {
         case 4 :
             text= Gsm2Iso.Gsm2Iso(data);
+            this.data=data;
             fields.put( "text", text);
 //            viewIt(type, text);
             break;
@@ -90,15 +92,17 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
         case 7 :{
             //This marks a USC2 text number
-//            if (String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")){
-//                System.out.println("USC2FOUND");
-//                if (fields.containsKey("text")){
-//                fields.remove("text");
-//                }
-//                text=Gsm2Iso.UCS2toISO(data);
-//                fields.put("text", text);
-//            }
-//           viewIt(type, text);
+            if (String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")){
+                System.out.println("USC2FOUND");
+                if (fields.containsKey("text")){
+                fields.remove("text");
+                }
+                viewIt(type, text);//remove this on releaes
+                text=Gsm2Iso.UCS2toISO(this.data);
+                viewIt(type, text);//remove this on releaes
+                fields.put("text", text);
+            }
+           
             
             break;}
 
