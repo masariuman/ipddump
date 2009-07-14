@@ -62,8 +62,8 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
         switch (type) {
         case 4 :
+            this.data=data.clone();
             text= Gsm2Iso.Gsm2Iso(data);
-            this.data=data;
             fields.put( "text", text);
 //            viewIt(type, text);
             break;

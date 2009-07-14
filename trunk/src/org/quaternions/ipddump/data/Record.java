@@ -87,6 +87,9 @@ public abstract class Record {
       public void viewIt(int type, String string) {
         System.out.format("Type %d Data String:%s\n", type, string);
     }
+      public void viewItHex(int type, String string) {
+        System.out.format("Type %d Data String:%h\n", type, string);
+    }
 
     @Override
     public boolean equals(Object obj) {
