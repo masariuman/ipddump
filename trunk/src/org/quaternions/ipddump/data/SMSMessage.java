@@ -140,7 +140,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             default :
 //               viewIt(type, data);
 
-        // Should be no default
         }
     }
 

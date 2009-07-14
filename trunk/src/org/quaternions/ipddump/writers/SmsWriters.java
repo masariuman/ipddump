@@ -102,8 +102,6 @@ public class SmsWriters extends BasicWriter {
     public String toPlainText(int[] SMSselectedRows) {
         StringBuilder tmp=new StringBuilder();
 
-        tmp.append("<html>");
-
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;
@@ -140,12 +138,9 @@ public class SmsWriters extends BasicWriter {
                 RecordIndex++;
             }
 
-            tmp.append("</html>");
-
             return tmp.toString();
         }
 
-        tmp.append("</html>");
 
         return tmp.toString();
     }

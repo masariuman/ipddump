@@ -53,7 +53,7 @@ public class Gsm2Iso {
                 data[i]='@';
             } else if (data[i]==0x00) {
                 data[i]='@';
-            } else if (data[i]==0x80) {    // FIX
+            } else if (data[i]==0x80) {
                 data[i]='€';
             } else if (data[i]==0x01) {
                 data[i]='£';
@@ -86,45 +86,45 @@ public class Gsm2Iso {
             } else if (data[i]==0x0F) {
                 data[i]='å';
             } else if (data[i]==0x10) {
-                data[i]=0xc4;
+                data[i]='Δ';
 
                 // System.out.println("Delta");
             } else if (data[i]==0x11) {
                 data[i]='_';
             } else if (data[i]==0x12) {
-                data[i]=0xC3;
+                data[i]='Φ';
 
                 // System.out.println("Fi");
             } else if (data[i]==0x13) {
-                data[i]=0xC3;
+                data[i]='Γ';
 
                 // System.out.println("Gamma");
             } else if (data[i]==0x14) {
-                data[i]=0xCB;
+                data[i]='Λ';
 
                 // System.out.println("Lamda");
             } else if (data[i]==0x15) {
-                data[i]=0xD9;
+                data[i]='Ω';
 
                 // System.out.println("Omega");
             } else if (data[i]==0x16) {
-                data[i]=0xD0;
+                data[i]='Π';
 
                 // System.out.println("Pi");
             } else if (data[i]==0x17) {
-                data[i]=0xD8;
+                data[i]='Ψ';
 
                 // System.out.println("Psi");
             } else if (data[i]==0x18) {
-                data[i]=0xD3;
+                data[i]='Σ';
 
                 // System.out.println("Sigma");
             } else if (data[i]==0x19) {
-                data[i]=0xC8;
+                data[i]='Θ';
 
                 // System.out.println("Thita");
             } else if (data[i]==0x1A) {
-                data[i]=0xCE;
+                data[i]='Ξ';
 
                 // System.out.println("Ksi");
             } else if (data[i]==0x1B) {
@@ -372,12 +372,12 @@ public class Gsm2Iso {
             else if (data[i]==0x8f) {}
             else {}
         }
-         byte[] d=new byte[data.length];
-            for (int i=0; i<data.length; i++) {
-                d[i]=(byte) data[i];
-                }
+//         byte[] d=new byte[data.length];
+//            for (int i=0; i<data.length; i++) {
+//                d[i]=(byte) data[i];
+//                }
 
-            return new String(d);
+            return new String(data);
     }
 
     /**
