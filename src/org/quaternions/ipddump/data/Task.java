@@ -1,5 +1,7 @@
 package org.quaternions.ipddump.data;
 
+import java.util.Date;
+
 /**
  * A contact is a record representing contact information stored in the address
  * book.
@@ -54,14 +56,6 @@ public class Task extends Record implements Comparable<Task> {
       // ignore, 0 for first, 1 for the rest
       break;
 
-//    case 12:
-//      long val = 0;
-//      for (int i =0; i < 8; i++) {
-//        val |= (long)data[i] << (i * 8);
-//      }
-//      fields.put("K:" + type, new Date(val).toString());
-//      break;
-
     // Status
     case 9:
       int status = data[0] << 0;
@@ -89,7 +83,7 @@ public class Task extends Record implements Comparable<Task> {
 //        fields.put("Status", "Deferred");
 //        break;
 //      }
-      break;
+        break;
 
     // Priority
     case 14:
@@ -110,7 +104,7 @@ public class Task extends Record implements Comparable<Task> {
 //        fields.put("Priority", "High");
 //        break;
 //      }
-      break;
+        break;
 
     case 15:
       // Reminder time
@@ -124,7 +118,7 @@ public class Task extends Record implements Comparable<Task> {
     default:
       StringBuilder builder = new StringBuilder();
       for (char c : data) {
-        builder.append(String.format("%2h", c));
+        builder.append(String.format("%h", c));
       }
       fields.put("" + type, builder.toString());
       break;
