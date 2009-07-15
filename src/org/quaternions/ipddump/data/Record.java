@@ -81,14 +81,18 @@ public abstract class Record {
      * @param data The field data
      */
      public void viewIt(int type, char[] data){
-      System.out.format("Type:%d Data HEX:%h\n", type,String.valueOf(data));
+      System.out.format("Type:%d Data String:%s\n", type,String.valueOf(data));
      }
 
       public void viewIt(int type, String string) {
         System.out.format("Type %d Data String:%s\n", type, string);
     }
-      public void viewItHex(int type, String string) {
-        System.out.format("Type %d Data String:%h\n", type, string);
+      public void viewItInHex(int type, String string) {
+        System.out.format("Type %d Data Hex:%h\n", type, string);
+    }
+
+      public void viewItInHex(int type, char[] data) {
+        System.out.format("Type %d Data Hex:%h\n", type, String.valueOf(data));
     }
 
     @Override

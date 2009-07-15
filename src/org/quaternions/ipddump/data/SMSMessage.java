@@ -36,8 +36,8 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
     /**
      * The text of the SMS.
      */
-    protected String text="ERROR";
-    private char[] data;
+    protected String decodedSMS="ERROR";
+    private char[] nonDecodedSms;
 
     //~--- constructors -------------------------------------------------------
 
@@ -62,9 +62,9 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
         switch (type) {
         case 4 :
-            this.data=data.clone();
-            text= Gsm2Iso.Gsm2Iso(data);
-            fields.put( "text", text);
+            this.nonDecodedSms=data.clone();
+            decodedSMS= Gsm2Iso.Gsm2Iso(data);
+            fields.put( "text", decodedSMS);
 //            viewIt(type, text);
             break;
 
@@ -91,19 +91,19 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             break;}
 
         case 7 :{
-            //This marks a USC2 text number
+            //This marks a USC2 text field
+            viewItInHex(type, data);//TODO: remove this on release
             if (String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")){
-                System.out.println("USC2FOUND");
+                 System.out.print("UCS2: ");viewItInHex(type, data);
                 if (fields.containsKey("text")){
                 fields.remove("text");
                 }
-                viewIt(type, text);//remove this on releaes
-                text=Gsm2Iso.UCS2toISO(this.data);
-                viewIt(type, text);//remove this on releaes
-                fields.put("text", text);
+                decodedSMS=Gsm2Iso.UCS2toISO(this.nonDecodedSms);
+                fields.put("text", decodedSMS);
+            } else {
+
             }
-           
-            
+          
             break;}
 
         case 11 :{
@@ -191,7 +191,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
      * @return The SMS text
      */
     public String getText() {
-        return text;
+        return decodedSMS;
     }
 
     //~--- methods ------------------------------------------------------------
