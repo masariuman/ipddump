@@ -23,7 +23,7 @@ public class IPDParser {
      * Stores the lase valid batabase id that was parced.
      */
     private int lastValidDBid=-1;
-    private boolean debuging=false;
+    private boolean debugingEnabled=false;
     private int lastValidDBHandle=0;
 
   /**
@@ -274,7 +274,7 @@ public class IPDParser {
             for ( int i = 0; i < fieldLength; i++ ) {
               dataBuffer[ i ] = (char) input.read();
             }
-            if ((dbID>database.databaseNames().size() || dbID<0) && debuging){
+            if ((dbID>database.databaseNames().size() || dbID<0) && debugingEnabled){
              database.setErrorFlag();
              String dbname=String.valueOf(lastValidDBid);
              if (lastValidDBid>0){dbname=database.databaseNames().get(lastValidDBid);}
@@ -301,13 +301,20 @@ public class IPDParser {
     } finally {
       input.close();
     }
+    
+    if (debugingEnabled){
+    for (int i=0;i<database.databaseNames().size();i++){
+    System.out.print((i+1)+": "+database.databaseNames().get(i)+", ");
+    }
+    System.out.println("");
+    }
 
     database.organize();
     return database;
   }
 
   public void enableDebuging(){
-  debuging=true;
+  debugingEnabled=true;
   }
 }
 

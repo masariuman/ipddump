@@ -120,7 +120,7 @@ public class InteractivePagerBackup {
             SMSMessage record=new SMSMessage(dbIndex, version, uid, length);
             smsRecords.add(record);
             return record;
-        } else if ("Address Book".equals(databases.get(dbIndex))) {
+        } else if ("Address Book".equals(databases.get(dbIndex)) || "Quick Contacts".equals(databases.get(dbIndex))) {
             Contact record=new Contact(dbIndex, version, uid, length);
             contacts.add(record);
             return record;

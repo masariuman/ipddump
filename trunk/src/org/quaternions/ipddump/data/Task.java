@@ -49,7 +49,7 @@ public class Task extends Record implements Comparable<Task> {
 
     case 8:
       boolean due = data[0] > 0;
-      fields.put("Due", due ? "true" : "false");
+      fields.put("Due", due ? "true" : "None");
       break;
 
     case 10:
@@ -173,14 +173,6 @@ public class Task extends Record implements Comparable<Task> {
     return new Date(time + offset);
   }
 
-   private String getField(String key) {
-    if (fields.containsKey(key)) {
-      return fields.get(key);
-    } else {
-      return "";
-    }
-  }
-
    public String getTask() {
     return getField("Name");
   }
@@ -208,6 +200,8 @@ public class Task extends Record implements Comparable<Task> {
   }
 
    public String getReminder() {
+       if (getField("Reminder").equals(""))
+            return "None";
     return getField("Reminder");
   }
 

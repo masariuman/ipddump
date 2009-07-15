@@ -13,6 +13,7 @@ import org.quaternions.ipddump.data.Task;
 
 import java.io.IOException;
 import java.io.StringWriter;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -62,7 +63,8 @@ public class TasksWriters extends BasicWriter {
         StringBuilder builder=new StringBuilder();    // fast builder!!
 
         builder.delete(0, builder.capacity());
-         /*
+
+        /*
          * Get all the keys since we don't know all of them ahead
          * of time.  Some fields might be duplicated several times.
          */
@@ -71,12 +73,13 @@ public class TasksWriters extends BasicWriter {
         for (Task record : database.tasks()) {
             keys.addAll(record.fields().keySet());
         }
-        
-        int RecordIndex=0;
-        int j          =0;
+
+        int          RecordIndex=0;
+        int          j          =0;
         List<String> names      =new ArrayList<String>(keys);
         boolean      first      =true;
-         for (String name : names) {
+
+        for (String name : names) {
             if (first) {
                 first=false;
             } else {
@@ -85,7 +88,9 @@ public class TasksWriters extends BasicWriter {
 
             builder.append(name);
         }
-          builder.append("\n");
+
+        builder.append("\n");
+
         for (Task record : database.tasks()) {
             if ((RecordIndex==selectedRecords[j]) && (selectedRecords[j]<database.tasks().size())) {
                 j++;
@@ -108,6 +113,7 @@ public class TasksWriters extends BasicWriter {
                 }
 
                 builder.append("\n");
+
                 if (j>=selectedRecords.length) {
                     break;
                 }
@@ -139,7 +145,6 @@ public class TasksWriters extends BasicWriter {
                 if ((RecordIndex==SelectedRecords[j]) && (SelectedRecords[j]<database.tasks().size())) {
                     j++;
 
-
                     Iterator iterator2=record.fields().entrySet().iterator();
 
                     for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
@@ -150,7 +155,6 @@ public class TasksWriters extends BasicWriter {
 
                     tmp.append("\n");
 
-                    
                     if (j>=SelectedRecords.length) {
                         break;
                     }
@@ -175,7 +179,6 @@ public class TasksWriters extends BasicWriter {
      */
     @Override
     public Document toXML(int[] SelectedRecords) {
-        String   sSent   ="";
         Document document=DocumentHelper.createDocument();
 
         // Add the root
@@ -186,16 +189,17 @@ public class TasksWriters extends BasicWriter {
 
         for (Task record : database.tasks()) {
             if ((RecordIndex==SelectedRecords[j]) && (SelectedRecords[j]<database.tasks().size())) {
-                Element message=root.addElement("Task").addAttribute("UID", String.valueOf(record.getUID()));
- Iterator iterator2=record.fields().entrySet().iterator();
+                Element  message  =root.addElement("Task").addAttribute("UID", String.valueOf(record.getUID()));
+                Iterator iterator2=record.fields().entrySet().iterator();
 
                 for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
                     Map.Entry entry=(Map.Entry) iterator.next();
-                    String    type =removeSpaces(entry.getKey().toString());
+                    String    type =entry.getKey().toString().replaceAll(" ", "");
                     String    value=entry.getValue().toString();
 
                     message.addElement(type).addText(value);
                 }
+
                 j++;
 
                 if (j>=SelectedRecords.length) {
@@ -206,49 +210,6 @@ public class TasksWriters extends BasicWriter {
             RecordIndex++;
         }
 
-        OutputFormat format=OutputFormat.createPrettyPrint();
-
-        format.setEncoding("UTF-8");
-
-        // format.setTrimText(true);
-//      Save it
-        XMLWriter    writer;
-        StringWriter str=new StringWriter();
-
-        writer=new XMLWriter(str, format);
-
-        try {
-            writer.write(document);
-            writer.close();
-            document=DocumentHelper.parseText(str.toString());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        } catch (DocumentException ex) {
-            System.out.println(ex.getMessage());
-        }
-
-        // System.out.println(document.getDocument().getText());
-        return document;
-
-        // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @param s
-     *
-     * @return
-     */
-    private String removeSpaces(String s) {
-        StringTokenizer st=new StringTokenizer(s, " ", false);
-        String          t ="";
-
-        while (st.hasMoreElements()) {
-            t+=st.nextElement();
-        }
-
-        return t;
+        return createPrettyPrint(document);
     }
 }

@@ -34,17 +34,18 @@ public class ContactFinder {
     public String findContactByPhoneNumber(String phoneNumber) {
         for (Contact record : database.contacts()) {
             String name       =record.getName();
-             if (phoneNumber.equalsIgnoreCase(record.getMobilePhone())) {
+            phoneNumber=phoneNumber.replaceAll(" ", "");
+             if (phoneNumber.equalsIgnoreCase(record.getMobilePhone().replaceAll(" ", ""))) {
                 return name+" (M)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getHomePhone())) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getHomePhone().replaceAll(" ", ""))) {
                 return name+" (H)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getWorkPhone())) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getWorkPhone().replaceAll(" ", ""))) {
                 return name+" (W)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getOtherNumber())) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getOtherNumber().replaceAll(" ", ""))) {
                 return name+" (O)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getPager())) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getPager().replaceAll(" ", ""))) {
                 return name+" (P)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getPIN())) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getPIN().replaceAll(" ", ""))) {
                 return name+" (Pin)";
             } else if (phoneNumber == null) {
               return "";

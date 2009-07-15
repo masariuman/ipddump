@@ -92,7 +92,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
         case 7 :{
             //This marks a USC2 text field
-            viewItInHex(type, data);//TODO: remove this on release
             if (String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")){
                  System.out.print("UCS2: ");viewItInHex(type, data);
                 if (fields.containsKey("text")){
@@ -100,6 +99,8 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
                 }
                 decodedSMS=Gsm2Iso.UCS2toISO(this.nonDecodedSms);
                 fields.put("text", decodedSMS);
+            } else {
+            viewItInHex(type, data);//TODO: remove this on release
             }
           
             break;}

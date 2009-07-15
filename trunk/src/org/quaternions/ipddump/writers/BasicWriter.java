@@ -3,8 +3,17 @@ package org.quaternions.ipddump.writers;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 
 import org.quaternions.ipddump.data.InteractivePagerBackup;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+import java.io.StringWriter;
 
 /**
  *
@@ -103,6 +112,37 @@ abstract class BasicWriter {
      */
     abstract public Document toXML(int[] SelectedRecords);
 
+    /**
+     * Method description
+     *
+     *
+     * @param document
+     *
+     * @return
+     */
+    protected Document createPrettyPrint(Document document) {
+        OutputFormat format=OutputFormat.createPrettyPrint();
+
+        format.setEncoding("UNICODE");
+
+        XMLWriter    writer;
+        StringWriter str=new StringWriter();
+
+        writer=new XMLWriter(str, format);
+
+        try {
+            writer.write(document);
+            writer.close();
+            document=DocumentHelper.parseText(str.toString());
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        } catch (DocumentException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return document;
+    }
+
     //~--- get methods --------------------------------------------------------
 
     /**
@@ -120,6 +160,4 @@ abstract class BasicWriter {
 
         return allRecords;
     }
-
-    ;
 }

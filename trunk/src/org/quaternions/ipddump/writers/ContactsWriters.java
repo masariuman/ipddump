@@ -172,16 +172,11 @@ public class ContactsWriters extends BasicWriter {
      * @return
      */
     public Document toXML(int[] selectedMessages) {
-        String sSent="";
-
-        // System.out.println("uid,sent,received,sent?,far number,text");
         Document document=DocumentHelper.createDocument();
 
         // Add the root
         Element root=document.addElement("Contacts").addAttribute("TotalContacts",
                                          String.valueOf(selectedMessages.length));
-
-        // System.out.println("uid,sent,received,sent?,far number,text");
         int RecordIndex=0;
         int j          =0;
 
@@ -192,7 +187,7 @@ public class ContactsWriters extends BasicWriter {
 
                 for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
                     Map.Entry entry=(Map.Entry) iterator.next();
-                    String    type =removeSpaces(entry.getKey().toString());
+                    String    type =entry.getKey().toString().replaceAll(" ", "");
                     String    value=entry.getValue().toString();
 
                     message.addElement(type).addText(value);
@@ -208,47 +203,6 @@ public class ContactsWriters extends BasicWriter {
             RecordIndex++;
         }
 
-        OutputFormat format=OutputFormat.createPrettyPrint();
-
-        format.setEncoding("UTF-8");
-
-        // format.setTrimText(true);
-//      Save it
-        XMLWriter    writer;
-        StringWriter str=new StringWriter();
-
-        writer=new XMLWriter(str, format);
-
-        try {
-            writer.write(document);
-            writer.close();
-            document=DocumentHelper.parseText(str.toString());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        } catch (DocumentException ex) {
-            System.out.println(ex.getMessage());
-        }
-
-        // System.out.println(document.getDocument().getText());
-        return document;
-    }
-
-    /**
-     * Method description
-     *
-     *
-     * @param s
-     *
-     * @return
-     */
-    private String removeSpaces(String s) {
-        StringTokenizer st=new StringTokenizer(s, " ", false);
-        String          t ="";
-
-        while (st.hasMoreElements()) {
-            t+=st.nextElement();
-        }
-
-        return t;
+        return createPrettyPrint(document);
     }
 }

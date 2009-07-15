@@ -128,17 +128,13 @@ public class MemosWriters extends BasicWriter {
      * @return
      */
     public Document toXML(int[] selectedMemos) {
-        String sSent="";
-
-        // System.out.println("uid,sent,received,sent?,far number,text");
         Document document=DocumentHelper.createDocument();
 
         // Add the root
-        Element root=document.addElement("Memos").addAttribute("TotalMemos", String.valueOf(selectedMemos.length));
-
-        // System.out.println("uid,sent,received,sent?,far number,text");
-        int RecordIndex=0;
-        int j          =0;
+        Element root       =document.addElement("Memos").addAttribute("TotalMemos",
+                                String.valueOf(selectedMemos.length));
+        int     RecordIndex=0;
+        int     j          =0;
 
         for (Memo record : database.memos()) {
             if ((RecordIndex==selectedMemos[j]) && (selectedMemos[j]<database.memos().size())) {
@@ -156,30 +152,6 @@ public class MemosWriters extends BasicWriter {
             RecordIndex++;
         }
 
-        OutputFormat format=OutputFormat.createPrettyPrint();
-
-        format.setEncoding("UTF-8");
-
-        // format.setTrimText(true);
-//      Save it
-        XMLWriter    writer;
-        StringWriter str=new StringWriter();
-
-        writer=new XMLWriter(str, format);
-
-        try {
-            writer.write(document);
-            writer.close();
-            document=DocumentHelper.parseText(str.toString());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        } catch (DocumentException ex) {
-            System.out.println(ex.getMessage());
-        }
-
-        // System.out.println(document.getDocument().getText());
-        return document;
-
-        // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
+        return createPrettyPrint(document);
     }
 }

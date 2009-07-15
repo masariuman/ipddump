@@ -175,4 +175,12 @@ public abstract class Record {
     public void setRecordDBHandle(int recordDBHandle) {
         this.recordDBHandle=recordDBHandle;
     }
+
+    protected final String getField(String key) {
+    if (fields.containsKey(key)) {
+      return fields.get(key);
+    } else {
+      return "";
+    }
+  }
 }
