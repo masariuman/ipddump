@@ -72,7 +72,7 @@ public class FileWriters {
         // Make a pretty output
         OutputFormat format=OutputFormat.createPrettyPrint();
 
-        format.setEncoding("UTF-8");
+        format.setEncoding("UNICODE");
 
         // format.setTrimText(true);
 //      Save it

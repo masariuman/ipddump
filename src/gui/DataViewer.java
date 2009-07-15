@@ -115,7 +115,7 @@ public class DataViewer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void TextAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TextAreaMouseClicked
-        ShowMenuPopup(evt);
+        if (evt.getButton()==3)ShowMenuPopup(evt);
     }//GEN-LAST:event_TextAreaMouseClicked
 
     private void CopyJmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CopyJmenuActionPerformed

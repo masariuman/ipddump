@@ -141,7 +141,6 @@ public class SmsWriters extends BasicWriter {
             return tmp.toString();
         }
 
-
         return tmp.toString();
     }
 
@@ -156,20 +155,17 @@ public class SmsWriters extends BasicWriter {
     public Document toXML(int[] selectedMessages) {
         String sSent="";
 
-        // System.out.println("uid,sent,received,sent?,far number,text");
         Document document=DocumentHelper.createDocument();
 
         // Add the root
         Element root=document.addElement("SMSmessages").addAttribute("TotalSMS",
                                          String.valueOf(selectedMessages.length));
 
-        // System.out.println("uid,sent,received,sent?,far number,text");
         int RecordIndex=0;
         int j          =0;
 
         for (SMSMessage record : database.smsRecords()) {
 
-//          System.out.println(smsRecord+" "+j+" "+selectedMessages[j]);
             if ((RecordIndex==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
                 if (record.wasSent()) {
                     sSent="true";
@@ -214,30 +210,6 @@ public class SmsWriters extends BasicWriter {
             RecordIndex++;
         }
 
-        OutputFormat format=OutputFormat.createPrettyPrint();
-
-        format.setEncoding("UTF-8");
-
-        // format.setTrimText(true);
-//      Save it
-        XMLWriter    writer;
-        StringWriter str=new StringWriter();
-
-        writer=new XMLWriter(str, format);
-
-        try {
-            writer.write(document);
-            writer.close();
-            document=DocumentHelper.parseText(str.toString());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        } catch (DocumentException ex) {
-            System.out.println(ex.getMessage());
-        }
-
-        // System.out.println(document.getDocument().getText());
-        return document;
-
-        // root.addAttribute("DbID", String.valueOf(record.getDatabaseID()));
+        return createPrettyPrint(document);
     }
 }
