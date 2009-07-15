@@ -1,42 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-
 package org.quaternions.ipddump.data;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.UnsupportedEncodingException;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
 public class Gsm2Iso {
- private static char[] data;
- 
- public static String UCS2toISO(char[] data){
-
-        Gsm2Iso.data = data.clone();
-        byte[] d=new byte[data.length];
-        for (int i=0; i<data.length; i++) {
-            d[i]=(byte) data[i];
-        }
-        String text = null;
-        try {
-            text = new String(d, "Unicode");
-        } catch (Exception error) {
-            error.printStackTrace();
-        }
-        return text;
- }
-
 
     /**
      * GSM 03.38 to ISO standart converter
@@ -45,9 +12,6 @@ public class Gsm2Iso {
      * @param data
      */
     public static String Gsm2Iso(char[] data) {
-
-        Gsm2Iso.data = data.clone();
-
         for (int i=0; i<data.length; i++) {
             if (data[i]==0x40) {
                 data[i]='@';
@@ -130,7 +94,7 @@ public class Gsm2Iso {
             } else if (data[i]==0x1B) {
 
                 // data[i]='';//<ESC>
-               // System.out.println("esc character");
+                // System.out.println("esc character");
             } else if (data[i]==0x1C) {
                 data[i]='Æ';
             } else if (data[i]==0x1D) {
@@ -354,7 +318,6 @@ public class Gsm2Iso {
             } else if (data[i]==0xA1) {
                 data[i]='΅';
             } else if (data[i]=='?') {}
-
             else if (data[i]=='¨') {}
             else if (data[i]=='¦') {}
             else if (data[i]=='±') {}
@@ -372,44 +335,55 @@ public class Gsm2Iso {
             else if (data[i]==0x8f) {}
             else {}
         }
-//         byte[] d=new byte[data.length];
-//            for (int i=0; i<data.length; i++) {
-//                d[i]=(byte) data[i];
-//                }
 
-            return new String(data);
+//      byte[] d=new byte[data.length];
+//         for (int i=0; i<data.length; i++) {
+//             d[i]=(byte) data[i];
+//             }
+
+        return new String(data);
     }
 
     /**
      * Method description
      *
      *
-     * @param ucs2Chars
+     * @param data
      *
      * @return
      */
-    public static String ucs2ToUTF8(char[] ucs2Chars) {
-        String unicode  ="";
-        String utf8     ="";
-        byte[] ucs2Bytes=new byte[ucs2Chars.length];
+    public static String UCS2toISO(char[] data) {
+        byte[] d=new byte[data.length];
 
-        for (int i=0; i<ucs2Chars.length; i++) {
-            ucs2Bytes[i]=(byte) ucs2Chars[i];
+        for (int i=0; i<data.length; i++) {
+            d[i]=(byte) data[i];
         }
+
+        String text=null;
 
         try {
-            unicode=new String(ucs2Bytes, "UTF-16");
-            utf8   =new String(unicode.getBytes("UTF-8"), "Cp1252");
-        } catch (UnsupportedEncodingException ex1) {
-            Logger.getLogger(Gsm2Iso.class.getName()).log(Level.SEVERE, null, ex1);
+            text=new String(d, "utf-16");
+            return text;
+        } catch (Exception error) {
+            error.printStackTrace();
+            return "ERROR";
         }
 
-        return utf8;
     }
 
+    /**
+     * Method description
+     *
+     *
+     * @param c
+     *
+     * @return
+     */
     private static String Gsm2Iso(char c) {
         char[] ch=new char[1];
+
         ch[0]=c;
+
         return Gsm2Iso.Gsm2Iso(ch);
     }
 }
