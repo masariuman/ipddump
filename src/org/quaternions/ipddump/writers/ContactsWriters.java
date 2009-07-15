@@ -3,23 +3,17 @@ package org.quaternions.ipddump.writers;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.dom4j.*;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 
 import org.quaternions.ipddump.data.Contact;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-import java.io.StringWriter;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 /**

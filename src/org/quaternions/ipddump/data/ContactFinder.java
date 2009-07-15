@@ -31,10 +31,10 @@ public class ContactFinder {
      *
      * @return The name of the contact if found, otherwise the phone number
      */
-    public String findContactByPhoneNumber(String phoneNumber) {
+    public String findContactByPhoneNumber(String phNumber) {
+        String phoneNumber=phNumber.replaceAll(" ", "");
         for (Contact record : database.contacts()) {
             String name       =record.getName();
-            phoneNumber=phoneNumber.replaceAll(" ", "");
              if (phoneNumber.equalsIgnoreCase(record.getMobilePhone().replaceAll(" ", ""))) {
                 return name+" (M)";
             } else if (phoneNumber.equalsIgnoreCase(record.getHomePhone().replaceAll(" ", ""))) {
@@ -52,6 +52,6 @@ public class ContactFinder {
             }
         }
 
-        return phoneNumber;
+        return phNumber;
     }
 }

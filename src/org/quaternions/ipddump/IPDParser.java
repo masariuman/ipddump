@@ -25,6 +25,7 @@ public class IPDParser {
     private int lastValidDBid=-1;
     private boolean debugingEnabled=false;
     private int lastValidDBHandle=0;
+    private int lastfieldLength=-1;
 
   /**
    * Specifies the state of the parser, that is, the current part of the IPD
@@ -282,8 +283,11 @@ public class IPDParser {
                         "database Size: %3d -- Last valid DBid:%3d Name: %s -- "
                         ,dbID,dbID,database.databaseNames().size(),
                         lastValidDBid,dbname);
-             System.err.println("\n    Last Valid BD handle: "+lastValidDBHandle+" BD handle:"+databaseHandle);
+             System.err.println("\n    Last Valid BD handle: "+lastValidDBHandle+" this BD handle: "+databaseHandle);
+             System.err.println("    Last Valid Field lenght: "+lastfieldLength+" this Field lenght: "+fieldLength);
               //System.out.print("Field:"+fieldType+" Data: "+String.valueOf(dataBuffer));
+            }else {
+                lastfieldLength=fieldLength;
             }
             record.addField( fieldType, dataBuffer );
             
