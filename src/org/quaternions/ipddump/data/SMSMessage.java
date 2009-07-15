@@ -100,8 +100,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
                 }
                 decodedSMS=Gsm2Iso.UCS2toISO(this.nonDecodedSms);
                 fields.put("text", decodedSMS);
-            } else {
-
             }
           
             break;}

@@ -172,4 +172,46 @@ public class Task extends Record implements Comparable<Task> {
     offset -= 61 * 60 * 1000;
     return new Date(time + offset);
   }
+
+   private String getField(String key) {
+    if (fields.containsKey(key)) {
+      return fields.get(key);
+    } else {
+      return "";
+    }
+  }
+
+   public String getTask() {
+    return getField("Name");
+  }
+
+   public String getCategories() {
+    return getField("Categories");
+  }
+
+   public String getDue() {
+    return getField("Due");
+  }
+
+   public String getPriority() {
+        if (getField("Priority").equals(""))
+            return "Normal";
+       return getField("Priority");
+  }
+
+   public String getNotes() {
+    return getField("Notes");
+  }
+  
+  public String getStatus() {
+    return getField("Status");
+  }
+
+   public String getReminder() {
+    return getField("Reminder");
+  }
+
+   public String getTimeZone() {
+    return getField("TimeZone");
+  }
 }
