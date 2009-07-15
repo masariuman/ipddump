@@ -10,17 +10,9 @@ package org.quaternions.ipddump.writers;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.dom4j.*;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 
-import org.quaternions.ipddump.data.ContactFinder;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
 import org.quaternions.ipddump.data.Memo;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-import java.io.StringWriter;
 
 /**
  *

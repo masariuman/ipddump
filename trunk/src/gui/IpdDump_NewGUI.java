@@ -72,7 +72,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final int ContactsNameIndex = 0;
     private final int ContactsEmailIndex = 1;
     private final int ContactsMobileIndex = 2;
-    private final int ContactsHomeNumberIndex = 3;
+    private final int ContactsWorkIndex = 3;
+    private final int ContactsHomeNumberIndex = 4;
+    private final int ContactsNotesIndex = 5;
     ContactFinder contactFinder;
     private boolean resolveNames = true;
     private final int MemosTitleIndex = 0;
@@ -238,15 +240,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jTableSMS.getColumnModel().getColumn(0).setMinWidth(40);
         jTableSMS.getColumnModel().getColumn(0).setPreferredWidth(40);
         jTableSMS.getColumnModel().getColumn(0).setMaxWidth(40);
-        jTableSMS.getColumnModel().getColumn(0).setHeaderValue("Sent?");
-        jTableSMS.getColumnModel().getColumn(1).setMaxWidth(130);
-        jTableSMS.getColumnModel().getColumn(1).setHeaderValue("Number");
+        jTableSMS.getColumnModel().getColumn(1).setMaxWidth(150);
         jTableSMS.getColumnModel().getColumn(2).setMinWidth(150);
-        jTableSMS.getColumnModel().getColumn(2).setHeaderValue("Text");
         jTableSMS.getColumnModel().getColumn(3).setMaxWidth(200);
-        jTableSMS.getColumnModel().getColumn(3).setHeaderValue("Sent Date");
         jTableSMS.getColumnModel().getColumn(4).setMaxWidth(200);
-        jTableSMS.getColumnModel().getColumn(4).setHeaderValue("Received Date");
 
         javax.swing.GroupLayout jPanelSMSLayout = new javax.swing.GroupLayout(jPanelSMS);
         jPanelSMS.setLayout(jPanelSMSLayout);
@@ -266,14 +263,14 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "Email", "Mobile", "Home"
+                "Name", "Email", "Mobile", "Work", "Home", "Notes"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -291,6 +288,21 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTableContacts);
+        jTableContacts.getColumnModel().getColumn(0).setMinWidth(100);
+        jTableContacts.getColumnModel().getColumn(0).setPreferredWidth(150);
+        jTableContacts.getColumnModel().getColumn(0).setMaxWidth(300);
+        jTableContacts.getColumnModel().getColumn(1).setPreferredWidth(170);
+        jTableContacts.getColumnModel().getColumn(1).setMaxWidth(300);
+        jTableContacts.getColumnModel().getColumn(2).setMinWidth(120);
+        jTableContacts.getColumnModel().getColumn(2).setPreferredWidth(120);
+        jTableContacts.getColumnModel().getColumn(2).setMaxWidth(180);
+        jTableContacts.getColumnModel().getColumn(3).setMinWidth(120);
+        jTableContacts.getColumnModel().getColumn(3).setPreferredWidth(120);
+        jTableContacts.getColumnModel().getColumn(3).setMaxWidth(180);
+        jTableContacts.getColumnModel().getColumn(4).setMinWidth(120);
+        jTableContacts.getColumnModel().getColumn(4).setPreferredWidth(120);
+        jTableContacts.getColumnModel().getColumn(4).setMaxWidth(180);
+        jTableContacts.getColumnModel().getColumn(5).setMinWidth(60);
 
         javax.swing.GroupLayout jPanelContactsLayout = new javax.swing.GroupLayout(jPanelContacts);
         jPanelContacts.setLayout(jPanelContactsLayout);
@@ -335,8 +347,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         });
         jScrollPane3.setViewportView(jTableMemos);
+        jTableMemos.getColumnModel().getColumn(0).setMinWidth(100);
         jTableMemos.getColumnModel().getColumn(0).setPreferredWidth(150);
-        jTableMemos.getColumnModel().getColumn(0).setMaxWidth(150);
+        jTableMemos.getColumnModel().getColumn(0).setMaxWidth(250);
+        jTableMemos.getColumnModel().getColumn(1).setPreferredWidth(500);
 
         javax.swing.GroupLayout jPanelMemoLayout = new javax.swing.GroupLayout(jPanelMemo);
         jPanelMemo.setLayout(jPanelMemoLayout);
@@ -380,6 +394,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         });
         jScrollPane4.setViewportView(jTableTasks);
+        jTableTasks.getColumnModel().getColumn(0).setMinWidth(70);
+        jTableTasks.getColumnModel().getColumn(0).setPreferredWidth(100);
+        jTableTasks.getColumnModel().getColumn(0).setMaxWidth(250);
         jTableTasks.getColumnModel().getColumn(1).setMinWidth(80);
         jTableTasks.getColumnModel().getColumn(1).setPreferredWidth(80);
         jTableTasks.getColumnModel().getColumn(1).setMaxWidth(80);
@@ -662,6 +679,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             ContactsDataModel.setValueAt(record.getEmail(), i, ContactsEmailIndex);
             ContactsDataModel.setValueAt(record.getMobilePhone(), i, ContactsMobileIndex);
             ContactsDataModel.setValueAt(record.getHomePhone(), i, ContactsHomeNumberIndex);
+            ContactsDataModel.setValueAt(record.getWorkPhone(), i, ContactsWorkIndex);
+            ContactsDataModel.setValueAt(record.getNotes(), i, ContactsNotesIndex);
             i++;//Go to next Line in the table
         }
     }
@@ -848,7 +867,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             tmp = Contacts.toXML(ContactsSelectedRows).asXML();
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toXML(MemosSelectedRows).asXML();
-        }else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
+        } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
             tmp = Tasks.toXML(TasksSelectedRows).asXML();
         }
         setClipboardContents(tmp);
@@ -923,7 +942,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     private void jTableTasksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTasksMouseClicked
-       tableClick(evt);
+        tableClick(evt);
     }//GEN-LAST:event_jTableTasksMouseClicked
 
     /**
@@ -960,12 +979,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 return canEdit[columnIndex];
             }
         });
+        jTableTasks.getColumnModel().getColumn(0).setMinWidth(70);
+        jTableTasks.getColumnModel().getColumn(0).setPreferredWidth(100);
+        jTableTasks.getColumnModel().getColumn(0).setMaxWidth(250);
         jTableTasks.getColumnModel().getColumn(1).setMinWidth(80);
         jTableTasks.getColumnModel().getColumn(1).setPreferredWidth(80);
         jTableTasks.getColumnModel().getColumn(1).setMaxWidth(80);
         jTableTasks.getColumnModel().getColumn(2).setMinWidth(60);
         jTableTasks.getColumnModel().getColumn(2).setPreferredWidth(60);
         jTableTasks.getColumnModel().getColumn(2).setMaxWidth(60);
+
         TasksDataModel = jTableTasks.getModel();
     }
 
@@ -993,39 +1016,50 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 return canEdit[columnIndex];
             }
         });
+        jTableMemos.getColumnModel().getColumn(0).setMinWidth(100);
+        jTableMemos.getColumnModel().getColumn(0).setMaxWidth(250);
+        jTableMemos.getColumnModel().getColumn(0).setPreferredWidth(150);
+        jTableMemos.getColumnModel().getColumn(1).setPreferredWidth(500);
         MemosDataModel = jTableMemos.getModel();
     }
 
     private void ContactsTablePrepair() {
         jTableContacts.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[totalContacts][3], new String[]{
-                    "Name", "Email", "Mobile", "Home"
+                new Object[totalContacts][5],
+                new String[]{
+                    "Name", "Email", "Mobile", "Work", "Home", "Notes"
                 }) {
 
             Class[] types = new Class[]{
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean[]{
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
-            @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
-            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
         });
-        jTableContacts.addMouseListener(new java.awt.event.MouseAdapter() {
-
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableContactsMouseClicked(evt);
-            }
-        });
+        jTableContacts.getColumnModel().getColumn(0).setMinWidth(100);
+        jTableContacts.getColumnModel().getColumn(0).setPreferredWidth(150);
+        jTableContacts.getColumnModel().getColumn(0).setMaxWidth(300);
+        jTableContacts.getColumnModel().getColumn(1).setPreferredWidth(170);
+        jTableContacts.getColumnModel().getColumn(1).setMaxWidth(300);
+        jTableContacts.getColumnModel().getColumn(2).setMinWidth(120);
+        jTableContacts.getColumnModel().getColumn(2).setPreferredWidth(120);
+        jTableContacts.getColumnModel().getColumn(2).setMaxWidth(180);
+        jTableContacts.getColumnModel().getColumn(3).setMinWidth(120);
+        jTableContacts.getColumnModel().getColumn(3).setPreferredWidth(120);
+        jTableContacts.getColumnModel().getColumn(3).setMaxWidth(180);
+        jTableContacts.getColumnModel().getColumn(4).setMinWidth(120);
+        jTableContacts.getColumnModel().getColumn(4).setPreferredWidth(120);
+        jTableContacts.getColumnModel().getColumn(4).setMaxWidth(180);
+        jTableContacts.getColumnModel().getColumn(5).setMinWidth(60);
 
         ContactsDataModel = jTableContacts.getModel();
     }
@@ -1059,7 +1093,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jTableSMS.getColumnModel().getColumn(0).setMinWidth(40);
         jTableSMS.getColumnModel().getColumn(0).setPreferredWidth(40);
         jTableSMS.getColumnModel().getColumn(0).setMaxWidth(40);
-        jTableSMS.getColumnModel().getColumn(1).setMaxWidth(130);
+        jTableSMS.getColumnModel().getColumn(1).setMaxWidth(150);
         jTableSMS.getColumnModel().getColumn(2).setMinWidth(150);
         jTableSMS.getColumnModel().getColumn(3).setMaxWidth(200);
         jTableSMS.getColumnModel().getColumn(4).setMaxWidth(200);

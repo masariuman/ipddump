@@ -3,17 +3,10 @@ package org.quaternions.ipddump.writers;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.dom4j.*;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 
 import org.quaternions.ipddump.data.ContactFinder;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
 import org.quaternions.ipddump.data.SMSMessage;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-import java.io.StringWriter;
 
 /**
  *
@@ -153,19 +146,16 @@ public class SmsWriters extends BasicWriter {
      * @return
      */
     public Document toXML(int[] selectedMessages) {
-        String sSent="";
-
+        String   sSent   ="";
         Document document=DocumentHelper.createDocument();
 
         // Add the root
         Element root=document.addElement("SMSmessages").addAttribute("TotalSMS",
                                          String.valueOf(selectedMessages.length));
-
         int RecordIndex=0;
         int j          =0;
 
         for (SMSMessage record : database.smsRecords()) {
-
             if ((RecordIndex==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
                 if (record.wasSent()) {
                     sSent="true";
