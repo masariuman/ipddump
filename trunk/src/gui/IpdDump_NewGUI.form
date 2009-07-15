@@ -468,16 +468,17 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="jTable1">
+                <Component class="javax.swing.JTable" name="jTableTasks">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="6" rowCount="0">
+                      <Table columnCount="7" rowCount="0">
                         <Column editable="false" title="Task" type="java.lang.String"/>
-                        <Column editable="false" title="Priority" type="java.lang.String"/>
                         <Column editable="false" title="Status" type="java.lang.String"/>
-                        <Column editable="false" title="Notes" type="java.lang.String"/>
+                        <Column editable="false" title="Priority" type="java.lang.String"/>
                         <Column editable="false" title="Due Date" type="java.lang.String"/>
                         <Column editable="false" title="Reminder" type="java.lang.String"/>
+                        <Column editable="false" title="Notes" type="java.lang.String"/>
+                        <Column editable="false" title="Time Zone" type="java.lang.String"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -487,7 +488,12 @@
                           <Editor/>
                           <Renderer/>
                         </Column>
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                        <Column maxWidth="80" minWidth="80" prefWidth="80" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="60" minWidth="60" prefWidth="60" resizable="true">
                           <Title/>
                           <Editor/>
                           <Renderer/>
@@ -518,6 +524,9 @@
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTableTasksMouseClicked"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

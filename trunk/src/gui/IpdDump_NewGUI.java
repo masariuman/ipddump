@@ -68,6 +68,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private TasksWriters Tasks;
     private TableModel ContactsDataModel;
     private TableModel MemosDataModel;
+    private TableModel TasksDataModel;
     private final int ContactsNameIndex = 0;
     private final int ContactsEmailIndex = 1;
     private final int ContactsMobileIndex = 2;
@@ -76,10 +77,17 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private boolean resolveNames = true;
     private final int MemosTitleIndex = 0;
     private final int MemosMemoIndex = 1;
-    private Collection<Contact> xe;
+    private final int TaskTitleIndex = 0;
+    private final int TaskStatusIndex = 1;
+    private final int TaskPriorityIndex = 2;
+    private final int TasksDueIndex = 3;
+    private final int TasksReminderIndex = 4;
+    private final int TasksNotesIndex = 5;
+    private final int TasksTimeZoneIndex = 6;
     private Object[] xe2;
     private String baseName = "gui.resources.IPDdumpAboutBox";
     private ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
+
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
      * initialize the form.
@@ -113,7 +121,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jTableMemos = new javax.swing.JTable();
         jPanelTasks = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableTasks = new javax.swing.JTable();
         jPanelCalendar = new javax.swing.JPanel();
         status_label7 = new javax.swing.JLabel();
         jPanelOptions = new javax.swing.JPanel();
@@ -343,19 +351,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Memos", jPanelMemo);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableTasks.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Task", "Priority", "Status", "Notes", "Due Date", "Reminder"
+                "Task", "Status", "Priority", "Due Date", "Reminder", "Notes", "Time Zone"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -366,7 +374,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(jTable1);
+        jTableTasks.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableTasksMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(jTableTasks);
+        jTableTasks.getColumnModel().getColumn(1).setMinWidth(80);
+        jTableTasks.getColumnModel().getColumn(1).setPreferredWidth(80);
+        jTableTasks.getColumnModel().getColumn(1).setMaxWidth(80);
+        jTableTasks.getColumnModel().getColumn(2).setMinWidth(60);
+        jTableTasks.getColumnModel().getColumn(2).setPreferredWidth(60);
+        jTableTasks.getColumnModel().getColumn(2).setMaxWidth(60);
 
         javax.swing.GroupLayout jPanelTasksLayout = new javax.swing.GroupLayout(jPanelTasks);
         jPanelTasks.setLayout(jPanelTasksLayout);
@@ -425,7 +444,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Options", jPanelOptions);
 
-        status_label.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
         status_label.setText("Welcome to IPDdump - http://code.google.com/p/ipddump/");
 
         fileMenu.setText("File");
@@ -508,7 +527,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     public IpdDump_NewGUI() {
         initComponents();
-        setTitle("IPDdump v"+rb.getString("version"));
+        setTitle("IPDdump v" + rb.getString("version"));
         viewer = new DataViewer();
         IpdChooser.setAcceptAllFileFilterUsed(false);
         IpdChooser.setFileHidingEnabled(false);
@@ -532,6 +551,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         SMSDataModel = jTableSMS.getModel();
         ContactsDataModel = jTableContacts.getModel();
         MemosDataModel = jTableMemos.getModel();
+        TasksDataModel = jTableTasks.getModel();
+
         SMStabINDEX = jTabbedPane1.indexOfTab("SMS");
         ContactstabINDEX = jTabbedPane1.indexOfTab("Contacts");
         CalendartabINDEX = jTabbedPane1.indexOfTab("Calendar");
@@ -579,10 +600,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             Tasks = new TasksWriters(database);
             totalTasks = Tasks.getSize();
 
-//            System.out.println(Tasks.toPlainText());
-//            System.out.println(Tasks.toXML());
-//            System.out.println(Tasks.toCSV());
-
             if (database != null) {
                 saveAsMenuItem.setEnabled(true);
             //ResolveCheckBox.setEnabled(true);
@@ -602,6 +619,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         fillSMSTable();
         fillContactsTable();
         fillMemosTable();
+        fillTasksTable();
     }
 
     private void fillSMSTable() {
@@ -657,6 +675,24 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
             MemosDataModel.setValueAt(record.getTitle(), i, MemosTitleIndex);
             MemosDataModel.setValueAt(record.getMemo(), i, MemosMemoIndex);
+            i++;//Go to next Line in the table
+        }
+    }
+
+    private void fillTasksTable() {
+        TasksTablePrepair();
+        jTabbedPane1.setTitleAt(TaskstabINDEX, "Tasks (" + totalTasks + ")");
+        int i = 0;
+
+        for (Task record : database.tasks()) {
+
+            TasksDataModel.setValueAt(record.getTask(), i, TaskTitleIndex);
+            TasksDataModel.setValueAt(record.getStatus(), i, TaskStatusIndex);
+            TasksDataModel.setValueAt(record.getPriority(), i, TaskPriorityIndex);
+            TasksDataModel.setValueAt(record.getDue(), i, TasksDueIndex);
+            TasksDataModel.setValueAt(record.getReminder(), i, TasksReminderIndex);
+            TasksDataModel.setValueAt(record.getNotes(), i, TasksNotesIndex);
+            TasksDataModel.setValueAt(record.getTimeZone(), i, TasksTimeZoneIndex);
             i++;//Go to next Line in the table
         }
     }
@@ -736,6 +772,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toXML(MemosSelectedRows).asXML();
             viewer.setTitle("Memos Viewer - XML");
+        } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
+            tmp = Tasks.toXML(TasksSelectedRows).asXML();
+            viewer.setTitle("Tasks Viewer - XML");
         }
 
 
@@ -755,8 +794,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toPlainText(MemosSelectedRows);
             viewer.setTitle("Memos Viewer - Plain Text");
+        } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
+            tmp = Tasks.toPlainText(TasksSelectedRows);
+            viewer.setTitle("Tasks Viewer - Plain Text");
         }
-
 
         viewer.setTxt(tmp);
 
@@ -775,6 +816,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toCSV(MemosSelectedRows);
             viewer.setTitle("Memos Viewer - Csv");
+        } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
+            tmp = Tasks.toCSV(TasksSelectedRows);
+            viewer.setTitle("Tasks Viewer - Csv");
         }
 
         viewer.setCvs(tmp);
@@ -790,8 +834,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             tmp = Contacts.toPlainText(ContactsSelectedRows);
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toPlainText(MemosSelectedRows);
+        } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
+            tmp = Tasks.toPlainText(TasksSelectedRows);
         }
-
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPTXTActionPerformed
 
@@ -803,6 +848,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             tmp = Contacts.toXML(ContactsSelectedRows).asXML();
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toXML(MemosSelectedRows).asXML();
+        }else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
+            tmp = Tasks.toXML(TasksSelectedRows).asXML();
         }
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPXMLActionPerformed
@@ -816,6 +863,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             tmp = Contacts.toCSV(ContactsSelectedRows);
         } else if (ActiveTAB == MemostabINDEX && totalMemos != 0 && MemosSelectedRows.length > 0) {
             tmp = Memos.toCSV(MemosSelectedRows);
+        } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
+            tmp = Tasks.toCSV(TasksSelectedRows);
         }
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPCSVActionPerformed
@@ -837,6 +886,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == MemostabINDEX) {
             SelectedRows = MemosSelectedRows = jTableMemos.getSelectedRows();
             evtObj = "Memos";
+        } else if (ActiveTAB == TaskstabINDEX) {
+            SelectedRows = TasksSelectedRows = jTableTasks.getSelectedRows();
+            evtObj = "Tasks";
         }
 
 
@@ -867,8 +919,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_jTableMemosMouseClicked
 
     private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
-    new IPDdumpAboutBox(this, false).setVisible(true);
+        new IPDdumpAboutBox(this, false).setVisible(true);
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
+
+    private void jTableTasksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTasksMouseClicked
+       tableClick(evt);
+    }//GEN-LAST:event_jTableTasksMouseClicked
 
     /**
      * @param args the command line arguments
@@ -881,6 +937,38 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 //        });
 //    }
     // <editor-fold defaultstate="collapsed" desc="Table Prepair Code - - NEED TO find alternative way of doing this??">
+    private void TasksTablePrepair() {
+
+        jTableTasks.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[totalTasks][6],
+                new String[]{
+                    "Task", "Status", "Priority", "Due Date", "Reminder", "Notes", "Time Zone"
+                }) {
+
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        jTableTasks.getColumnModel().getColumn(1).setMinWidth(80);
+        jTableTasks.getColumnModel().getColumn(1).setPreferredWidth(80);
+        jTableTasks.getColumnModel().getColumn(1).setMaxWidth(80);
+        jTableTasks.getColumnModel().getColumn(2).setMinWidth(60);
+        jTableTasks.getColumnModel().getColumn(2).setPreferredWidth(60);
+        jTableTasks.getColumnModel().getColumn(2).setMaxWidth(60);
+        TasksDataModel = jTableTasks.getModel();
+    }
+
     private void MemoTablePrepair() {
         jTableMemos.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[totalMemos][1],
@@ -905,17 +993,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 return canEdit[columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTableMemos);
-        jTableMemos.getColumnModel().getColumn(0).setPreferredWidth(150);
-        jTableMemos.getColumnModel().getColumn(0).setMaxWidth(150);
-
-        javax.swing.GroupLayout jPanelMemoLayout = new javax.swing.GroupLayout(jPanelMemo);
-        jPanelMemo.setLayout(jPanelMemoLayout);
-        jPanelMemoLayout.setHorizontalGroup(
-                jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE));
-        jPanelMemoLayout.setVerticalGroup(
-                jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanelMemoLayout.createSequentialGroup().addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-
         MemosDataModel = jTableMemos.getModel();
     }
 
@@ -987,13 +1064,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jTableSMS.getColumnModel().getColumn(3).setMaxWidth(200);
         jTableSMS.getColumnModel().getColumn(4).setMaxWidth(200);
 
-        javax.swing.GroupLayout jPanelSMSLayout = new javax.swing.GroupLayout(jPanelSMS);
-        jPanelSMS.setLayout(jPanelSMSLayout);
-        jPanelSMSLayout.setHorizontalGroup(
-                jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE));
-        jPanelSMSLayout.setVerticalGroup(
-                jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE));
-
         SMSDataModel = jTableSMS.getModel();
     }// </editor-fold>
 
@@ -1030,10 +1100,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTableContacts;
     private javax.swing.JTable jTableMemos;
     private javax.swing.JTable jTableSMS;
+    private javax.swing.JTable jTableTasks;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
