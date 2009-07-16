@@ -12,7 +12,6 @@ import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.JFileChooser;
@@ -48,53 +47,40 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     final private int SMSSentIndex = 3;
     final private int SMSReceivedIndex = 4;
     private int ActiveTAB;
-
     private int totalSMS = 0;
     private int[] SMSSelectedRows;
-
     private int totalContacts = 0;
     private int[] ContactsSelectedRows;
-
     private int totalCalendar = 0;
     private int[] CalendarSelectedRows;
-
     private int totalCallLogs = 0;
     private int[] CallLogsSelectedRows;
-
     private int totalMemos = 0;
     private int[] MemosSelectedRows;
-
     private int totalTasks = 0;
     private int[] TasksSelectedRows;
-
     private int totalOptions = 0;
     private int[] OptionsSelectedRows;
-
     private final DataViewer viewer;
     private final FileWriters fileWriter = new FileWriters();
-    ContactFinder contactFinder;
-
+    Finder finder;
     private SmsWriters SMS;
     private ContactsWriters Contacts;
     private MemosWriters Memos;
     private TasksWriters Tasks;
-
     private TableModel ContactsDataModel;
     private TableModel MemosDataModel;
     private TableModel TasksDataModel;
     private TableModel SMSDataModel;
     private TableModel CallLogsDataModel;
-
     private final int ContactsNameIndex = 0;
     private final int ContactsEmailIndex = 1;
     private final int ContactsMobileIndex = 2;
     private final int ContactsWorkIndex = 3;
     private final int ContactsHomeNumberIndex = 4;
     private final int ContactsNotesIndex = 5;
-    
     private final int MemosTitleIndex = 0;
     private final int MemosMemoIndex = 1;
-
     private final int TaskTitleIndex = 0;
     private final int TaskStatusIndex = 1;
     private final int TaskPriorityIndex = 2;
@@ -102,7 +88,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final int TasksReminderIndex = 4;
     private final int TasksNotesIndex = 5;
     private final int TasksTimeZoneIndex = 6;
-    
     private boolean resolveNames = true;
     private String baseName = "gui.resources.IPDdumpAboutBox";
     private ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
@@ -124,10 +109,14 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jMenuItemTxt = new javax.swing.JMenuItem();
         jMenuItemXML = new javax.swing.JMenuItem();
         jMenuItemCSV = new javax.swing.JMenuItem();
-        jMenu = new javax.swing.JMenu();
+        jMenuCP = new javax.swing.JMenu();
         jMenuItemCPTXT = new javax.swing.JMenuItem();
         jMenuItemCPXML = new javax.swing.JMenuItem();
         jMenuItemCPCSV = new javax.swing.JMenuItem();
+        jMenuSpSMS = new javax.swing.JMenu();
+        jMenuItemSelectedSMSTxt = new javax.swing.JMenuItem();
+        jMenuItemSelectedSMSXML = new javax.swing.JMenuItem();
+        jMenuItemSelectedSMSCSV = new javax.swing.JMenuItem();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelSMS = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -194,7 +183,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         });
         jPopupMenu.add(jMenuItemCSV);
 
-        jMenu.setText("Copy in-->");
+        jMenuCP.setText("Copy in-->");
 
         jMenuItemCPTXT.setText("Plain Text");
         jMenuItemCPTXT.addActionListener(new java.awt.event.ActionListener() {
@@ -202,7 +191,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 jMenuItemCPTXTActionPerformed(evt);
             }
         });
-        jMenu.add(jMenuItemCPTXT);
+        jMenuCP.add(jMenuItemCPTXT);
 
         jMenuItemCPXML.setText("XML");
         jMenuItemCPXML.addActionListener(new java.awt.event.ActionListener() {
@@ -210,7 +199,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 jMenuItemCPXMLActionPerformed(evt);
             }
         });
-        jMenu.add(jMenuItemCPXML);
+        jMenuCP.add(jMenuItemCPXML);
 
         jMenuItemCPCSV.setText("CSV");
         jMenuItemCPCSV.addActionListener(new java.awt.event.ActionListener() {
@@ -218,9 +207,38 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 jMenuItemCPCSVActionPerformed(evt);
             }
         });
-        jMenu.add(jMenuItemCPCSV);
+        jMenuCP.add(jMenuItemCPCSV);
 
-        jPopupMenu.add(jMenu);
+        jPopupMenu.add(jMenuCP);
+
+        jMenuSpSMS.setText("Sms's from this contact");
+        jMenuSpSMS.setActionCommand("Sms's from this contact/s");
+
+        jMenuItemSelectedSMSTxt.setText("View in PlainText");
+        jMenuItemSelectedSMSTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSelectedSMSTxtActionPerformed(evt);
+            }
+        });
+        jMenuSpSMS.add(jMenuItemSelectedSMSTxt);
+
+        jMenuItemSelectedSMSXML.setText("View in Xml");
+        jMenuItemSelectedSMSXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSelectedSMSXMLActionPerformed(evt);
+            }
+        });
+        jMenuSpSMS.add(jMenuItemSelectedSMSXML);
+
+        jMenuItemSelectedSMSCSV.setText("View in Csv");
+        jMenuItemSelectedSMSCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSelectedSMSCSVActionPerformed(evt);
+            }
+        });
+        jMenuSpSMS.add(jMenuItemSelectedSMSCSV);
+
+        jPopupMenu.add(jMenuSpSMS);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IPDdump");
@@ -458,7 +476,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Calendar", jPanelCalendar);
 
-        status_label6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        status_label6.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label6.setText("Coming Soon");
 
         javax.swing.GroupLayout jPanelOptionsLayout = new javax.swing.GroupLayout(jPanelOptions);
@@ -480,7 +498,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Options", jPanelOptions);
 
-        status_label8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        status_label8.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label8.setText("Coming Soon");
 
         javax.swing.GroupLayout jPanelCallLogsLayout = new javax.swing.GroupLayout(jPanelCallLogs);
@@ -653,7 +671,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
             Contacts = new ContactsWriters(database);
             totalContacts = Contacts.getSize();
-            contactFinder = new ContactFinder(database);
+            finder = new Finder(database);
 
             Memos = new MemosWriters(database);
             totalMemos = Memos.getSize();
@@ -691,7 +709,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 sSent = "false";
             }
             if (resolveNames) {
-                Name = contactFinder.findContactByPhoneNumber(record.getNumber());
+                Name = finder.findContactByPhoneNumber(record.getNumber());
             } else {
                 Name = record.getNumber();
             }
@@ -946,15 +964,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX) {
             SelectedRows = SMSSelectedRows = jTableSMS.getSelectedRows();
             evtObj = "SMS";
+            jPopupMenu.remove(jMenuSpSMS);
         } else if (ActiveTAB == ContactstabINDEX) {
             SelectedRows = ContactsSelectedRows = jTableContacts.getSelectedRows();
             evtObj = "Contacts";
+            jPopupMenu.add(jMenuSpSMS);
         } else if (ActiveTAB == MemostabINDEX) {
             SelectedRows = MemosSelectedRows = jTableMemos.getSelectedRows();
             evtObj = "Memos";
+            jPopupMenu.remove(jMenuSpSMS);
         } else if (ActiveTAB == TaskstabINDEX) {
             SelectedRows = TasksSelectedRows = jTableTasks.getSelectedRows();
             evtObj = "Tasks";
+            jPopupMenu.remove(jMenuSpSMS);
         }
 
         if (evt.getButton() == MouseEvent.BUTTON3 && SelectedRows.length > 0) {
@@ -989,6 +1011,38 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private void jTableTasksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTasksMouseClicked
         tableClick(evt);
     }//GEN-LAST:event_jTableTasksMouseClicked
+
+    private void jMenuItemSelectedSMSTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedSMSTxtActionPerformed
+        int[] selectedSMS = finder.findSmsByContacts(ContactsSelectedRows);
+        if (selectedSMS!=null){
+            String tmp = SMS.toPlainText(selectedSMS);
+        viewer.setTitle("SMS Viewer - Plain Text");
+        viewer.setXml(tmp);
+        viewer.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found!");
+        }
+}//GEN-LAST:event_jMenuItemSelectedSMSTxtActionPerformed
+
+    private void jMenuItemSelectedSMSXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedSMSXMLActionPerformed
+        int[] selectedSMS = finder.findSmsByContacts(ContactsSelectedRows);
+        if (selectedSMS!=null){String tmp = SMS.toXML(selectedSMS).asXML();
+        viewer.setTitle("SMS Viewer - XML");
+        viewer.setXml(tmp);
+        viewer.setVisible(true);} else {
+            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found!");
+        }
+}//GEN-LAST:event_jMenuItemSelectedSMSXMLActionPerformed
+
+    private void jMenuItemSelectedSMSCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedSMSCSVActionPerformed
+        int[] selectedSMS = finder.findSmsByContacts(ContactsSelectedRows);
+        if (selectedSMS!=null){String tmp = SMS.toCSV(selectedSMS);
+        viewer.setTitle("SMS Viewer - CSV");
+        viewer.setXml(tmp);
+        viewer.setVisible(true);} else {
+            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found!");
+        }
+}//GEN-LAST:event_jMenuItemSelectedSMSCSVActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1158,15 +1212,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JMenu jMenu;
+    private javax.swing.JMenu jMenuCP;
     private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemCPCSV;
     private javax.swing.JMenuItem jMenuItemCPTXT;
     private javax.swing.JMenuItem jMenuItemCPXML;
     private javax.swing.JMenuItem jMenuItemCSV;
+    private javax.swing.JMenuItem jMenuItemSelectedSMSCSV;
+    private javax.swing.JMenuItem jMenuItemSelectedSMSTxt;
+    private javax.swing.JMenuItem jMenuItemSelectedSMSXML;
     private javax.swing.JMenuItem jMenuItemTxt;
     private javax.swing.JMenuItem jMenuItemXML;
+    private javax.swing.JMenu jMenuSpSMS;
     private javax.swing.JPanel jPanelCalendar;
     private javax.swing.JPanel jPanelCallLogs;
     private javax.swing.JPanel jPanelContacts;

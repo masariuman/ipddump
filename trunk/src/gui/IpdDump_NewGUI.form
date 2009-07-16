@@ -54,7 +54,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCSVActionPerformed"/>
           </Events>
         </MenuItem>
-        <Menu class="javax.swing.JMenu" name="jMenu">
+        <Menu class="javax.swing.JMenu" name="jMenuCP">
           <Properties>
             <Property name="text" type="java.lang.String" value="Copy in--&gt;"/>
           </Properties>
@@ -81,6 +81,38 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCPCSVActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenuSpSMS">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Sms&apos;s from this contact"/>
+            <Property name="actionCommand" type="java.lang.String" value="Sms&apos;s from this contact/s"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSelectedSMSTxt">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="View in PlainText"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemSelectedSMSTxtActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSelectedSMSXML">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="View in Xml"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemSelectedSMSXMLActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSelectedSMSCSV">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="View in Csv"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemSelectedSMSCSVActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
