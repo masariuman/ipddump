@@ -149,11 +149,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
     @Override
     public int compareTo(SMSMessage o) {
-        if (sent.compareTo(o.sent)!=0) {
-            return sent.compareTo(o.sent);
-        } else {
             return received.compareTo(o.received);
-        }
     }
 
     //~--- get methods --------------------------------------------------------
