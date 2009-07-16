@@ -6,14 +6,14 @@ import java.util.TimeZone;
 /**
  * A contact is a record representing contact information stored in the address
  * book.
- * 
+ *
  * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  * @created Jun 20, 2009
  */
 public class Task extends Record implements Comparable<Task> {
   /**
    * Creates a new record with all provided data.
-   * 
+   *
    * @param dbID
    *          The database id
    * @param dbVersion
@@ -85,6 +85,11 @@ public class Task extends Record implements Comparable<Task> {
       }
       break;
 
+    // Recur
+    case 12:
+      // ignore for now
+      break;
+
     // Priority
     case 14:
       int priority = data[0] << 0;
@@ -115,14 +120,6 @@ public class Task extends Record implements Comparable<Task> {
       // ignore for now
       break;
 
-    default:
-      StringBuilder builder = new StringBuilder();
-      for (char c : data) {
-        builder.append(String.format("%2h", c));
-      }
-      fields.put("" + type, builder.toString());
-      break;
-
     case 17:
       String existing = fields.get("Categories");
       if (existing == null) {
@@ -132,15 +129,23 @@ public class Task extends Record implements Comparable<Task> {
         existing += ";";
       }
 
-      // fields.put("Categories", existing + makeString(data));
+      fields.put("Categories", existing + makeString(data));
+      break;
+
+    case 18:
+      // unknown
+      break;
+
+    case 31:
+      // unknown
       break;
     }
   }
 
   @Override
-     public int compareTo(Task o) {
-      return getTask().compareTo(o.getTask());
-    }
+  public int compareTo(Task o) {
+    return getTask().compareTo(o.getTask());
+  }
 
   @Override
   public String toString() {
@@ -173,39 +178,39 @@ public class Task extends Record implements Comparable<Task> {
     return new Date(time + offset);
   }
 
-   public String getTask() {
+  public String getTask() {
     return getField("Name");
   }
 
-   public String getCategories() {
+  public String getCategories() {
     return getField("Categories");
   }
 
-   public String getDue() {
+  public String getDue() {
     return getField("Due");
   }
 
-   public String getPriority() {
-        if (getField("Priority").equals(""))
-            return "Normal";
-       return getField("Priority");
+  public String getPriority() {
+    if (getField("Priority").equals(""))
+      return "Normal";
+    return getField("Priority");
   }
 
-   public String getNotes() {
+  public String getNotes() {
     return getField("Notes");
   }
-  
+
   public String getStatus() {
     return getField("Status");
   }
 
-   public String getReminder() {
-       if (getField("Reminder").equals(""))
-            return "None";
+  public String getReminder() {
+    if (getField("Reminder").equals(""))
+      return "None";
     return getField("Reminder");
   }
 
-   public String getTimeZone() {
+  public String getTimeZone() {
     return getField("TimeZone");
   }
 }
