@@ -1014,11 +1014,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void jMenuItemSelectedSMSTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedSMSTxtActionPerformed
         int[] selectedSMS = finder.findSmsByContacts(ContactsSelectedRows);
-        if (selectedSMS!=null){
+        if (selectedSMS.length != 0) {
             String tmp = SMS.toPlainText(selectedSMS);
-        viewer.setTitle("SMS Viewer - Plain Text");
-        viewer.setXml(tmp);
-        viewer.setVisible(true);
+            viewer.setTitle("SMS Viewer - Plain Text");
+            viewer.setTxt(tmp);
+            viewer.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found!");
         }
@@ -1026,20 +1026,24 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void jMenuItemSelectedSMSXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedSMSXMLActionPerformed
         int[] selectedSMS = finder.findSmsByContacts(ContactsSelectedRows);
-        if (selectedSMS!=null){String tmp = SMS.toXML(selectedSMS).asXML();
-        viewer.setTitle("SMS Viewer - XML");
-        viewer.setXml(tmp);
-        viewer.setVisible(true);} else {
+        if (selectedSMS.length != 0) {
+            String tmp = SMS.toXML(selectedSMS).asXML();
+            viewer.setTitle("SMS Viewer - XML");
+            viewer.setXml(tmp);
+            viewer.setVisible(true);
+        } else {
             JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found!");
         }
 }//GEN-LAST:event_jMenuItemSelectedSMSXMLActionPerformed
 
     private void jMenuItemSelectedSMSCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedSMSCSVActionPerformed
         int[] selectedSMS = finder.findSmsByContacts(ContactsSelectedRows);
-        if (selectedSMS!=null){String tmp = SMS.toCSV(selectedSMS);
-        viewer.setTitle("SMS Viewer - CSV");
-        viewer.setXml(tmp);
-        viewer.setVisible(true);} else {
+        if (selectedSMS.length != 0) {
+            String tmp = SMS.toCSV(selectedSMS);
+            viewer.setTitle("SMS Viewer - CSV");
+            viewer.setTxt(tmp);
+            viewer.setVisible(true);
+        } else {
             JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found!");
         }
 }//GEN-LAST:event_jMenuItemSelectedSMSCSVActionPerformed
