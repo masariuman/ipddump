@@ -92,15 +92,16 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
         case 7 :{
             //This marks a USC2 text field
-            if (String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")){
-                 System.out.print("UCS2: ");viewItInHex(type, data);
+            if (String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")
+                ||String.format("%h", String.valueOf(data)).equalsIgnoreCase("fbcca65e")){
+                 //System.out.print("UCS2: ");viewItInHex(type, data);
                 if (fields.containsKey("text")){
                 fields.remove("text");
                 }
                 decodedSMS=Gsm2Iso.UCS2toISO(this.nonDecodedSms);
                 fields.put("text", decodedSMS);
             } else {
-            viewItInHex(type, data);//TODO: remove this on release
+            //viewItInHex(type, data);//TODO: remove this on release
             }
           
             break;}
