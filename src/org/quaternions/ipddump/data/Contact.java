@@ -114,6 +114,7 @@ public class Contact extends Record implements Comparable<Contact> {
           addField(field, makeString(data));
         }
       }
+      //else{viewItInHex(type, data);}
     }
   }
 
@@ -162,7 +163,7 @@ public class Contact extends Record implements Comparable<Contact> {
   }
 
   private Image decodeBase64(String sb) {
-    try {
+    try {//I am not sure anymore that this a base64 encoded image...
       byte[] buffer_decode = new sun.misc.BASE64Decoder().decodeBuffer(sb);
       return Toolkit.getDefaultToolkit().createImage(buffer_decode);
     } catch (IOException e) {

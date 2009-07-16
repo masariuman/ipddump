@@ -362,7 +362,7 @@ public class Gsm2Iso {
         String text=null;
 
         try {
-            text=new String(d, "utf-16");
+            text=new String(d, "UNICODE");
             return text;
         } catch (Exception error) {
             error.printStackTrace();

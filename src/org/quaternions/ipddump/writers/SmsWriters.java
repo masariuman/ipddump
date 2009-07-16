@@ -4,7 +4,7 @@ package org.quaternions.ipddump.writers;
 
 import org.dom4j.*;
 
-import org.quaternions.ipddump.data.ContactFinder;
+import org.quaternions.ipddump.data.Finder;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
 import org.quaternions.ipddump.data.SMSMessage;
 
@@ -14,14 +14,14 @@ import org.quaternions.ipddump.data.SMSMessage;
  */
 public class SmsWriters extends BasicWriter {
     private boolean       resolveNames=false;
-    private ContactFinder contactFinder;
+    private Finder contactFinder;
 
     //~--- constructors -------------------------------------------------------
 
     public SmsWriters(InteractivePagerBackup database, boolean resolveNames) {
         super(database);
         this.resolveNames=resolveNames;
-        contactFinder    =new ContactFinder(super.database);
+        contactFinder    =new Finder(super.database);
     }
 
     //~--- get methods --------------------------------------------------------
