@@ -121,10 +121,6 @@ public class Finder {
             RecordIndex++;
         }
 
-        if (pointer==0) {
-            selectedSMS=null;
-        }
-
         return selectedSMS;
     }
 }
