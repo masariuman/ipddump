@@ -35,10 +35,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private String ext;
     private String fileToSave;
     private InteractivePagerBackup database;
-    private TableModel SMSDataModel;
     private final int SMStabINDEX;
     private final int ContactstabINDEX;
     private final int CalendartabINDEX;
+    private final int CallLogstabINDEX;
     private final int TaskstabINDEX;
     private final int OptionstabINDEX;
     private final int MemostabINDEX;
@@ -48,37 +48,53 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     final private int SMSSentIndex = 3;
     final private int SMSReceivedIndex = 4;
     private int ActiveTAB;
+
     private int totalSMS = 0;
     private int[] SMSSelectedRows;
+
     private int totalContacts = 0;
     private int[] ContactsSelectedRows;
+
     private int totalCalendar = 0;
     private int[] CalendarSelectedRows;
+
+    private int totalCallLogs = 0;
+    private int[] CallLogsSelectedRows;
+
     private int totalMemos = 0;
     private int[] MemosSelectedRows;
+
     private int totalTasks = 0;
     private int[] TasksSelectedRows;
+
     private int totalOptions = 0;
     private int[] OptionsSelectedRows;
+
     private final DataViewer viewer;
     private final FileWriters fileWriter = new FileWriters();
+    ContactFinder contactFinder;
+
     private SmsWriters SMS;
     private ContactsWriters Contacts;
     private MemosWriters Memos;
     private TasksWriters Tasks;
+
     private TableModel ContactsDataModel;
     private TableModel MemosDataModel;
     private TableModel TasksDataModel;
+    private TableModel SMSDataModel;
+    private TableModel CallLogsDataModel;
+
     private final int ContactsNameIndex = 0;
     private final int ContactsEmailIndex = 1;
     private final int ContactsMobileIndex = 2;
     private final int ContactsWorkIndex = 3;
     private final int ContactsHomeNumberIndex = 4;
     private final int ContactsNotesIndex = 5;
-    ContactFinder contactFinder;
-    private boolean resolveNames = true;
+    
     private final int MemosTitleIndex = 0;
     private final int MemosMemoIndex = 1;
+
     private final int TaskTitleIndex = 0;
     private final int TaskStatusIndex = 1;
     private final int TaskPriorityIndex = 2;
@@ -86,7 +102,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final int TasksReminderIndex = 4;
     private final int TasksNotesIndex = 5;
     private final int TasksTimeZoneIndex = 6;
-    private Object[] xe2;
+    
+    private boolean resolveNames = true;
     private String baseName = "gui.resources.IPDdumpAboutBox";
     private ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
 
@@ -128,6 +145,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         status_label7 = new javax.swing.JLabel();
         jPanelOptions = new javax.swing.JPanel();
         status_label6 = new javax.swing.JLabel();
+        jPanelCallLogs = new javax.swing.JPanel();
+        status_label8 = new javax.swing.JLabel();
         status_label = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -439,7 +458,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Calendar", jPanelCalendar);
 
-        status_label6.setFont(new java.awt.Font("Tahoma", 0, 18));
+        status_label6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         status_label6.setText("Coming Soon");
 
         javax.swing.GroupLayout jPanelOptionsLayout = new javax.swing.GroupLayout(jPanelOptions);
@@ -461,6 +480,28 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Options", jPanelOptions);
 
+        status_label8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        status_label8.setText("Coming Soon");
+
+        javax.swing.GroupLayout jPanelCallLogsLayout = new javax.swing.GroupLayout(jPanelCallLogs);
+        jPanelCallLogs.setLayout(jPanelCallLogsLayout);
+        jPanelCallLogsLayout.setHorizontalGroup(
+            jPanelCallLogsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelCallLogsLayout.createSequentialGroup()
+                .addGap(306, 306, 306)
+                .addComponent(status_label8, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addGap(306, 306, 306))
+        );
+        jPanelCallLogsLayout.setVerticalGroup(
+            jPanelCallLogsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelCallLogsLayout.createSequentialGroup()
+                .addGap(211, 211, 211)
+                .addComponent(status_label8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(219, 219, 219))
+        );
+
+        jTabbedPane1.addTab("Call Logs", jPanelCallLogs);
+
         status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
         status_label.setText("Welcome to IPDdump - http://code.google.com/p/ipddump/");
 
@@ -475,6 +516,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         });
         fileMenu.add(openMenuItem);
 
+        ResolveCheckBox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
         ResolveCheckBox.setSelected(true);
         ResolveCheckBox.setText("Resolve Names?");
         ResolveCheckBox.addActionListener(new java.awt.event.ActionListener() {
@@ -506,6 +548,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jMenuHelp.setText("Help");
 
+        jMenuItemAbout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         jMenuItemAbout.setText("About");
         jMenuItemAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -576,6 +619,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         TaskstabINDEX = jTabbedPane1.indexOfTab("Tasks");
         OptionstabINDEX = jTabbedPane1.indexOfTab("Options");
         MemostabINDEX = jTabbedPane1.indexOfTab("Memos");
+        CallLogstabINDEX = jTabbedPane1.indexOfTab("Call Logs");
         ActiveTAB = jTabbedPane1.getSelectedIndex();
 
         status_label.setText(welcome);
@@ -617,16 +661,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             Tasks = new TasksWriters(database);
             totalTasks = Tasks.getSize();
 
-            if (database != null) {
-                saveAsMenuItem.setEnabled(true);
-            //ResolveCheckBox.setEnabled(true);
-            } else {
-                saveAsMenuItem.setEnabled(false);
-            //ResolveCheckBox.setEnabled(false);
-            }
-
             fillTables();
-
         }
         status_label.setText(welcome);
     }//GEN-LAST:event_openMenuItemActionPerformed
@@ -637,6 +672,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         fillContactsTable();
         fillMemosTable();
         fillTasksTable();
+
+        saveAsMenuItem.setEnabled(true);
     }
 
     private void fillSMSTable() {
@@ -755,6 +792,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                     fileWriter.writeTextToFile(fileToSave, Memos.toCSV(MemosSelectedRows), ".csv");
                 } else if (ext.equalsIgnoreCase("xml")) {
                     fileWriter.writeXMLtoFile(fileToSave, Memos.toXML(MemosSelectedRows));
+                }
+            }
+        } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
+            if (saveDialog()) {
+                if (ext.equalsIgnoreCase("txt")) {
+                    fileWriter.writeTextToFile(fileToSave, Tasks.toPlainText(TasksSelectedRows), ".txt");
+                } else if (ext.equalsIgnoreCase("csv")) {
+                    fileWriter.writeTextToFile(fileToSave, Tasks.toCSV(TasksSelectedRows), ".csv");
+                } else if (ext.equalsIgnoreCase("xml")) {
+                    fileWriter.writeXMLtoFile(fileToSave, Tasks.toXML(TasksSelectedRows));
                 }
             }
         } else {
@@ -910,18 +957,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             evtObj = "Tasks";
         }
 
-
         if (evt.getButton() == MouseEvent.BUTTON3 && SelectedRows.length > 0) {
             ShowPopup(evt);
-
         } else {
             if (evt.getButton() == MouseEvent.BUTTON3 && SelectedRows.length == 0) {
                 JOptionPane.showMessageDialog(MessageFrame, "Select the " + evtObj + " you want to View");
             }
         }
-        if (evt.getClickCount() == 2) {
-            //System.out.println("double click");
-        }
+//        if (evt.getClickCount() == 2) {
+//            //System.out.println("double click");
+//        }
 
     }
     private void ResolveCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResolveCheckBoxActionPerformed
@@ -1123,6 +1168,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemTxt;
     private javax.swing.JMenuItem jMenuItemXML;
     private javax.swing.JPanel jPanelCalendar;
+    private javax.swing.JPanel jPanelCallLogs;
     private javax.swing.JPanel jPanelContacts;
     private javax.swing.JPanel jPanelMemo;
     private javax.swing.JPanel jPanelOptions;
@@ -1144,5 +1190,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JLabel status_label;
     private javax.swing.JLabel status_label6;
     private javax.swing.JLabel status_label7;
+    private javax.swing.JLabel status_label8;
     // End of variables declaration//GEN-END:variables
 }

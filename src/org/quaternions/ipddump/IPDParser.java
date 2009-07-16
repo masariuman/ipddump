@@ -308,7 +308,7 @@ public class IPDParser {
     
     if (debugingEnabled){
     for (int i=0;i<database.databaseNames().size();i++){
-    System.out.print((i+1)+": "+database.databaseNames().get(i)+", ");
+    System.out.print(i+": "+database.databaseNames().get(i)+", ");
     }
     System.out.println("");
     }

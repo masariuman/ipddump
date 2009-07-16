@@ -138,9 +138,9 @@ public class Task extends Record implements Comparable<Task> {
   }
 
   @Override
-  public int compareTo(Task o) {
-    return 0;
-  }
+     public int compareTo(Task o) {
+      return getTask().compareTo(o.getTask());
+    }
 
   @Override
   public String toString() {
