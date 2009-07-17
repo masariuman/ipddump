@@ -246,14 +246,14 @@ public class IPDParser {
             uid |= input.read() << 16;
             uid |= input.read() << 24;
             recordRead += 4;
-            
+
             if (dbID<database.databaseNames().size() && dbID>0){
             lastValidDBid=dbID;
             lastValidDBHandle=databaseHandle;
             }
             record = database.createRecord( dbID, recordDBVersion, uid, recordLength );
             record.setRecordDBHandle( databaseHandle );
-            
+
             state = ReadingState.FIELDLENGTH;
             break;
 
@@ -284,13 +284,13 @@ public class IPDParser {
                         ,dbID,dbID,database.databaseNames().size(),
                         lastValidDBid,dbname);
              System.err.println("\n    Last Valid BD handle: "+lastValidDBHandle+" this BD handle: "+databaseHandle);
-             System.err.println("    Last Valid Field lenght: "+lastfieldLength+" this Field lenght: "+fieldLength);
+             System.err.println("    Last Valid Field length: "+lastfieldLength+" this Field length: "+fieldLength);
               //System.out.print("Field:"+fieldType+" Data: "+String.valueOf(dataBuffer));
             }else {
                 lastfieldLength=fieldLength;
             }
             record.addField( fieldType, dataBuffer );
-            
+
 
             recordRead += fieldLength;
 
@@ -305,7 +305,7 @@ public class IPDParser {
     } finally {
       input.close();
     }
-    
+
     if (debugingEnabled){
     for (int i=0;i<database.databaseNames().size();i++){
     System.out.print(i+": "+database.databaseNames().get(i)+", ");
