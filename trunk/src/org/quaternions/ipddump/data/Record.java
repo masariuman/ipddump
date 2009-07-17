@@ -3,8 +3,10 @@ package org.quaternions.ipddump.data;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * A Record is an entry in a particular database. Each record indexes into the
@@ -183,4 +185,34 @@ public abstract class Record {
       return "";
     }
   }
+
+   /**
+   * Making a date is not simple, RIM doesn't use the standard
+   * "seconds since the epoch". The unit is minutes, but the zero point is
+   * somewhere around the start of 1900.
+   */
+  protected Date makeDate(char[] data) {
+    long time = data[0] << 0;
+    time |= data[1] << 8;
+    time |= data[2] << 16;
+    time |= data[3] << 24;
+
+    // Turn into milliseconds units
+    time *= 60 * 1000;
+    // Zero out at Jan 1, 1900
+    time -= 2208970740000L;
+    // Make the offset be the local timezone, minus the odd 61 minutes
+    int offset = TimeZone.getDefault().getOffset(time);
+    offset -= 61 * 60 * 1000;
+    return new Date(time + offset);
+  }
+
+    protected int makeInt(char[] data){
+    int temp = data[0] << 0;
+      temp |= data[1] << 8;
+      temp |= data[2] << 16;
+      temp |= data[3] << 24;
+
+      return temp;
+    }
 }

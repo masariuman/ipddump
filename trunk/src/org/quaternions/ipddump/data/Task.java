@@ -56,10 +56,7 @@ public class Task extends Record implements Comparable<Task> {
 
     // Status
     case 9:
-      int status = data[0] << 0;
-      status |= data[1] << 8;
-      status |= data[2] << 16;
-      status |= data[3] << 24;
+      int status =makeInt(data);
       switch (status) {
       case 0:
         fields.put("Status", "Not Started");
@@ -90,10 +87,7 @@ public class Task extends Record implements Comparable<Task> {
 
     // Priority
     case 14:
-      int priority = data[0] << 0;
-      priority |= data[1] << 8;
-      priority |= data[2] << 16;
-      priority |= data[3] << 24;
+      int priority = makeInt(data);
       switch (priority) {
       case 0:
         fields.put("Priority", "Low");
@@ -115,12 +109,7 @@ public class Task extends Record implements Comparable<Task> {
 
     // Timezone
     case 16:
-        viewItInHex(type, data);
-      int timezone = data[0] << 0;
-      timezone |= data[1] << 8;
-      timezone |= data[2] << 16;
-      timezone |= data[3] << 24;
-      //TimeZone.getTimeZone(ID);
+      int timezone = makeInt(data);
         System.out.println(timezone);
         fields.put("TimeZone", String.valueOf(timezone));
       switch (timezone) {}
@@ -162,27 +151,6 @@ public class Task extends Record implements Comparable<Task> {
   protected String makeString(char[] data) {
     String str = new String(data);
     return str.substring(0, str.length() - 1);
-  }
-
-  /**
-   * Making a date is not simple, RIM doesn't use the standard
-   * "seconds since the epoch". The unit is minutes, but the zero point is
-   * somewhere around the start of 1900.
-   */
-  protected Date makeDate(char[] data) {
-    long time = data[0] << 0;
-    time |= data[1] << 8;
-    time |= data[2] << 16;
-    time |= data[3] << 24;
-
-    // Turn into milliseconds units
-    time *= 60 * 1000;
-    // Zero out at Jan 1, 1900
-    time -= 2208970740000L;
-    // Make the offset be the local timezone, minus the odd 61 minutes
-    int offset = TimeZone.getDefault().getOffset(time);
-    offset -= 61 * 60 * 1000;
-    return new Date(time + offset);
   }
 
   public String getTask() {
