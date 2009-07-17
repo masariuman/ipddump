@@ -8,6 +8,8 @@ package org.quaternions.ipddump.data;
 public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
     private int timezoneOfset;
 
+    //~--- constructors -------------------------------------------------------
+
     /**
      * Creates a new record with all provided data.
      *
@@ -30,11 +32,8 @@ public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
     public void addField(int type, char[] data) {
         switch (type) {
         case 1 : {
-            int timezone=data[0] << 0;
+            int timezone=makeInt(data);
 
-            timezone|=data[1] << 8;
-            timezone|=data[2] << 16;
-            timezone|=data[3] << 24;
             fields.put("TimeZoneID", String.valueOf(timezone));
         }
 
@@ -44,11 +43,7 @@ public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
             break;
 
         case 3 : {
-            timezoneOfset=data[0] << 0;
-
-            timezoneOfset|=data[1] << 8;
-            timezoneOfset|=data[2] << 16;
-            timezoneOfset|=data[3] << 24;
+            timezoneOfset=makeInt(data);
             fields.put("TimeZoneOffset", String.valueOf(timezoneOfset));
         }
 
@@ -61,15 +56,10 @@ public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
         return getPlaceName().compareTo(o.getPlaceName());
     }
 
-    @Override
-    public String toString() {
-        return fields.toString();
-    }
-
     //~--- get methods --------------------------------------------------------
 
     public String getPlaceName() {
-        return getField("PlaceName")+" "+String.valueOf(timezoneOfset/60.0)+"h";
+        return getField("PlaceName")+" "+String.valueOf(timezoneOfset / 60.0)+"h";
     }
 
     public String getTimeZoneID() {
@@ -79,5 +69,11 @@ public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
     public String getTimeZoneOffset() {
         return getField("TimeZoneOffset");
     }
-    
+
+    //~--- methods ------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        return fields.toString();
+    }
 }
