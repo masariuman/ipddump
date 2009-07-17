@@ -1,7 +1,7 @@
 
 /*
  * IpdDump_NewGUI.java
- * 
+ *
  * Created on 10 Ιουν 2009, 11:50:15 πμ
  */
 package gui;
@@ -51,15 +51,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private int[] SMSSelectedRows;
     private int totalContacts = 0;
     private int[] ContactsSelectedRows;
-    private int totalCalendar = 0;
+    private final int totalCalendar = 0;
     private int[] CalendarSelectedRows;
-    private int totalCallLogs = 0;
+    private final int totalCallLogs = 0;
     private int[] CallLogsSelectedRows;
     private int totalMemos = 0;
     private int[] MemosSelectedRows;
     private int totalTasks = 0;
     private int[] TasksSelectedRows;
-    private int totalOptions = 0;
+    private final int totalOptions = 0;
     private int[] OptionsSelectedRows;
     private final DataViewer viewer;
     private final FileWriters fileWriter = new FileWriters();
@@ -89,8 +89,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final int TasksNotesIndex = 5;
     private final int TasksTimeZoneIndex = 6;
     private boolean resolveNames = true;
-    private String baseName = "gui.resources.IPDdumpAboutBox";
-    private ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
+    private final String baseName = "gui.resources.IPDdumpAboutBox";
+    private final ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -259,16 +259,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableSMS.setName("SMS"); // NOI18N
         jTableSMS.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableSMSMouseClicked(evt);
             }
@@ -310,16 +313,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableContacts.setName("Contacts"); // NOI18N
         jTableContacts.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableContactsMouseClicked(evt);
             }
@@ -369,16 +375,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableMemos.setName("Memos"); // NOI18N
         jTableMemos.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableMemosMouseClicked(evt);
             }
@@ -417,15 +426,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableTasks.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableTasksMouseClicked(evt);
             }
@@ -658,7 +670,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             String[] args = {IpdChooser.getSelectedFile().getPath()};
             try {
                 IPDParser parser = new IPDParser(args[0]);
-                parser.enableDebuging(); // TODO: Comment This Line Before Publish
+//                parser.enableDebuging(); // TODO: Comment This Line Before Publish
                 database = parser.parse();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(MessageFrame, "ERROR: " + ex.getMessage());
@@ -1074,10 +1086,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
@@ -1140,10 +1154,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false, false
             };
 
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
