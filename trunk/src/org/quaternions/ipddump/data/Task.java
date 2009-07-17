@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * A contact is a record representing contact information stored in the address
- * book.
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  * @created Jun 20, 2009
@@ -117,7 +115,16 @@ public class Task extends Record implements Comparable<Task> {
 
     // Timezone
     case 16:
-      // ignore for now
+        viewItInHex(type, data);
+      int timezone = data[0] << 0;
+      timezone |= data[1] << 8;
+      timezone |= data[2] << 16;
+      timezone |= data[3] << 24;
+      //TimeZone.getTimeZone(ID);
+        System.out.println(timezone);
+        fields.put("TimeZone", String.valueOf(timezone));
+      switch (timezone) {}
+      
       break;
 
     case 17:
@@ -183,7 +190,7 @@ public class Task extends Record implements Comparable<Task> {
   }
 
   public String getCategories() {
-    return getField("Categories");
+    return getField("Categories").replaceAll(",", ";");
   }
 
   public String getDue() {
@@ -212,5 +219,9 @@ public class Task extends Record implements Comparable<Task> {
 
   public String getTimeZone() {
     return getField("TimeZone");
+  }
+  
+  public void setTimeZoneName(String name){
+    fields.put("TimeZone", name);
   }
 }
