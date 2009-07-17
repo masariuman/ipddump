@@ -57,6 +57,12 @@ public class InteractivePagerBackup {
      * The set of Memos.
      */
     protected final List<Memo> memos;
+
+    /**
+     * Reports If there were Errors while parsing
+     */
+    protected final List<BBTimeZone> timeZones;
+
     /**
      * Reports If there were Errors while parsing
      */
@@ -78,6 +84,7 @@ public class InteractivePagerBackup {
         contacts     =new ArrayList<Contact>();
         tasks        =new ArrayList<Task>();
         memos        =new ArrayList<Memo>();
+        timeZones    =new ArrayList<BBTimeZone>();
     }
 
     //~--- methods ------------------------------------------------------------
@@ -111,26 +118,42 @@ public class InteractivePagerBackup {
      * @return A new Record
      */
     public Record createRecord(int dbIndex, int version, int uid, int length) {
-      /*
-       * Fix for bug #2, there might be an error in parsing, but for now, this seems to fix it.
-       */
-        if (dbIndex>=databases.size() || dbIndex<0) {
+
+        /*
+         * Fix for bug #2, there might be an error in parsing, but for now, this seems to fix it.
+         */
+        if ((dbIndex>=databases.size()) || (dbIndex<0)) {
             return new DummyRecord(dbIndex, version, uid, length);
         } else if ("SMS Messages".equals(databases.get(dbIndex))) {
             SMSMessage record=new SMSMessage(dbIndex, version, uid, length);
+
             smsRecords.add(record);
+
             return record;
         } else if ("Address Book".equals(databases.get(dbIndex)) || "Quick Contacts".equals(databases.get(dbIndex))) {
             Contact record=new Contact(dbIndex, version, uid, length);
+
             contacts.add(record);
+
             return record;
         } else if ("Memos".equals(databases.get(dbIndex))) {
             Memo record=new Memo(dbIndex, version, uid, length);
+
             memos.add(record);
+
             return record;
         } else if ("Tasks".equals(databases.get(dbIndex))) {
-            Task record = new Task(dbIndex, version, uid, length);
+            Task record=new Task(dbIndex, version, uid, length);
+
             tasks.add(record);
+
+            return record;
+        } else if ("Time Zones".equals(databases.get(dbIndex))) {
+            BBTimeZone record=new BBTimeZone(dbIndex, version, uid, length);
+
+            // System.out.println("------New TimeZone------");
+            timeZones.add(record);
+
             return record;
         } else {
             return new DummyRecord(dbIndex, version, uid, length);
@@ -155,6 +178,29 @@ public class InteractivePagerBackup {
         return Collections.<Memo>unmodifiableCollection(memos);
     }
 
+    public void organize() {
+        Collections.sort(memos);
+        Collections.sort(smsRecords);
+        Collections.sort(tasks);
+        Collections.sort(contacts);
+        Collections.sort(timeZones);
+
+        Finder finder=new Finder(this);
+
+        for (Task recordt : this.tasks) { 
+                String name=finder.findTimeZoneByID(recordt.getTimeZone());
+                recordt.setTimeZoneName(name);
+        }
+    }
+
+    //~--- set methods --------------------------------------------------------
+
+    public void setErrorFlag() {
+        errorFlag=true;
+    }
+
+    //~--- methods ------------------------------------------------------------
+
     /**
      * Gets the collection of SMS records.
      *
@@ -170,20 +216,19 @@ public class InteractivePagerBackup {
      * @return An unmodifiable collection of task records
      */
     public Collection<Task> tasks() {
-      return Collections.unmodifiableCollection(tasks);
+        return Collections.unmodifiableCollection(tasks);
     }
 
-    public void organize() {
-      Collections.sort(memos);
-      Collections.sort(smsRecords);
-      Collections.sort(tasks);
-      Collections.sort(contacts);
+    /**
+     * Gets the collection of the Time Zones records.
+     *
+     * @return An unmodifiable collection of Time Zones records
+     */
+    public Collection<BBTimeZone> timeZones() {
+        return Collections.unmodifiableCollection(timeZones);
     }
-      public boolean wereErrors(){
+
+    public boolean wereErrors() {
         return errorFlag;
-    }
-
-      public void setErrorFlag(){
-        errorFlag=true;
     }
 }

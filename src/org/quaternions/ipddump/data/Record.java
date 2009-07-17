@@ -81,7 +81,7 @@ public abstract class Record {
      * @param data The field data
      */
      public void viewIt(int type, char[] data){
-      System.out.format("Type:%d Data String:%s\n", type,String.valueOf(data));
+      System.out.format("Type:%d Data String:%s length:%d\n", type,String.valueOf(data),data.length);
      }
 
       public void viewIt(int type, String string) {
@@ -92,7 +92,7 @@ public abstract class Record {
     }
 
       public void viewItInHex(int type, char[] data) {
-        System.out.format("Type %d Data Hex:%h\n", type, String.valueOf(data));
+        System.out.format("Type %d Data Hex:%h length:%d\n", type, String.valueOf(data),data.length);
     }
 
     @Override

@@ -9,9 +9,6 @@ package org.quaternions.ipddump.data;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Iterator;
-import java.util.Map;
-
 /**
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
@@ -72,9 +69,12 @@ public class Finder {
                 for (SMSMessage recordsms : database.smsRecords()) {
                     String SMSnumber=recordsms.getNumber();
 
-                    if (SMSnumber.replaceAll(" ", "").equals(record.getMobilePhone().replaceAll(" ", "")) || SMSnumber.replaceAll(" ", "").equals(record.getPager().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getHomePhone().replaceAll(" ", "")) || SMSnumber.replaceAll(" ", "").equals(record.getWorkPhone().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getOtherNumber().replaceAll(" ", "")) || SMSnumber.replaceAll(" ", "").equals(record.getPIN().replaceAll(" ", ""))) {
+                    if (SMSnumber.replaceAll(" ", "").equals(record.getMobilePhone().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getPager().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getHomePhone().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getWorkPhone().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getOtherNumber().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getPIN().replaceAll(" ", ""))) {
                         i++;
                     }
                 }
@@ -102,9 +102,12 @@ public class Finder {
                 for (SMSMessage recordsms : database.smsRecords()) {
                     String SMSnumber=recordsms.getNumber();
 
-                    if (SMSnumber.replaceAll(" ", "").equals(record.getMobilePhone().replaceAll(" ", "")) || SMSnumber.replaceAll(" ", "").equals(record.getPager().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getHomePhone().replaceAll(" ", "")) || SMSnumber.replaceAll(" ", "").equals(record.getWorkPhone().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getOtherNumber().replaceAll(" ", "")) || SMSnumber.replaceAll(" ", "").equals(record.getPIN().replaceAll(" ", ""))) {
+                    if (SMSnumber.replaceAll(" ", "").equals(record.getMobilePhone().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getPager().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getHomePhone().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getWorkPhone().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getOtherNumber().replaceAll(" ", ""))
+                            || SMSnumber.replaceAll(" ", "").equals(record.getPIN().replaceAll(" ", ""))) {
                         selectedSMS[pointer++]=smsindex;
                     }
 
@@ -122,5 +125,17 @@ public class Finder {
         }
 
         return selectedSMS;
+    }
+
+    public String findTimeZoneByID(String idNumber) {
+        for (BBTimeZone record : database.timeZones()) {
+            String id=record.getTimeZoneID();
+
+            if (idNumber.equals(id)) {
+                return record.getPlaceName();
+            }
+        }
+
+        return "TimeZ db not present "+idNumber;
     }
 }
