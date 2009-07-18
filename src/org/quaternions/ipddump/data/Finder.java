@@ -132,7 +132,7 @@ public class Finder {
             String id=record.getTimeZoneID();
 
             if (idNumber.equals(id)) {
-                return record.getPlaceName();
+                return record.getPlaceNameWithOffset();
             }
         }
 

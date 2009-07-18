@@ -70,7 +70,7 @@ public class Memo extends Record implements Comparable<Memo> {
     }
 
     protected String makeString(char[] data) {
-        String str=new String(data);
+        String str=Gsm2Iso.Gsm2Iso(data);
         return str.substring(0, str.length()-1);
     }
 }

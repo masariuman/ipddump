@@ -6,7 +6,7 @@ package org.quaternions.ipddump.data;
  * @created Jun 20, 2009
  */
 public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
-    private int timezoneOfset;
+    private double timezoneOfset;
 
     //~--- constructors -------------------------------------------------------
 
@@ -36,6 +36,7 @@ public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
 
             fields.put("TimeZoneID", String.valueOf(timezone));
         }
+        break;
 
         case 2 :
             fields.put("PlaceName", String.valueOf(data));
@@ -60,6 +61,38 @@ public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
 
     public String getPlaceName() {
         return getField("PlaceName")+" "+String.valueOf(timezoneOfset / 60.0)+"h";
+    }
+
+    public String getPlaceNameWithOffset() {
+        String temp="";
+
+        timezoneOfset=timezoneOfset / 60.0;
+
+        // timezoneOfset=-1.5;
+        // timezoneOfset=1.5;
+        System.out.println(timezoneOfset);
+
+        if (timezoneOfset % 1==0) {
+            if ((timezoneOfset>=0)) {
+                temp=String.format("(%+2.0f)", timezoneOfset);
+            } else {
+                temp=String.format("(%2.0f)", timezoneOfset);
+            }
+        } else {
+            if ((timezoneOfset>=0)) {
+                temp=String.format("(%+2.1f)", timezoneOfset);
+            } else {
+                temp=String.format("(%2.1f)", timezoneOfset);
+            }
+        }
+
+        if ((timezoneOfset>=0)) {
+            temp=String.format("(%+2.1f)", timezoneOfset);
+        } else {
+            temp=String.format("(%2.1f)", timezoneOfset);
+        }
+
+        return getField("PlaceName")+" "+temp;
     }
 
     public String getTimeZoneID() {
