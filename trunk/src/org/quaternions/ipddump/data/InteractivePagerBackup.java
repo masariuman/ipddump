@@ -59,9 +59,14 @@ public class InteractivePagerBackup {
     protected final List<Memo> memos;
 
     /**
-     * Reports If there were Errors while parsing
+     * The set of TimeZones.
      */
     protected final List<BBTimeZone> timeZones;
+
+    /**
+     * The set of Phone Call Logs.
+     */
+    protected final List<CallLog> callLogs;
 
     /**
      * Reports If there were Errors while parsing
@@ -85,6 +90,7 @@ public class InteractivePagerBackup {
         tasks        =new ArrayList<Task>();
         memos        =new ArrayList<Memo>();
         timeZones    =new ArrayList<BBTimeZone>();
+        callLogs    =new ArrayList<CallLog>();
     }
 
     //~--- methods ------------------------------------------------------------
@@ -155,6 +161,13 @@ public class InteractivePagerBackup {
             timeZones.add(record);
 
             return record;
+        } else if ("Phone Call Logs".equals(databases.get(dbIndex))) {
+            CallLog record=new CallLog(dbIndex, version, uid, length);
+
+             System.out.println("------New Call Log------");
+            callLogs.add(record);
+
+            return record;
         } else {
             return new DummyRecord(dbIndex, version, uid, length);
         }
@@ -184,6 +197,7 @@ public class InteractivePagerBackup {
         Collections.sort(tasks);
         Collections.sort(contacts);
         Collections.sort(timeZones);
+        Collections.sort(callLogs);
 
         Finder finder=new Finder(this);
 
@@ -226,6 +240,15 @@ public class InteractivePagerBackup {
      */
     public Collection<BBTimeZone> timeZones() {
         return Collections.unmodifiableCollection(timeZones);
+    }
+
+    /**
+     * Gets the collection of the Phone Call Logs.
+     *
+     * @return An unmodifiable collection of Phone Call Logs records
+     */
+    public Collection<CallLog> callLogs() {
+        return Collections.unmodifiableCollection(callLogs);
     }
 
     public boolean wereErrors() {
