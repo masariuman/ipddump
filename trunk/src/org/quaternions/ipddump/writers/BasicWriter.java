@@ -17,7 +17,7 @@ import java.io.StringWriter;
 
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  */
 abstract class BasicWriter {
     protected InteractivePagerBackup database;

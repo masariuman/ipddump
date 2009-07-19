@@ -5,7 +5,7 @@ import java.util.TimeZone;
 
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  * @created Jun 20, 2009
  */
 public class Task extends Record implements Comparable<Task> {

@@ -6,10 +6,13 @@ import java.util.Date;
 
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  * @created Jun 20, 2009
  */
 public class CallLog extends Record implements Comparable<CallLog> {
+    private Date date;
+
+    //~--- constructors -------------------------------------------------------
 
     /**
      * Creates a new record with all provided data.
@@ -45,38 +48,38 @@ public class CallLog extends Record implements Comparable<CallLog> {
             break;    // always the same
 
         case 10 :
-            //viewItInInt(type, data);
+
+            // viewItInInt(type, data);
             // Probably nothing special
             break;
 
         case 11 :
-            //viewItInInt(type, data);
+
+            // viewItInInt(type, data);
             // Probably nothing special
             break;
 
         case 13 :
-           // viewItInInt(type, data);
+
+            // viewItInInt(type, data);
             // Probably nothing special
             break;
 
         case 2 :
             if (makeInt(data)==0) {
-                fields.put("Call", "Received Call");
+                fields.put("Status", "Received Call");
             } else if (makeInt(data)==1) {
-                fields.put("Call", "Placed Call");
+                fields.put("Status", "Placed Call");
             } else if (makeInt(data)==2) {
-                fields.put("Call", "Placed, Aborted");
+                fields.put("Status", "Placed, Not Answered");
             } else if (makeInt(data)==3) {
-                fields.put("Call", "Missed Call");
+                fields.put("Status", "Missed Call");//Diference?
             }
 
-            //viewItInInt(type, data);
-            System.out.println(getField("Call"));
             break;
 
         case 31 :
             fields.put("Name", makeString(data));
-            System.out.println(getField("Name"));
 
             break;
 
@@ -84,34 +87,70 @@ public class CallLog extends Record implements Comparable<CallLog> {
             String duration=makeDuration(makeInt(data));
 
             fields.put("Duration", duration);
-            System.out.println(getField("Duration"));
 
             break;
         }
 
         case 4 : {
-            fields.put("Date", makeDate2(data).toString());
-            System.out.println(getField("Date"));
+            date=makeDate2(data);
+            fields.put("Date", date.toString());
 
             break;
         }
 
         case 12 : {
             fields.put("Number", makeString(data));
-            System.out.println(getField("Number"));
 
             break;
         }
 
         default :
-            //viewItInInt(type, data);
+
+        // viewItInInt(type, data);
         }
     }
 
     @Override
     public int compareTo(CallLog o) {
-        return 0;    // getPlaceName().compareTo(o.getPlaceName());
+        return getDate().compareTo(o.getDate());
     }
+
+    //~--- get methods --------------------------------------------------------
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getDuration() {
+        return getField("Duration");
+    }
+
+    public String getName() {
+        if (getField("Name").equals("")) {
+            return getNumber();
+        }
+
+        return getField("Name");
+    }
+
+    public String getNameAndNumber() {
+        if (getField("Name").equals("")) {
+            return "Number: "+getNumber();
+        }
+
+        return "Name: "+getField("Name")+"\nNumber: "+getNumber();
+    }
+
+
+    public String getNumber() {
+        return getField("Number");
+    }
+
+    public String getStatus() {
+        return getField("Status");
+    }
+
+    //~--- methods ------------------------------------------------------------
 
     @Override
     public String toString() {

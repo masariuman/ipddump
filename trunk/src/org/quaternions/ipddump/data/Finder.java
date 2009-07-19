@@ -7,11 +7,9 @@
 
 package org.quaternions.ipddump.data;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  */
 public class Finder {
     private final InteractivePagerBackup database;
@@ -23,6 +21,78 @@ public class Finder {
     }
 
     //~--- methods ------------------------------------------------------------
+
+    public int[] findCallLogsByContacts(int[] selectedContacts) {
+        int RecordIndex=0;
+        int j          =0;
+        int i          =0;
+
+        for (Contact record : database.contacts()) {
+            if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
+                for (CallLog recordCallLog : database.callLogs()) {
+                    String CallLogNumber=recordCallLog.getNumber().replaceAll(" ", "");
+
+                    if (CallLogNumber.equals(record.getMobilePhone().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getPager().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getHomePhone().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getWorkPhone().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getOtherNumber().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getPIN().replaceAll(" ", ""))) {
+                        i++;
+                    }
+                }
+
+                j++;
+            }
+
+            if (j>=selectedContacts.length) {
+                break;
+            }
+
+            RecordIndex++;
+        }
+
+        System.out.println("Call Logs Found: "+i);
+
+        int selectedCallLogs[]=new int[i];
+        int pointer           =0;
+
+        RecordIndex=0;
+        j          =0;
+
+        int index=0;
+
+        for (Contact record : database.contacts()) {
+            if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
+                index=0;
+
+                for (CallLog recordCallLog : database.callLogs()) {
+                    String CallLogNumber=recordCallLog.getNumber().replaceAll(" ", "");
+
+                    if (CallLogNumber.equals(record.getMobilePhone().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getPager().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getHomePhone().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getWorkPhone().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getOtherNumber().replaceAll(" ", ""))
+                            || CallLogNumber.equals(record.getPIN().replaceAll(" ", ""))) {
+                        selectedCallLogs[pointer++]=index;
+                    }
+
+                    index++;
+                }
+
+                j++;
+            }
+
+            if (j>=selectedContacts.length) {
+                break;
+            }
+
+            RecordIndex++;
+        }
+
+        return selectedCallLogs;
+    }
 
     /**
      *  You can find the contact via home
@@ -67,23 +137,23 @@ public class Finder {
         for (Contact record : database.contacts()) {
             if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
                 for (SMSMessage recordsms : database.smsRecords()) {
-                    String SMSnumber=recordsms.getNumber();
+                    String SMSnumber=recordsms.getNumber().replaceAll(" ", "");
 
-                    if (SMSnumber.replaceAll(" ", "").equals(record.getMobilePhone().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getPager().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getHomePhone().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getWorkPhone().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getOtherNumber().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getPIN().replaceAll(" ", ""))) {
+                    if (SMSnumber.equals(record.getMobilePhone().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getPager().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getHomePhone().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getWorkPhone().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getOtherNumber().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getPIN().replaceAll(" ", ""))) {
                         i++;
                     }
                 }
 
                 j++;
+            }
 
-                if (j>=selectedContacts.length) {
-                    break;
-                }
+            if (j>=selectedContacts.length) {
+                break;
             }
 
             RecordIndex++;
@@ -100,14 +170,14 @@ public class Finder {
                 int smsindex=0;
 
                 for (SMSMessage recordsms : database.smsRecords()) {
-                    String SMSnumber=recordsms.getNumber();
+                    String SMSnumber=recordsms.getNumber().replaceAll(" ", "");
 
-                    if (SMSnumber.replaceAll(" ", "").equals(record.getMobilePhone().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getPager().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getHomePhone().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getWorkPhone().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getOtherNumber().replaceAll(" ", ""))
-                            || SMSnumber.replaceAll(" ", "").equals(record.getPIN().replaceAll(" ", ""))) {
+                    if (SMSnumber.equals(record.getMobilePhone().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getPager().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getHomePhone().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getWorkPhone().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getOtherNumber().replaceAll(" ", ""))
+                            || SMSnumber.equals(record.getPIN().replaceAll(" ", ""))) {
                         selectedSMS[pointer++]=smsindex;
                     }
 
@@ -115,13 +185,46 @@ public class Finder {
                 }
 
                 j++;
+            }
 
-                if (j>=selectedContacts.length) {
-                    break;
-                }
+            if (j>=selectedContacts.length) {
+                break;
             }
 
             RecordIndex++;
+        }
+
+        return selectedSMS;
+    }
+
+    public int[] findSmsByNumber(String phNumber) {
+        int RecordIndex=0;
+        int j          =0;
+        int i          =0;
+        int smsindex   =0;
+
+        for (SMSMessage recordsms : database.smsRecords()) {
+            String SMSnumber=recordsms.getNumber();
+
+            if (SMSnumber.replaceAll(" ", "").equals(phNumber.replaceAll(" ", ""))) {
+                i++;
+            }
+        }
+
+        int selectedSMS[]=new int[i];
+        int pointer      =0;
+
+        RecordIndex=0;
+        j          =0;
+
+        for (SMSMessage recordsms : database.smsRecords()) {
+            String SMSnumber=recordsms.getNumber();
+
+            if (SMSnumber.replaceAll(" ", "").equals(phNumber.replaceAll(" ", ""))) {
+                selectedSMS[pointer++]=smsindex;
+            }
+
+            smsindex++;
         }
 
         return selectedSMS;
@@ -136,6 +239,6 @@ public class Finder {
             }
         }
 
-        return "TimeZ db not present "+idNumber;
+        return "TimeZ db not present ID:"+idNumber;
     }
 }

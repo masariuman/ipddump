@@ -16,7 +16,7 @@ import org.quaternions.ipddump.data.Memo;
 
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  */
 public class MemosWriters extends BasicWriter {
     public MemosWriters(InteractivePagerBackup database) {

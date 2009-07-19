@@ -18,7 +18,7 @@ import java.util.TreeSet;
 
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  */
 public class ContactsWriters extends BasicWriter {
     public ContactsWriters(InteractivePagerBackup database) {

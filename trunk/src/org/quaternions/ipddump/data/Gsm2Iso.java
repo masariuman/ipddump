@@ -1,7 +1,7 @@
 package org.quaternions.ipddump.data;
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  */
 public class Gsm2Iso {
 
