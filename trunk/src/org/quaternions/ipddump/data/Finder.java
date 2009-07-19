@@ -27,6 +27,7 @@ public class Finder {
         int j          =0;
         int i          =0;
 
+        // This first loop counts the Call Logs to be found
         for (Contact record : database.contacts()) {
             if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
                 for (CallLog recordCallLog : database.callLogs()) {
@@ -198,10 +199,8 @@ public class Finder {
     }
 
     public int[] findSmsByNumber(String phNumber) {
-        int RecordIndex=0;
-        int j          =0;
-        int i          =0;
-        int smsindex   =0;
+        int i       =0;
+        int smsindex=0;
 
         for (SMSMessage recordsms : database.smsRecords()) {
             String SMSnumber=recordsms.getNumber();
@@ -213,9 +212,6 @@ public class Finder {
 
         int selectedSMS[]=new int[i];
         int pointer      =0;
-
-        RecordIndex=0;
-        j          =0;
 
         for (SMSMessage recordsms : database.smsRecords()) {
             String SMSnumber=recordsms.getNumber();

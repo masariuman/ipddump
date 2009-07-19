@@ -82,7 +82,7 @@ public class ContactsWriters extends BasicWriter {
         builder.append("\n");
 
         for (Contact record : database.contacts()) {
-            if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
+            if (isSelectedRecord(RecordIndex, selectedContacts) && (selectedContacts[j]<database.contacts().size())) {
                 first=true;
 
                 Map<String, String> fields=record.fields();
@@ -131,7 +131,7 @@ public class ContactsWriters extends BasicWriter {
             int j          =0;
 
             for (Contact record : database.contacts()) {
-                if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
+                if (isSelectedRecord(RecordIndex, selectedContacts) && (selectedContacts[j]<database.contacts().size())) {
                     Iterator iterator2=record.fields().entrySet().iterator();
 
                     for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
@@ -175,7 +175,7 @@ public class ContactsWriters extends BasicWriter {
         int j          =0;
 
         for (Contact record : database.contacts()) {
-            if ((RecordIndex==selectedMessages[j]) && (selectedMessages[j]<database.contacts().size())) {
+            if (isSelectedRecord(RecordIndex, selectedMessages) && (selectedMessages[j]<database.contacts().size())) {
                 Element  message  =root.addElement("Contact").addAttribute("UID", String.valueOf(record.getUID()));
                 Iterator iterator2=record.fields().entrySet().iterator();
 
