@@ -57,7 +57,7 @@ public class MemosWriters extends BasicWriter {
         int j          =0;
 
         for (Memo record : database.memos()) {
-            if ((RecordIndex==selectedMemos[j]) && (selectedMemos[j]<database.memos().size())) {
+            if (isSelectedRecord(RecordIndex, selectedMemos) && (selectedMemos[j]<database.memos().size())) {
                 temp.append(record.getTitle()+","+record.getMemo()+"\n");
                 j++;
 
@@ -90,7 +90,7 @@ public class MemosWriters extends BasicWriter {
             int j          =0;
 
             for (Memo record : database.memos()) {
-                if ((RecordIndex==MemoselectedRows[j]) && (MemoselectedRows[j]<database.memos().size())) {
+                if (isSelectedRecord(RecordIndex, MemoselectedRows) && (MemoselectedRows[j]<database.memos().size())) {
                     String title=record.getTitle();
                     String memo =record.getMemo();
 
@@ -129,7 +129,7 @@ public class MemosWriters extends BasicWriter {
         int     j          =0;
 
         for (Memo record : database.memos()) {
-            if ((RecordIndex==selectedMemos[j]) && (selectedMemos[j]<database.memos().size())) {
+            if (isSelectedRecord(RecordIndex, selectedMemos) && (selectedMemos[j]<database.memos().size())) {
                 Element message=root.addElement("MemoMessage").addAttribute("UID", String.valueOf(record.getUID()));
 
                 message.addElement("Title").addText(record.getTitle());

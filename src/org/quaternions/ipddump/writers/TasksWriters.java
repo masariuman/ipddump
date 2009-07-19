@@ -86,7 +86,7 @@ public class TasksWriters extends BasicWriter {
         builder.append("\n");
 
         for (Task record : database.tasks()) {
-            if ((RecordIndex==selectedRecords[j]) && (selectedRecords[j]<database.tasks().size())) {
+            if (isSelectedRecord(RecordIndex, selectedRecords) && (selectedRecords[j]<database.tasks().size())) {
                 j++;
                 first=true;
 
@@ -136,7 +136,7 @@ public class TasksWriters extends BasicWriter {
             int j          =0;
 
             for (Task record : database.tasks()) {
-                if ((RecordIndex==SelectedRecords[j]) && (SelectedRecords[j]<database.tasks().size())) {
+                if (isSelectedRecord(RecordIndex, SelectedRecords) && (SelectedRecords[j]<database.tasks().size())) {
                     j++;
 
                     Iterator iterator2=record.fields().entrySet().iterator();
@@ -182,7 +182,7 @@ public class TasksWriters extends BasicWriter {
         int     j          =0;
 
         for (Task record : database.tasks()) {
-            if ((RecordIndex==SelectedRecords[j]) && (SelectedRecords[j]<database.tasks().size())) {
+            if (isSelectedRecord(RecordIndex, SelectedRecords) && (SelectedRecords[j]<database.tasks().size())) {
                 Element  message  =root.addElement("Task").addAttribute("UID", String.valueOf(record.getUID()));
                 Iterator iterator2=record.fields().entrySet().iterator();
 

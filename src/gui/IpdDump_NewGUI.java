@@ -1216,7 +1216,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 }//GEN-LAST:event_jMenuItemSelectedCallLogsXMLActionPerformed
 
     private void jMenuItemSelectedCallLogsCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedCallLogsCSVActionPerformed
-               int[] selectedRows = null;
+        int[] selectedRows = null;
         if (ActiveTAB == ContactstabINDEX) {
             selectedRows = finder.findCallLogsByContacts(ContactsSelectedRows);
         }

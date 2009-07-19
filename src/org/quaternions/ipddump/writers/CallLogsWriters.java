@@ -57,7 +57,7 @@ public class CallLogsWriters extends BasicWriter {
         int j          =0;
 
         for (CallLog record : database.callLogs()) {
-            if ((RecordIndex==selectedCallLogs[j]) && (selectedCallLogs[j]<database.callLogs().size())) {
+            if (isSelectedRecord(RecordIndex, selectedCallLogs) && (selectedCallLogs[j]<database.callLogs().size())) {
                 temp.append(record.getName()+","+record.getDuration()+","+record.getStatus()+","
                             +record.getDate().toString()+","+record.getNumber()+"\n");
                 j++;
@@ -91,7 +91,7 @@ public class CallLogsWriters extends BasicWriter {
             int j          =0;
 
             for (CallLog record : database.callLogs()) {
-                if ((RecordIndex==CallLogselectedRows[j]) && (CallLogselectedRows[j]<database.callLogs().size())) {
+                if (isSelectedRecord(RecordIndex, CallLogselectedRows) && (CallLogselectedRows[j]<database.callLogs().size())) {
                     tmp.append(record.getNameAndNumber()+"\nStatus: "+record.getStatus()+"\nDate: "+record.getDate()
                                +"\nDuration: "+record.getDuration().toString()+"\n\n");
                     j++;
@@ -128,7 +128,7 @@ public class CallLogsWriters extends BasicWriter {
         int j          =0;
 
         for (CallLog record : database.callLogs()) {
-            if ((RecordIndex==selectedCallLogs[j]) && (selectedCallLogs[j]<database.callLogs().size())) {
+            if (isSelectedRecord(RecordIndex, selectedCallLogs) && (selectedCallLogs[j]<database.callLogs().size())) {
                 Element message=root.addElement("CallLog").addAttribute("UID", String.valueOf(record.getUID()));
 
                 message.addElement("Name").addText(record.getName());

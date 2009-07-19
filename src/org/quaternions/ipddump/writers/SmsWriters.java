@@ -58,7 +58,7 @@ public class SmsWriters extends BasicWriter {
         int j          =0;
 
         for (SMSMessage record : database.smsRecords()) {
-            if ((RecordIndex==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
+            if (isSelectedRecord(RecordIndex, selectedMessages) && (selectedMessages[j]<database.smsRecords().size())) {
                 String Name="";
 
                 if (resolveNames) {
@@ -100,7 +100,7 @@ public class SmsWriters extends BasicWriter {
             int j          =0;
 
             for (SMSMessage record : database.smsRecords()) {
-                if ((RecordIndex==SMSselectedRows[j]) && (SMSselectedRows[j]<database.smsRecords().size())) {
+                if (isSelectedRecord(RecordIndex, SMSselectedRows) && (SMSselectedRows[j]<database.smsRecords().size())) {
                     String number  =record.getNumber();
                     String text    =record.getText();
                     String sent    =record.getSent().toString();
@@ -156,7 +156,7 @@ public class SmsWriters extends BasicWriter {
         int j          =0;
 
         for (SMSMessage record : database.smsRecords()) {
-            if ((RecordIndex==selectedMessages[j]) && (selectedMessages[j]<database.smsRecords().size())) {
+            if (isSelectedRecord(RecordIndex, selectedMessages) && (selectedMessages[j]<database.smsRecords().size())) {
                 if (record.wasSent()) {
                     sSent="true";
                 } else {

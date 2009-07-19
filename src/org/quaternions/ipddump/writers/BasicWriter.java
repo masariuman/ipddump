@@ -160,4 +160,14 @@ abstract class BasicWriter {
 
         return allRecords;
     }
+
+    protected boolean isSelectedRecord(int curentIndex, int[] selectedRecord) {
+        for (int i=0; i<selectedRecord.length; i++) {
+            if (curentIndex==selectedRecord[i]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
