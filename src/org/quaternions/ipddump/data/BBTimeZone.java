@@ -2,7 +2,7 @@ package org.quaternions.ipddump.data;
 
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  * @created Jun 20, 2009
  */
 public class BBTimeZone extends Record implements Comparable<BBTimeZone> {

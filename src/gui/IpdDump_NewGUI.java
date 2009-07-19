@@ -23,7 +23,7 @@ import org.quaternions.ipddump.writers.*;
 
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  */
 public class IpdDump_NewGUI extends javax.swing.JFrame {
 
@@ -51,9 +51,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private int[] SMSSelectedRows;
     private int totalContacts = 0;
     private int[] ContactsSelectedRows;
-    private final int totalCalendar = 0;
+    private int totalCalendar = 0;
     private int[] CalendarSelectedRows;
-    private final int totalCallLogs = 0;
+    private int totalCallLogs = 0;
     private int[] CallLogsSelectedRows;
     private int totalMemos = 0;
     private int[] MemosSelectedRows;
@@ -68,6 +68,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private ContactsWriters Contacts;
     private MemosWriters Memos;
     private TasksWriters Tasks;
+    private CallLogsWriters CallLogs;
     private TableModel ContactsDataModel;
     private TableModel MemosDataModel;
     private TableModel TasksDataModel;
@@ -88,6 +89,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final int TasksReminderIndex = 4;
     private final int TasksNotesIndex = 5;
     private final int TasksTimeZoneIndex = 6;
+    private final int CallLogsNameIndex = 0;
+    private final int CallLogsDateIndex = 1;
+    private final int CallLogsStatusIndex = 2;
+    private final int CallLogsDurationIndex = 3;
     private boolean resolveNames = true;
     private final String baseName = "gui.resources.IPDdumpAboutBox";
     private final ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
@@ -117,7 +122,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jMenuItemSelectedSMSTxt = new javax.swing.JMenuItem();
         jMenuItemSelectedSMSXML = new javax.swing.JMenuItem();
         jMenuItemSelectedSMSCSV = new javax.swing.JMenuItem();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jMenuSpCallLogs = new javax.swing.JMenu();
+        jMenuItemSelectedCallLogsText = new javax.swing.JMenuItem();
+        jMenuItemSelectedCallLogsXML = new javax.swing.JMenuItem();
+        jMenuItemSelectedCallLogsCSV = new javax.swing.JMenuItem();
+        mainTabbedPane = new javax.swing.JTabbedPane();
         jPanelSMS = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableSMS = new javax.swing.JTable();
@@ -130,12 +139,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelTasks = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTableTasks = new javax.swing.JTable();
+        jPanelCallLogs = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTableCallLogs = new javax.swing.JTable();
         jPanelCalendar = new javax.swing.JPanel();
         status_label7 = new javax.swing.JLabel();
         jPanelOptions = new javax.swing.JPanel();
         status_label6 = new javax.swing.JLabel();
-        jPanelCallLogs = new javax.swing.JPanel();
-        status_label8 = new javax.swing.JLabel();
         status_label = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -211,7 +221,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jPopupMenu.add(jMenuCP);
 
-        jMenuSpSMS.setText("Sms's from this contact");
+        jMenuSpSMS.setText("Sms's from this contact\\s");
         jMenuSpSMS.setActionCommand("Sms's from this contact/s");
 
         jMenuItemSelectedSMSTxt.setText("View in PlainText");
@@ -240,6 +250,35 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         jPopupMenu.add(jMenuSpSMS);
 
+        jMenuSpCallLogs.setText("Call Logs from this contact\\s");
+        jMenuSpCallLogs.setActionCommand("Sms's from this contact/s");
+
+        jMenuItemSelectedCallLogsText.setText("View in PlainText");
+        jMenuItemSelectedCallLogsText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSelectedCallLogsTextActionPerformed(evt);
+            }
+        });
+        jMenuSpCallLogs.add(jMenuItemSelectedCallLogsText);
+
+        jMenuItemSelectedCallLogsXML.setText("View in Xml");
+        jMenuItemSelectedCallLogsXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSelectedCallLogsXMLActionPerformed(evt);
+            }
+        });
+        jMenuSpCallLogs.add(jMenuItemSelectedCallLogsXML);
+
+        jMenuItemSelectedCallLogsCSV.setText("View in Csv");
+        jMenuItemSelectedCallLogsCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSelectedCallLogsCSVActionPerformed(evt);
+            }
+        });
+        jMenuSpCallLogs.add(jMenuItemSelectedCallLogsCSV);
+
+        jPopupMenu.add(jMenuSpCallLogs);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IPDdump");
         setMinimumSize(new java.awt.Dimension(100, 500));
@@ -259,19 +298,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false
             };
 
-            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
-            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableSMS.setName("SMS"); // NOI18N
         jTableSMS.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableSMSMouseClicked(evt);
             }
@@ -296,7 +332,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("SMS", jPanelSMS);
+        mainTabbedPane.addTab("SMS", jPanelSMS);
 
         jTableContacts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -313,19 +349,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false, false
             };
 
-            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
-            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableContacts.setName("Contacts"); // NOI18N
         jTableContacts.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableContactsMouseClicked(evt);
             }
@@ -358,7 +391,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Contacts", jPanelContacts);
+        mainTabbedPane.addTab("Contacts", jPanelContacts);
 
         jTableMemos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -375,19 +408,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false
             };
 
-            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
-            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableMemos.setName("Memos"); // NOI18N
         jTableMemos.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableMemosMouseClicked(evt);
             }
@@ -409,7 +439,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Memos", jPanelMemo);
+        mainTabbedPane.addTab("Memos", jPanelMemo);
 
         jTableTasks.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -426,18 +456,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 false, false, false, false, false, false, false
             };
 
-            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
 
-            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jTableTasks.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableTasksMouseClicked(evt);
             }
@@ -464,7 +491,62 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Tasks", jPanelTasks);
+        mainTabbedPane.addTab("Tasks", jPanelTasks);
+
+        jTableCallLogs.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Name", "Date", "Status", "Duration"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTableCallLogs.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableCallLogsMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(jTableCallLogs);
+        jTableCallLogs.getColumnModel().getColumn(0).setMinWidth(100);
+        jTableCallLogs.getColumnModel().getColumn(0).setPreferredWidth(170);
+        jTableCallLogs.getColumnModel().getColumn(0).setMaxWidth(300);
+        jTableCallLogs.getColumnModel().getColumn(1).setMinWidth(170);
+        jTableCallLogs.getColumnModel().getColumn(1).setPreferredWidth(180);
+        jTableCallLogs.getColumnModel().getColumn(1).setMaxWidth(300);
+        jTableCallLogs.getColumnModel().getColumn(2).setMinWidth(100);
+        jTableCallLogs.getColumnModel().getColumn(2).setPreferredWidth(100);
+        jTableCallLogs.getColumnModel().getColumn(2).setMaxWidth(300);
+        jTableCallLogs.getColumnModel().getColumn(3).setMinWidth(60);
+        jTableCallLogs.getColumnModel().getColumn(3).setPreferredWidth(60);
+        jTableCallLogs.getColumnModel().getColumn(3).setMaxWidth(60);
+
+        javax.swing.GroupLayout jPanelCallLogsLayout = new javax.swing.GroupLayout(jPanelCallLogs);
+        jPanelCallLogs.setLayout(jPanelCallLogsLayout);
+        jPanelCallLogsLayout.setHorizontalGroup(
+            jPanelCallLogsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
+        );
+        jPanelCallLogsLayout.setVerticalGroup(
+            jPanelCallLogsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+        );
+
+        mainTabbedPane.addTab("Call Logs", jPanelCallLogs);
 
         status_label7.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label7.setText("Coming Soon");
@@ -486,7 +568,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 .addGap(219, 219, 219))
         );
 
-        jTabbedPane1.addTab("Calendar", jPanelCalendar);
+        mainTabbedPane.addTab("Calendar", jPanelCalendar);
 
         status_label6.setFont(new java.awt.Font("Tahoma", 0, 18));
         status_label6.setText("Coming Soon");
@@ -508,29 +590,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 .addGap(219, 219, 219))
         );
 
-        jTabbedPane1.addTab("Options", jPanelOptions);
-
-        status_label8.setFont(new java.awt.Font("Tahoma", 0, 18));
-        status_label8.setText("Coming Soon");
-
-        javax.swing.GroupLayout jPanelCallLogsLayout = new javax.swing.GroupLayout(jPanelCallLogs);
-        jPanelCallLogs.setLayout(jPanelCallLogsLayout);
-        jPanelCallLogsLayout.setHorizontalGroup(
-            jPanelCallLogsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelCallLogsLayout.createSequentialGroup()
-                .addGap(306, 306, 306)
-                .addComponent(status_label8, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                .addGap(306, 306, 306))
-        );
-        jPanelCallLogsLayout.setVerticalGroup(
-            jPanelCallLogsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelCallLogsLayout.createSequentialGroup()
-                .addGap(211, 211, 211)
-                .addComponent(status_label8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(219, 219, 219))
-        );
-
-        jTabbedPane1.addTab("Call Logs", jPanelCallLogs);
+        mainTabbedPane.addTab("Options", jPanelOptions);
 
         status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
         status_label.setText("Welcome to IPDdump - http://code.google.com/p/ipddump/");
@@ -598,18 +658,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(status_label, javax.swing.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
+            .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+                .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(status_label)
                 .addContainerGap())
         );
 
-        jTabbedPane1.getAccessibleContext().setAccessibleName("tabbedPane");
+        mainTabbedPane.getAccessibleContext().setAccessibleName("tabbedPane");
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         setBounds((screenSize.width-762)/2, (screenSize.height-560)/2, 762, 560);
@@ -642,15 +702,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         ContactsDataModel = jTableContacts.getModel();
         MemosDataModel = jTableMemos.getModel();
         TasksDataModel = jTableTasks.getModel();
+        CallLogsDataModel = jTableCallLogs.getModel();
 
-        SMStabINDEX = jTabbedPane1.indexOfTab("SMS");
-        ContactstabINDEX = jTabbedPane1.indexOfTab("Contacts");
-        CalendartabINDEX = jTabbedPane1.indexOfTab("Calendar");
-        TaskstabINDEX = jTabbedPane1.indexOfTab("Tasks");
-        OptionstabINDEX = jTabbedPane1.indexOfTab("Options");
-        MemostabINDEX = jTabbedPane1.indexOfTab("Memos");
-        CallLogstabINDEX = jTabbedPane1.indexOfTab("Call Logs");
-        ActiveTAB = jTabbedPane1.getSelectedIndex();
+        SMStabINDEX = mainTabbedPane.indexOfTab("SMS");
+        ContactstabINDEX = mainTabbedPane.indexOfTab("Contacts");
+        CalendartabINDEX = mainTabbedPane.indexOfTab("Calendar");
+        TaskstabINDEX = mainTabbedPane.indexOfTab("Tasks");
+        OptionstabINDEX = mainTabbedPane.indexOfTab("Options");
+        MemostabINDEX = mainTabbedPane.indexOfTab("Memos");
+        CallLogstabINDEX = mainTabbedPane.indexOfTab("Call Logs");
+        ActiveTAB = mainTabbedPane.getSelectedIndex();
 
         status_label.setText(welcome);
         saveAsMenuItem.setEnabled(false);
@@ -688,6 +749,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             Memos = new MemosWriters(database);
             totalMemos = Memos.getSize();
 
+            CallLogs = new CallLogsWriters(database);
+            totalCallLogs = CallLogs.getSize();
+
             Tasks = new TasksWriters(database);
             totalTasks = Tasks.getSize();
 
@@ -702,14 +766,32 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         fillContactsTable();
         fillMemosTable();
         fillTasksTable();
+        fillCallLogsTable();
 
         saveAsMenuItem.setEnabled(true);
+    }
+
+    private void fillCallLogsTable() {
+        CallLogsTablePrepair();
+
+        mainTabbedPane.setTitleAt(CallLogstabINDEX, "Call Logs (" + totalCallLogs + ")");
+        int i = 0;
+
+        for (CallLog record : database.callLogs()) {
+
+            CallLogsDataModel.setValueAt(record.getName(), i, CallLogsNameIndex);
+            CallLogsDataModel.setValueAt(record.getDate().toString(), i, CallLogsDateIndex);
+            CallLogsDataModel.setValueAt(record.getStatus(), i, CallLogsStatusIndex);
+            CallLogsDataModel.setValueAt(record.getDuration(), i, CallLogsDurationIndex);
+            i++;//Go to next Line in the table
+
+        }
     }
 
     private void fillSMSTable() {
 
         smsTablePrepair();
-        jTabbedPane1.setTitleAt(SMStabINDEX, "SMS (" + totalSMS + ")");
+        mainTabbedPane.setTitleAt(SMStabINDEX, "SMS (" + totalSMS + ")");
         int i = 0;
         String sSent = "";
         String Name = "";
@@ -737,7 +819,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private void fillContactsTable() {
 
         ContactsTablePrepair();
-        jTabbedPane1.setTitleAt(ContactstabINDEX, "Contacts (" + totalContacts + ")");
+        mainTabbedPane.setTitleAt(ContactstabINDEX, "Contacts (" + totalContacts + ")");
         int i = 0;
 
         for (Contact record : database.contacts()) {
@@ -754,7 +836,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void fillMemosTable() {
         MemoTablePrepair();
-        jTabbedPane1.setTitleAt(MemostabINDEX, "Memos (" + totalMemos + ")");
+        mainTabbedPane.setTitleAt(MemostabINDEX, "Memos (" + totalMemos + ")");
         int i = 0;
 
         for (Memo record : database.memos()) {
@@ -767,7 +849,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void fillTasksTable() {
         TasksTablePrepair();
-        jTabbedPane1.setTitleAt(TaskstabINDEX, "Tasks (" + totalTasks + ")");
+        mainTabbedPane.setTitleAt(TaskstabINDEX, "Tasks (" + totalTasks + ")");
         int i = 0;
 
         for (Task record : database.tasks()) {
@@ -791,7 +873,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         SMSSelectedRows = jTableSMS.getSelectedRows();
         ContactsSelectedRows = jTableContacts.getSelectedRows();
         MemosSelectedRows = jTableMemos.getSelectedRows();
-        ActiveTAB = jTabbedPane1.getSelectedIndex();
+        ActiveTAB = mainTabbedPane.getSelectedIndex();
 
 
         if (ActiveTAB == SMStabINDEX && totalSMS != 0 && SMSSelectedRows.length > 0) {
@@ -834,6 +916,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                     fileWriter.writeXMLtoFile(fileToSave, Tasks.toXML(TasksSelectedRows));
                 }
             }
+        } else if (ActiveTAB == CallLogstabINDEX && totalCallLogs != 0 && CallLogsSelectedRows.length > 0) {
+            if (saveDialog()) {
+                if (ext.equalsIgnoreCase("txt")) {
+                    fileWriter.writeTextToFile(fileToSave, CallLogs.toPlainText(CallLogsSelectedRows), ".txt");
+                } else if (ext.equalsIgnoreCase("csv")) {
+                    fileWriter.writeTextToFile(fileToSave, CallLogs.toCSV(CallLogsSelectedRows), ".csv");
+                } else if (ext.equalsIgnoreCase("xml")) {
+                    fileWriter.writeXMLtoFile(fileToSave, CallLogs.toXML(CallLogsSelectedRows));
+                }
+            }
         } else {
             JOptionPane.showMessageDialog(MessageFrame, "Select the items you want to save");
         }
@@ -871,6 +963,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
             tmp = Tasks.toXML(TasksSelectedRows).asXML();
             viewer.setTitle("Tasks Viewer - XML");
+        } else if (ActiveTAB == CallLogstabINDEX && totalCallLogs != 0 && CallLogsSelectedRows.length > 0) {
+            tmp = CallLogs.toXML(CallLogsSelectedRows).asXML();
+            viewer.setTitle("Call Logs Viewer - XML");
         }
 
 
@@ -893,6 +988,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
             tmp = Tasks.toPlainText(TasksSelectedRows);
             viewer.setTitle("Tasks Viewer - Plain Text");
+        } else if (ActiveTAB == CallLogstabINDEX && totalCallLogs != 0 && CallLogsSelectedRows.length > 0) {
+            tmp = CallLogs.toPlainText(CallLogsSelectedRows);
+            viewer.setTitle("Call Logs Viewer -  Plain Text");
         }
 
         viewer.setTxt(tmp);
@@ -915,6 +1013,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
             tmp = Tasks.toCSV(TasksSelectedRows);
             viewer.setTitle("Tasks Viewer - Csv");
+        } else if (ActiveTAB == CallLogstabINDEX && totalCallLogs != 0 && CallLogsSelectedRows.length > 0) {
+            tmp = CallLogs.toCSV(CallLogsSelectedRows);
+            viewer.setTitle("Call Logs Viewer - Csv");
         }
 
         viewer.setCvs(tmp);
@@ -932,6 +1033,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             tmp = Memos.toPlainText(MemosSelectedRows);
         } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
             tmp = Tasks.toPlainText(TasksSelectedRows);
+        } else if (ActiveTAB == CallLogstabINDEX && totalCallLogs != 0 && CallLogsSelectedRows.length > 0) {
+            tmp = CallLogs.toPlainText(CallLogsSelectedRows);
         }
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPTXTActionPerformed
@@ -946,6 +1049,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             tmp = Memos.toXML(MemosSelectedRows).asXML();
         } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
             tmp = Tasks.toXML(TasksSelectedRows).asXML();
+        } else if (ActiveTAB == CallLogstabINDEX && totalCallLogs != 0 && CallLogsSelectedRows.length > 0) {
+            tmp = CallLogs.toXML(CallLogsSelectedRows).asXML();
         }
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPXMLActionPerformed
@@ -961,6 +1066,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             tmp = Memos.toCSV(MemosSelectedRows);
         } else if (ActiveTAB == TaskstabINDEX && totalTasks != 0 && TasksSelectedRows.length > 0) {
             tmp = Tasks.toCSV(TasksSelectedRows);
+        } else if (ActiveTAB == CallLogstabINDEX && totalCallLogs != 0 && CallLogsSelectedRows.length > 0) {
+            tmp = CallLogs.toCSV(CallLogsSelectedRows);
         }
         setClipboardContents(tmp);
 }//GEN-LAST:event_jMenuItemCPCSVActionPerformed
@@ -971,16 +1078,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private void tableClick(java.awt.event.MouseEvent evt) {
         int[] SelectedRows = new int[0];
         String evtObj = null;
-        ActiveTAB = jTabbedPane1.getSelectedIndex();
+        ActiveTAB = mainTabbedPane.getSelectedIndex();
 
         if (ActiveTAB == SMStabINDEX) {
             SelectedRows = SMSSelectedRows = jTableSMS.getSelectedRows();
             evtObj = "SMS";
             jPopupMenu.remove(jMenuSpSMS);
+            jPopupMenu.remove(jMenuSpCallLogs);
         } else if (ActiveTAB == ContactstabINDEX) {
             SelectedRows = ContactsSelectedRows = jTableContacts.getSelectedRows();
             evtObj = "Contacts";
             jPopupMenu.add(jMenuSpSMS);
+            jPopupMenu.add(jMenuSpCallLogs);
         } else if (ActiveTAB == MemostabINDEX) {
             SelectedRows = MemosSelectedRows = jTableMemos.getSelectedRows();
             evtObj = "Memos";
@@ -989,6 +1098,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             SelectedRows = TasksSelectedRows = jTableTasks.getSelectedRows();
             evtObj = "Tasks";
             jPopupMenu.remove(jMenuSpSMS);
+            jPopupMenu.remove(jMenuSpCallLogs);
+        } else if (ActiveTAB == CallLogstabINDEX) {
+            SelectedRows = CallLogsSelectedRows = jTableCallLogs.getSelectedRows();
+            evtObj = "Call Logs";
+            jPopupMenu.remove(jMenuSpSMS);
+            jPopupMenu.remove(jMenuSpCallLogs);
         }
 
         if (evt.getButton() == MouseEvent.BUTTON3 && SelectedRows.length > 0) {
@@ -1025,9 +1140,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jTableTasksMouseClicked
 
     private void jMenuItemSelectedSMSTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedSMSTxtActionPerformed
-        int[] selectedSMS = finder.findSmsByContacts(ContactsSelectedRows);
-        if (selectedSMS.length != 0) {
-            String tmp = SMS.toPlainText(selectedSMS);
+        int[] selectedRows = null;
+        if (ActiveTAB == ContactstabINDEX) {
+            selectedRows = finder.findSmsByContacts(ContactsSelectedRows);
+        }
+        
+        if (selectedRows.length != 0) {
+            String tmp = SMS.toPlainText(selectedRows);
             viewer.setTitle("SMS Viewer - Plain Text");
             viewer.setTxt(tmp);
             viewer.setVisible(true);
@@ -1056,21 +1175,115 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             viewer.setTxt(tmp);
             viewer.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found!");
+            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found for this Contact!");
         }
 }//GEN-LAST:event_jMenuItemSelectedSMSCSVActionPerformed
+
+    private void jTableCallLogsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableCallLogsMouseClicked
+        tableClick(evt);
+    }//GEN-LAST:event_jTableCallLogsMouseClicked
+
+    private void jMenuItemSelectedCallLogsTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedCallLogsTextActionPerformed
+        int[] selectedRows = null;
+        if (ActiveTAB == ContactstabINDEX) {
+            selectedRows = finder.findCallLogsByContacts(ContactsSelectedRows);
+        }
+
+        if (selectedRows.length != 0) {
+            String tmp = CallLogs.toPlainText(selectedRows);
+            viewer.setTitle("Call Logs Viewer - Plain Text");
+            viewer.setTxt(tmp);
+            viewer.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(MessageFrame, "No Call Logs were found for this Contact!");
+        }
+}//GEN-LAST:event_jMenuItemSelectedCallLogsTextActionPerformed
+
+    private void jMenuItemSelectedCallLogsXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedCallLogsXMLActionPerformed
+        int[] selectedRows = null;
+        if (ActiveTAB == ContactstabINDEX) {
+            selectedRows = finder.findCallLogsByContacts(ContactsSelectedRows);
+        }
+
+        if (selectedRows.length != 0) {
+            String tmp = CallLogs.toXML(selectedRows).asXML();
+            viewer.setTitle("Call Logs Viewer - XML");
+            viewer.setTxt(tmp);
+            viewer.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(MessageFrame, "No Call Logs were found for this Contact!");
+        }
+}//GEN-LAST:event_jMenuItemSelectedCallLogsXMLActionPerformed
+
+    private void jMenuItemSelectedCallLogsCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectedCallLogsCSVActionPerformed
+               int[] selectedRows = null;
+        if (ActiveTAB == ContactstabINDEX) {
+            selectedRows = finder.findCallLogsByContacts(ContactsSelectedRows);
+        }
+
+        if (selectedRows.length != 0) {
+            String tmp = CallLogs.toCSV(selectedRows);
+            viewer.setTitle("Call Logs Viewer - CSV");
+            viewer.setTxt(tmp);
+            viewer.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(MessageFrame, "No Call Logs were found for this Contact!");
+        }
+}//GEN-LAST:event_jMenuItemSelectedCallLogsCSVActionPerformed
 
     /**
      * @param args the command line arguments
      */
-//    public static void main(String args[]) {
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new IpdDump_NewGUI().setVisible(true);
-//            }
-//        });
-//    }
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                new IpdDump_NewGUI().setVisible(true);
+            }
+        });
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Table Prepair Code - - NEED TO find alternative way of doing this??">
+    private void CallLogsTablePrepair() {
+        jTableCallLogs.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[totalCallLogs][3],
+                new String[]{
+                    "Name", "Date", "Status", "Duration"
+                }) {
+
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+
+        jTableCallLogs.getColumnModel().getColumn(0).setMinWidth(100);
+        jTableCallLogs.getColumnModel().getColumn(0).setPreferredWidth(170);
+        jTableCallLogs.getColumnModel().getColumn(0).setMaxWidth(300);
+        jTableCallLogs.getColumnModel().getColumn(1).setMinWidth(170);
+        jTableCallLogs.getColumnModel().getColumn(1).setPreferredWidth(180);
+        jTableCallLogs.getColumnModel().getColumn(1).setMaxWidth(300);
+        jTableCallLogs.getColumnModel().getColumn(2).setMinWidth(100);
+        jTableCallLogs.getColumnModel().getColumn(2).setPreferredWidth(100);
+        jTableCallLogs.getColumnModel().getColumn(2).setMaxWidth(300);
+        jTableCallLogs.getColumnModel().getColumn(3).setMinWidth(60);
+        jTableCallLogs.getColumnModel().getColumn(3).setPreferredWidth(60);
+        jTableCallLogs.getColumnModel().getColumn(3).setMaxWidth(60);
+
+
+        CallLogsDataModel = jTableCallLogs.getModel();
+    }
+
     private void TasksTablePrepair() {
 
         jTableTasks.setModel(new javax.swing.table.DefaultTableModel(
@@ -1239,11 +1452,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemCPTXT;
     private javax.swing.JMenuItem jMenuItemCPXML;
     private javax.swing.JMenuItem jMenuItemCSV;
+    private javax.swing.JMenuItem jMenuItemSelectedCallLogsCSV;
+    private javax.swing.JMenuItem jMenuItemSelectedCallLogsText;
+    private javax.swing.JMenuItem jMenuItemSelectedCallLogsXML;
     private javax.swing.JMenuItem jMenuItemSelectedSMSCSV;
     private javax.swing.JMenuItem jMenuItemSelectedSMSTxt;
     private javax.swing.JMenuItem jMenuItemSelectedSMSXML;
     private javax.swing.JMenuItem jMenuItemTxt;
     private javax.swing.JMenuItem jMenuItemXML;
+    private javax.swing.JMenu jMenuSpCallLogs;
     private javax.swing.JMenu jMenuSpSMS;
     private javax.swing.JPanel jPanelCalendar;
     private javax.swing.JPanel jPanelCallLogs;
@@ -1257,17 +1474,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTable jTableCallLogs;
     private javax.swing.JTable jTableContacts;
     private javax.swing.JTable jTableMemos;
     private javax.swing.JTable jTableSMS;
     private javax.swing.JTable jTableTasks;
+    private javax.swing.JTabbedPane mainTabbedPane;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JLabel status_label;
     private javax.swing.JLabel status_label6;
     private javax.swing.JLabel status_label7;
-    private javax.swing.JLabel status_label8;
     // End of variables declaration//GEN-END:variables
 }

@@ -156,15 +156,11 @@ public class InteractivePagerBackup {
             return record;
         } else if ("Time Zones".equals(databases.get(dbIndex))) {
             BBTimeZone record=new BBTimeZone(dbIndex, version, uid, length);
-
-            // System.out.println("------New TimeZone------");
             timeZones.add(record);
 
             return record;
         } else if ("Phone Call Logs".equals(databases.get(dbIndex))) {
             CallLog record=new CallLog(dbIndex, version, uid, length);
-
-             System.out.println("------New Call Log------");
             callLogs.add(record);
 
             return record;
