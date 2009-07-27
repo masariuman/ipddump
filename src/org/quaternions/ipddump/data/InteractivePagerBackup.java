@@ -2,8 +2,8 @@ package org.quaternions.ipddump.data;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.quaternions.ipddump.tools.Finder;
 import org.quaternions.ipddump.data.Records.*;
+import org.quaternions.ipddump.tools.Finder;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -81,7 +81,9 @@ public class InteractivePagerBackup {
     /**
      * Reports If there were Errors while parsing
      */
-    private boolean errorFlag=false;
+    private boolean errorFlag      =false;
+    private boolean debugingEnabled=false;
+    private boolean valuePeeking   =false;
 
     //~--- constructors -------------------------------------------------------
 
@@ -105,6 +107,10 @@ public class InteractivePagerBackup {
     }
 
     //~--- methods ------------------------------------------------------------
+
+    public void enableValuePeeking() {
+        valuePeeking=true;
+    }
 
     /**
      * Adds a new database to the list of contained databases.
@@ -140,21 +146,28 @@ public class InteractivePagerBackup {
          * Fix for bug #2, there might be an error in parsing, but for now, this seems to fix it.
          */
         if ((dbIndex>=databases.size()) || (dbIndex<0)) {
-            return new DummyRecord(dbIndex, version, uid, length);
+            if (valuePeeking || debugingEnabled) {
+                System.out.println("-------dbID: "+dbIndex+"-------");
+
+                return new DummyRecord(dbIndex, version, uid, length).enableValuePeeking();
+            } else {
+                return new DummyRecord(dbIndex, version, uid, length).disableValuePeeking();
+            }
         } else if ("SMS Messages".equals(databases.get(dbIndex))) {
             SMSMessage record=new SMSMessage(dbIndex, version, uid, length);
 
             smsRecords.add(record);
 
             return record;
-        } else if ("Address Book".equals(databases.get(dbIndex)) || "Quick Contacts".equals(databases.get(dbIndex))) {
+        } else if ("Address Book".equals(databases.get(dbIndex))) {
             Contact record=new Contact(dbIndex, version, uid, length);
 
             contacts.add(record);
 
             return record;
         } else if ("Memos".equals(databases.get(dbIndex))) {
-            org.quaternions.ipddump.data.Records.Memo record=new org.quaternions.ipddump.data.Records.Memo(dbIndex, version, uid, length);
+            org.quaternions.ipddump.data.Records.Memo record=new org.quaternions.ipddump.data.Records.Memo(dbIndex,
+                                                                 version, uid, length);
 
             memos.add(record);
 
@@ -186,8 +199,18 @@ public class InteractivePagerBackup {
 //
 //              return record;
         } else {
-            return new DummyRecord(dbIndex, version, uid, length);
+            if (valuePeeking) {
+                distinguishRecord(dbIndex);
+
+                return new DummyRecord(dbIndex, version, uid, length).enableValuePeeking();
+            } else {
+                return new DummyRecord(dbIndex, version, uid, length).disableValuePeeking();
+            }
         }
+    }
+
+    public void enableDebuging() {
+        debugingEnabled=true;
     }
 
     //~--- get methods --------------------------------------------------------

@@ -734,7 +734,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             String[] args = {IpdChooser.getSelectedFile().getPath()};
             try {
                 IPDParser parser = new IPDParser(args[0]);
-                parser.enableDebuging(); // TODO: Comment This Line Before Publish
+                //parser.enableDebuging(); // TODO: Comment This Line Before Publish
+                //parser.enableValuePeeking(); // TODO: Comment This Line Before Publish
                 database = parser.parse();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(MessageFrame, "ERROR: " + ex.getMessage());

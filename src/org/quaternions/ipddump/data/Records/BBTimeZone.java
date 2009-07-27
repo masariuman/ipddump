@@ -69,10 +69,6 @@ public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
 
         timezoneOfset=timezoneOfset / 60.0;
 
-        // timezoneOfset=-1.5;
-        // timezoneOfset=1.5;
-        System.out.println(timezoneOfset);
-
         if (timezoneOfset % 1==0) {
             if ((timezoneOfset>=0)) {
                 temp=String.format("(%+2.0f)", timezoneOfset);
