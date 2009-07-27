@@ -1,7 +1,5 @@
 package org.quaternions.ipddump.data.Records;
 
-import org.quaternions.ipddump.data.*;
-
 /**
  * A memo is a record with title and text.
  *
@@ -9,9 +7,8 @@ import org.quaternions.ipddump.data.*;
  * @date Jun 20, 2009
  */
 public class Memo extends Record implements Comparable<Memo> {
-    protected String                    text="";
-
-    protected String                    title="ERROR";
+    protected String text ="";
+    protected String title="ERROR";
 
     //~--- constructors -------------------------------------------------------
 
@@ -33,13 +30,15 @@ public class Memo extends Record implements Comparable<Memo> {
     public void addField(int type, char[] data) {
         switch (type) {
         case 1 :
-            title = makeString(data);
+            title=makeString(data);
             fields.put("Title", title);
+
             break;
 
         case 2 :
-            text = makeString(data);
+            text=makeString(data);
             fields.put("Memo", text);
+
             break;
 
         case 3 :
@@ -51,17 +50,17 @@ public class Memo extends Record implements Comparable<Memo> {
 
     @Override
     public int compareTo(Memo o) {
-      return getTitle().compareTo(o.getTitle());
+        return getTitle().compareTo(o.getTitle());
     }
 
     //~--- get methods --------------------------------------------------------
 
     public String getMemo() {
-      return text;
+        return text;
     }
 
     public String getTitle() {
-      return title;
+        return title;
     }
 
     //~--- methods ------------------------------------------------------------

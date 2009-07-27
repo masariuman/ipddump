@@ -1,9 +1,5 @@
 package org.quaternions.ipddump.data.Records;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.quaternions.ipddump.data.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.awt.Image;

@@ -1,9 +1,5 @@
 package org.quaternions.ipddump.data.Records;
 
-import org.quaternions.ipddump.data.*;
-import java.util.Date;
-import java.util.TimeZone;
-
 /**
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
@@ -26,7 +22,7 @@ public class Task extends Record implements Comparable<Task> {
     super(dbID, dbVersion, uid, recordLength);
   }
 
-  @Override
+  
   public void addField(int type, char[] data) {
     switch (type) {
     case 1:

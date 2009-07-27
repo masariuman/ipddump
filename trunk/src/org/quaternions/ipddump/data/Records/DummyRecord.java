@@ -34,7 +34,7 @@ public class DummyRecord extends Record {
 
     @Override
     public void addField(int type, char[] data) {
-        fields.add(""+type+"|"+new String(data));
+        fields.add(type+"|"+ makeString(data));
     }
 
     @Override

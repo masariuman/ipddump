@@ -760,7 +760,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
             fillTables();
             long endTime = System.currentTimeMillis() - startTime;
-            status_label.setText(welcomeMsg + " -->Time of load: " + (endTime / 1000.0) + "sec");
+            status_label.setText(welcomeMsg + " --> Load Time: " + (endTime / 1000.0) + "sec");
         } else {
             status_label.setText(welcomeMsg);
         }
