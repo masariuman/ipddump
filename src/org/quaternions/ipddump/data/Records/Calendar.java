@@ -2,9 +2,7 @@ package org.quaternions.ipddump.data.Records;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import org.quaternions.ipddump.data.*;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  *
@@ -84,7 +82,8 @@ public class Calendar extends Record implements Comparable<Calendar> {
             break;
 
         case 7 :
-            fields.put("EndDate", new Date((long)(makeInt(data)) * 60 * 1000-2208970740000L-28*61 * 60 * 1000).toString());
+            fields.put("EndDate",
+                       new Date((long) (makeInt(data)) * 60 * 1000-2208970740000L-28 * 61 * 60 * 1000).toString());
             viewItInInt(type, data);
             System.out.println(getField("EndDate"));
 

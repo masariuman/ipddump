@@ -1,9 +1,11 @@
 package org.quaternions.ipddump.data.Records;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.quaternions.ipddump.tools.Gsm2Iso;
+
 //~--- JDK imports ------------------------------------------------------------
 
-import org.quaternions.ipddump.data.*;
-import org.quaternions.ipddump.tools.Gsm2Iso;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -15,6 +17,7 @@ import java.util.HashMap;
  * @date Jan 1, 2008
  */
 public class SMSMessage extends Record implements Comparable<SMSMessage> {
+
     /**
      * The date the SMS was sent;
      */
@@ -39,7 +42,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
      * The text of the SMS.
      */
     protected String decodedSMS="ERROR";
-    private char[] nonDecodedSms;
+    private char[]   nonDecodedSms;
 
     //~--- constructors -------------------------------------------------------
 
@@ -65,9 +68,10 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
         switch (type) {
         case 4 :
             this.nonDecodedSms=data.clone();
-            decodedSMS= Gsm2Iso.Gsm2Iso(data);
-            fields.put( "text", decodedSMS);
-//            viewIt(type, text);
+            decodedSMS        =Gsm2Iso.Gsm2Iso(data);
+            fields.put("text", decodedSMS);
+
+//          viewIt(type, text);
             break;
 
         case 2 :
@@ -85,34 +89,43 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
             break;
 
-        case 9 :{
-//            viewIt(type, data);
+        case 9 : {
+
+//          viewIt(type, data);
             // This is a sequence number and we don't care about it for now.
             // The sequence number seems to apply only if it was sent from the
             // phone in the IPD.
-            break;}
+            break;
+        }
 
-        case 7 :{
-            //This marks a USC2 text field
+        case 7 : {
+
+            // This marks a USC2 text field
             if (String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")
-                ||String.format("%h", String.valueOf(data)).equalsIgnoreCase("fbcca65e")){
-                 //System.out.print("UCS2: ");viewItInHex(type, data);
-                if (fields.containsKey("text")){
-                fields.remove("text");
+                    || String.format("%h", String.valueOf(data)).equalsIgnoreCase("fbcca65e")) {
+
+                // System.out.print("UCS2: ");viewItInHex(type, data);
+                if (fields.containsKey("text")) {
+                    fields.remove("text");
                 }
+
                 decodedSMS=Gsm2Iso.UCS2toISO(this.nonDecodedSms);
                 fields.put("text", decodedSMS);
             } else {
-            //viewItInHex(type, data);//TODO: remove this on release
-            }
-          
-            break;}
 
-        case 11 :{
-//            viewIt(type, data);
+                // viewItInHex(type, data);//TODO: remove this on release
+            }
+
+            break;
+        }
+
+        case 11 : {
+
+//          viewIt(type, data);
             // This is also inconsequential, for me it's 0000 for the first sms,
             // 1000 for all the rest
-            break;}
+            break;
+        }
 
         case 1 :
             long val0=0;
@@ -143,15 +156,15 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
             break;
 
-            default :
-//               viewIt(type, data);
+        default :
 
+//      viewIt(type, data);
         }
     }
 
     @Override
     public int compareTo(SMSMessage o) {
-            return received.compareTo(o.received);
+        return received.compareTo(o.received);
     }
 
     //~--- get methods --------------------------------------------------------

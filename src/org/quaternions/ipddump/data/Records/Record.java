@@ -1,8 +1,11 @@
 package org.quaternions.ipddump.data.Records;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
 import org.quaternions.ipddump.tools.GeneralToolBox;
+
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

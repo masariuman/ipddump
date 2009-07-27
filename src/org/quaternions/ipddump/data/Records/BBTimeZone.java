@@ -1,7 +1,5 @@
 package org.quaternions.ipddump.data.Records;
 
-import org.quaternions.ipddump.data.*;
-
 /**
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
@@ -38,6 +36,7 @@ public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
 
             fields.put("TimeZoneID", String.valueOf(timezone));
         }
+
         break;
 
         case 2 :

@@ -2,7 +2,6 @@ package org.quaternions.ipddump.data.Records;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import org.quaternions.ipddump.data.*;
 import java.util.Date;
 
 /**
@@ -74,7 +73,7 @@ public class CallLog extends Record implements Comparable<CallLog> {
             } else if (makeInt(data)==2) {
                 fields.put("Status", "Placed, Not Answered");
             } else if (makeInt(data)==3) {
-                fields.put("Status", "Missed Call");//Diference?
+                fields.put("Status", "Missed Call");    // Diference?
             }
 
             break;
@@ -141,7 +140,6 @@ public class CallLog extends Record implements Comparable<CallLog> {
 
         return "Name: "+getField("Name")+"\nNumber: "+getNumber();
     }
-
 
     public String getNumber() {
         return getField("Number");
