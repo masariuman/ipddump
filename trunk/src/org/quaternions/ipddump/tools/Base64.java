@@ -1,4 +1,4 @@
-package org.quaternions.ipddump.data;
+package org.quaternions.ipddump.tools;
 
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>

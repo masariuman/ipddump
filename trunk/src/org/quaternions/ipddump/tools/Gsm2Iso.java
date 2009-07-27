@@ -1,4 +1,4 @@
-package org.quaternions.ipddump.data;
+package org.quaternions.ipddump.tools;
 /**
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com

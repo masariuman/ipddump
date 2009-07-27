@@ -1,7 +1,9 @@
-package org.quaternions.ipddump.data;
+package org.quaternions.ipddump.data.Records;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import org.quaternions.ipddump.data.*;
+import org.quaternions.ipddump.tools.Gsm2Iso;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -49,7 +51,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
      * @param uid The unique identifier of this record
      * @param recordLength The length of the record
      */
-    SMSMessage(int dbID, int dbVersion, int uid, int recordLength) {
+    public SMSMessage(int dbID, int dbVersion, int uid, int recordLength) {
         super(dbID, dbVersion, uid, recordLength);
         fields=new HashMap<String, String>();
     }

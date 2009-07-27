@@ -1,4 +1,4 @@
-package org.quaternions.ipddump.data;
+package org.quaternions.ipddump.data.Records;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -26,7 +26,7 @@ public class DummyRecord extends Record {
      * @param uid The unique identifier of this record
      * @param recordLength The length of the record
      */
-    DummyRecord(int dbID, int dbVersion, int uid, int recordLength) {
+    public DummyRecord(int dbID, int dbVersion, int uid, int recordLength) {
         super(dbID, dbVersion, uid, recordLength);
     }
 

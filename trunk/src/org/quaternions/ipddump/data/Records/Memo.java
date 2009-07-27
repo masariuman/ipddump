@@ -1,4 +1,6 @@
-package org.quaternions.ipddump.data;
+package org.quaternions.ipddump.data.Records;
+
+import org.quaternions.ipddump.data.*;
 
 /**
  * A memo is a record with title and text.
@@ -21,7 +23,7 @@ public class Memo extends Record implements Comparable<Memo> {
      * @param uid The unique identifier of this record
      * @param recordLength The length of the record
      */
-    Memo(int dbID, int dbVersion, int uid, int recordLength) {
+    public Memo(int dbID, int dbVersion, int uid, int recordLength) {
         super(dbID, dbVersion, uid, recordLength);
     }
 
@@ -67,10 +69,5 @@ public class Memo extends Record implements Comparable<Memo> {
     @Override
     public String toString() {
         return getTitle()+": "+getMemo();
-    }
-
-    protected String makeString(char[] data) {
-        String str=Gsm2Iso.Gsm2Iso(data);
-        return str.substring(0, str.length()-1);
     }
 }

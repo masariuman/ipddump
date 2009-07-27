@@ -1,11 +1,11 @@
-package org.quaternions.ipddump.writers;
+package org.quaternions.ipddump.tools.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.dom4j.*;
 
+import org.quaternions.ipddump.data.Records.Contact;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
-import org.quaternions.ipddump.data.Task;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -18,25 +18,24 @@ import java.util.TreeSet;
 
 /**
  *
- * @author Jimmys Daskalakis
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  */
-public class TasksWriters extends BasicWriter {
-    public TasksWriters(InteractivePagerBackup database) {
+public class ContactsWriters extends BasicWriter {
+    public ContactsWriters(InteractivePagerBackup database) {
         super(database);
     }
 
     //~--- get methods --------------------------------------------------------
 
     /**
-     * Method description
+     * Returns the total of the SMS messages
      *
      *
      * @return
      */
-    @Override
     public int getSize() {
         if (database!=null) {
-            return database.tasks().size();
+            return database.contacts().size();
         } else {
             return 0;
         }
@@ -48,15 +47,12 @@ public class TasksWriters extends BasicWriter {
      * Method description
      *
      *
-     * @param selectedRecords
+     * @param selectedContacts
      *
      * @return
      */
-    @Override
-    public String toCSV(int[] selectedRecords) {
+    public String toCSV(int[] selectedContacts) {
         StringBuilder builder=new StringBuilder();    // fast builder!!
-
-        builder.delete(0, builder.capacity());
 
         /*
          * Get all the keys since we don't know all of them ahead
@@ -64,7 +60,7 @@ public class TasksWriters extends BasicWriter {
          */
         Set<String> keys=new TreeSet<String>();
 
-        for (Task record : database.tasks()) {
+        for (Contact record : database.contacts()) {
             keys.addAll(record.fields().keySet());
         }
 
@@ -85,9 +81,8 @@ public class TasksWriters extends BasicWriter {
 
         builder.append("\n");
 
-        for (Task record : database.tasks()) {
-            if (isSelectedRecord(RecordIndex, selectedRecords) && (selectedRecords[j]<database.tasks().size())) {
-                j++;
+        for (Contact record : database.contacts()) {
+            if (isSelectedRecord(RecordIndex, selectedContacts) && (selectedContacts[j]<database.contacts().size())) {
                 first=true;
 
                 Map<String, String> fields=record.fields();
@@ -107,8 +102,9 @@ public class TasksWriters extends BasicWriter {
                 }
 
                 builder.append("\n");
+                j++;
 
-                if (j>=selectedRecords.length) {
+                if (j>=selectedContacts.length) {
                     break;
                 }
             }
@@ -123,22 +119,19 @@ public class TasksWriters extends BasicWriter {
      * Method description
      *
      *
-     * @param SelectedRecords
+     * @param selectedContacts
      *
      * @return
      */
-    @Override
-    public String toPlainText(int[] SelectedRecords) {
+    public String toPlainText(int[] selectedContacts) {
         StringBuilder tmp=new StringBuilder();
 
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;
 
-            for (Task record : database.tasks()) {
-                if (isSelectedRecord(RecordIndex, SelectedRecords) && (SelectedRecords[j]<database.tasks().size())) {
-                    j++;
-
+            for (Contact record : database.contacts()) {
+                if (isSelectedRecord(RecordIndex, selectedContacts) && (selectedContacts[j]<database.contacts().size())) {
                     Iterator iterator2=record.fields().entrySet().iterator();
 
                     for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
@@ -148,8 +141,9 @@ public class TasksWriters extends BasicWriter {
                     }
 
                     tmp.append("\n");
+                    j++;
 
-                    if (j>=SelectedRecords.length) {
+                    if (j>=selectedContacts.length) {
                         break;
                     }
                 }
@@ -167,23 +161,22 @@ public class TasksWriters extends BasicWriter {
      * Method description
      *
      *
-     * @param SelectedRecords
+     * @param selectedMessages
      *
      * @return
      */
-    @Override
-    public Document toXML(int[] SelectedRecords) {
+    public Document toXML(int[] selectedMessages) {
         Document document=DocumentHelper.createDocument();
 
         // Add the root
-        Element root       =document.addElement("Tasks").addAttribute("TotalTasks",
-                                String.valueOf(SelectedRecords.length));
-        int     RecordIndex=0;
-        int     j          =0;
+        Element root=document.addElement("Contacts").addAttribute("TotalContacts",
+                                         String.valueOf(selectedMessages.length));
+        int RecordIndex=0;
+        int j          =0;
 
-        for (Task record : database.tasks()) {
-            if (isSelectedRecord(RecordIndex, SelectedRecords) && (SelectedRecords[j]<database.tasks().size())) {
-                Element  message  =root.addElement("Task").addAttribute("UID", String.valueOf(record.getUID()));
+        for (Contact record : database.contacts()) {
+            if (isSelectedRecord(RecordIndex, selectedMessages) && (selectedMessages[j]<database.contacts().size())) {
+                Element  message  =root.addElement("Contact").addAttribute("UID", String.valueOf(record.getUID()));
                 Iterator iterator2=record.fields().entrySet().iterator();
 
                 for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
@@ -196,7 +189,7 @@ public class TasksWriters extends BasicWriter {
 
                 j++;
 
-                if (j>=SelectedRecords.length) {
+                if (j>=selectedMessages.length) {
                     break;
                 }
             }

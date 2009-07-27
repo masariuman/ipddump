@@ -1,11 +1,11 @@
-package org.quaternions.ipddump.writers;
+package org.quaternions.ipddump.tools.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.dom4j.*;
 
-import org.quaternions.ipddump.data.Contact;
 import org.quaternions.ipddump.data.InteractivePagerBackup;
+import org.quaternions.ipddump.data.Records.Task;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -18,24 +18,25 @@ import java.util.TreeSet;
 
 /**
  *
- * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
+ * @author Jimmys Daskalakis
  */
-public class ContactsWriters extends BasicWriter {
-    public ContactsWriters(InteractivePagerBackup database) {
+public class TasksWriters extends BasicWriter {
+    public TasksWriters(InteractivePagerBackup database) {
         super(database);
     }
 
     //~--- get methods --------------------------------------------------------
 
     /**
-     * Returns the total of the SMS messages
+     * Method description
      *
      *
      * @return
      */
+    @Override
     public int getSize() {
         if (database!=null) {
-            return database.contacts().size();
+            return database.getTasks().size();
         } else {
             return 0;
         }
@@ -47,12 +48,15 @@ public class ContactsWriters extends BasicWriter {
      * Method description
      *
      *
-     * @param selectedContacts
+     * @param selectedRecords
      *
      * @return
      */
-    public String toCSV(int[] selectedContacts) {
+    @Override
+    public String toCSV(int[] selectedRecords) {
         StringBuilder builder=new StringBuilder();    // fast builder!!
+
+        builder.delete(0, builder.capacity());
 
         /*
          * Get all the keys since we don't know all of them ahead
@@ -60,7 +64,7 @@ public class ContactsWriters extends BasicWriter {
          */
         Set<String> keys=new TreeSet<String>();
 
-        for (Contact record : database.contacts()) {
+        for (Task record : database.getTasks()) {
             keys.addAll(record.fields().keySet());
         }
 
@@ -81,8 +85,9 @@ public class ContactsWriters extends BasicWriter {
 
         builder.append("\n");
 
-        for (Contact record : database.contacts()) {
-            if (isSelectedRecord(RecordIndex, selectedContacts) && (selectedContacts[j]<database.contacts().size())) {
+        for (Task record : database.getTasks()) {
+            if (isSelectedRecord(RecordIndex, selectedRecords) && (selectedRecords[j]<database.getTasks().size())) {
+                j++;
                 first=true;
 
                 Map<String, String> fields=record.fields();
@@ -102,9 +107,8 @@ public class ContactsWriters extends BasicWriter {
                 }
 
                 builder.append("\n");
-                j++;
 
-                if (j>=selectedContacts.length) {
+                if (j>=selectedRecords.length) {
                     break;
                 }
             }
@@ -119,19 +123,22 @@ public class ContactsWriters extends BasicWriter {
      * Method description
      *
      *
-     * @param selectedContacts
+     * @param SelectedRecords
      *
      * @return
      */
-    public String toPlainText(int[] selectedContacts) {
+    @Override
+    public String toPlainText(int[] SelectedRecords) {
         StringBuilder tmp=new StringBuilder();
 
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;
 
-            for (Contact record : database.contacts()) {
-                if (isSelectedRecord(RecordIndex, selectedContacts) && (selectedContacts[j]<database.contacts().size())) {
+            for (Task record : database.getTasks()) {
+                if (isSelectedRecord(RecordIndex, SelectedRecords) && (SelectedRecords[j]<database.getTasks().size())) {
+                    j++;
+
                     Iterator iterator2=record.fields().entrySet().iterator();
 
                     for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
@@ -141,9 +148,8 @@ public class ContactsWriters extends BasicWriter {
                     }
 
                     tmp.append("\n");
-                    j++;
 
-                    if (j>=selectedContacts.length) {
+                    if (j>=SelectedRecords.length) {
                         break;
                     }
                 }
@@ -161,22 +167,23 @@ public class ContactsWriters extends BasicWriter {
      * Method description
      *
      *
-     * @param selectedMessages
+     * @param SelectedRecords
      *
      * @return
      */
-    public Document toXML(int[] selectedMessages) {
+    @Override
+    public Document toXML(int[] SelectedRecords) {
         Document document=DocumentHelper.createDocument();
 
         // Add the root
-        Element root=document.addElement("Contacts").addAttribute("TotalContacts",
-                                         String.valueOf(selectedMessages.length));
-        int RecordIndex=0;
-        int j          =0;
+        Element root       =document.addElement("Tasks").addAttribute("TotalTasks",
+                                String.valueOf(SelectedRecords.length));
+        int     RecordIndex=0;
+        int     j          =0;
 
-        for (Contact record : database.contacts()) {
-            if (isSelectedRecord(RecordIndex, selectedMessages) && (selectedMessages[j]<database.contacts().size())) {
-                Element  message  =root.addElement("Contact").addAttribute("UID", String.valueOf(record.getUID()));
+        for (Task record : database.getTasks()) {
+            if (isSelectedRecord(RecordIndex, SelectedRecords) && (SelectedRecords[j]<database.getTasks().size())) {
+                Element  message  =root.addElement("Task").addAttribute("UID", String.valueOf(record.getUID()));
                 Iterator iterator2=record.fields().entrySet().iterator();
 
                 for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
@@ -189,7 +196,7 @@ public class ContactsWriters extends BasicWriter {
 
                 j++;
 
-                if (j>=selectedMessages.length) {
+                if (j>=SelectedRecords.length) {
                     break;
                 }
             }

@@ -1,4 +1,6 @@
-package org.quaternions.ipddump.data;
+package org.quaternions.ipddump.data.Records;
+
+import org.quaternions.ipddump.data.*;
 
 /**
  *

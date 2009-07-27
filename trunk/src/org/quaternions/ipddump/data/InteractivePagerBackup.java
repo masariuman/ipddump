@@ -1,5 +1,10 @@
 package org.quaternions.ipddump.data;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import org.quaternions.ipddump.tools.Finder;
+import org.quaternions.ipddump.data.Records.*;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
@@ -26,47 +31,52 @@ public class InteractivePagerBackup {
     /**
      * The character used as the line feed.
      */
-    protected char lineFeed;
+    private char lineFeed;
 
     /**
      * The version of the IPD.
      */
-    protected final int version;
+    private final int version;
 
     /**
      * The list of databases, or rather the names of the databases.
      */
-    protected final List<String> databases;
+    private final List<String> databases;
 
     /**
      * The set of SMS messages.
      */
-    protected final List<SMSMessage> smsRecords;
+    private final List<SMSMessage> smsRecords;
 
     /**
      * The set of contacts.
      */
-    protected final List<Contact> contacts;
+    private final List<Contact> contacts;
+
+    /**
+     * The set of contacts.
+     */
+    private final List<Calendar> calendar;
 
     /**
      * The set of Tasks Entries.
      */
-    protected final List<Task> tasks;
+    private final List<Task> tasks;
 
     /**
      * The set of Memos.
      */
-    protected final List<Memo> memos;
+    private final List<Memo> memos;
 
     /**
      * The set of TimeZones.
      */
-    protected final List<BBTimeZone> timeZones;
+    private final List<BBTimeZone> timeZones;
 
     /**
      * The set of Phone Call Logs.
      */
-    protected final List<CallLog> callLogs;
+    private final List<CallLog> callLogs;
 
     /**
      * Reports If there were Errors while parsing
@@ -90,7 +100,8 @@ public class InteractivePagerBackup {
         tasks        =new ArrayList<Task>();
         memos        =new ArrayList<Memo>();
         timeZones    =new ArrayList<BBTimeZone>();
-        callLogs    =new ArrayList<CallLog>();
+        callLogs     =new ArrayList<CallLog>();
+        calendar     =new ArrayList<Calendar>();
     }
 
     //~--- methods ------------------------------------------------------------
@@ -143,7 +154,7 @@ public class InteractivePagerBackup {
 
             return record;
         } else if ("Memos".equals(databases.get(dbIndex))) {
-            Memo record=new Memo(dbIndex, version, uid, length);
+            org.quaternions.ipddump.data.Records.Memo record=new org.quaternions.ipddump.data.Records.Memo(dbIndex, version, uid, length);
 
             memos.add(record);
 
@@ -156,17 +167,47 @@ public class InteractivePagerBackup {
             return record;
         } else if ("Time Zones".equals(databases.get(dbIndex))) {
             BBTimeZone record=new BBTimeZone(dbIndex, version, uid, length);
+
             timeZones.add(record);
 
             return record;
         } else if ("Phone Call Logs".equals(databases.get(dbIndex))) {
             CallLog record=new CallLog(dbIndex, version, uid, length);
+
             callLogs.add(record);
 
             return record;
+
+//          } else if ("Calendar".equals(databases.get(dbIndex))) {
+//              Calendar record=new Calendar(dbIndex, version, uid, length);
+//
+//              distinguishRecord(dbIndex);
+//              calendar.add(record);
+//
+//              return record;
         } else {
             return new DummyRecord(dbIndex, version, uid, length);
         }
+    }
+
+    //~--- get methods --------------------------------------------------------
+
+    /**
+     * Gets the collection of the Calendar.
+     *
+     * @return An unmodifiable collection of Calendar records
+     */
+    public Collection<Calendar> getCalendar() {
+        return Collections.unmodifiableCollection(calendar);
+    }
+
+    /**
+     * Gets the collection of the Phone Call Logs.
+     *
+     * @return An unmodifiable collection of Phone Call Logs records
+     */
+    public Collection<CallLog> getCallLogs() {
+        return Collections.unmodifiableCollection(callLogs);
     }
 
     /**
@@ -174,7 +215,7 @@ public class InteractivePagerBackup {
      *
      * @return An unmodifiable list of database names
      */
-    public List<String> databaseNames() {
+    public List<String> getDatabaseNames() {
         return Collections.<String>unmodifiableList(databases);
     }
 
@@ -183,9 +224,38 @@ public class InteractivePagerBackup {
      *
      * @return An unmodifiable collection of memos
      */
-    public Collection<Memo> memos() {
+    public Collection<Memo> getMemos() {
         return Collections.<Memo>unmodifiableCollection(memos);
     }
+
+    /**
+     * Gets the collection of SMS records.
+     *
+     * @return An unmodifiable collection of SMS records
+     */
+    public Collection<SMSMessage> getSMSRecords() {
+        return Collections.<SMSMessage>unmodifiableCollection(smsRecords);
+    }
+
+    /**
+     * Gets the collection of task records.
+     *
+     * @return An unmodifiable collection of task records
+     */
+    public Collection<Task> getTasks() {
+        return Collections.unmodifiableCollection(tasks);
+    }
+
+    /**
+     * Gets the collection of the Time Zones records.
+     *
+     * @return An unmodifiable collection of Time Zones records
+     */
+    public Collection<BBTimeZone> getTimeZones() {
+        return Collections.unmodifiableCollection(timeZones);
+    }
+
+    //~--- methods ------------------------------------------------------------
 
     public void organize() {
         Collections.sort(memos);
@@ -194,12 +264,14 @@ public class InteractivePagerBackup {
         Collections.sort(contacts);
         Collections.sort(timeZones);
         Collections.sort(callLogs);
+        Collections.sort(calendar);
 
         Finder finder=new Finder(this);
 
-        for (Task recordt : this.tasks) { 
-                String name=finder.findTimeZoneByID(recordt.getTimeZone());
-                recordt.setTimeZoneName(name);
+        for (Task recordt : this.tasks) {
+            String name=finder.findTimeZoneByID(recordt.getTimeZone());
+
+            recordt.setTimeZoneName(name);
         }
     }
 
@@ -211,43 +283,11 @@ public class InteractivePagerBackup {
 
     //~--- methods ------------------------------------------------------------
 
-    /**
-     * Gets the collection of SMS records.
-     *
-     * @return An unmodifiable collection of SMS records
-     */
-    public Collection<SMSMessage> smsRecords() {
-        return Collections.<SMSMessage>unmodifiableCollection(smsRecords);
-    }
-
-    /**
-     * Gets the collection of task records.
-     *
-     * @return An unmodifiable collection of task records
-     */
-    public Collection<Task> tasks() {
-        return Collections.unmodifiableCollection(tasks);
-    }
-
-    /**
-     * Gets the collection of the Time Zones records.
-     *
-     * @return An unmodifiable collection of Time Zones records
-     */
-    public Collection<BBTimeZone> timeZones() {
-        return Collections.unmodifiableCollection(timeZones);
-    }
-
-    /**
-     * Gets the collection of the Phone Call Logs.
-     *
-     * @return An unmodifiable collection of Phone Call Logs records
-     */
-    public Collection<CallLog> callLogs() {
-        return Collections.unmodifiableCollection(callLogs);
-    }
-
     public boolean wereErrors() {
         return errorFlag;
+    }
+
+    private void distinguishRecord(int dbIndex) {
+        System.out.println("----New "+getDatabaseNames().get(dbIndex)+"----");
     }
 }

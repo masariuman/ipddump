@@ -1,4 +1,4 @@
-package gui;
+package org.quaternions.ipddump.tools;
 
 //~--- JDK imports ------------------------------------------------------------
 

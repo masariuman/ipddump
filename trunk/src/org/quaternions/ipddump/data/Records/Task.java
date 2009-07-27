@@ -1,5 +1,6 @@
-package org.quaternions.ipddump.data;
+package org.quaternions.ipddump.data.Records;
 
+import org.quaternions.ipddump.data.*;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -110,7 +111,6 @@ public class Task extends Record implements Comparable<Task> {
     // Timezone
     case 16:
       int timezone = makeInt(data);
-        System.out.println(timezone);
         fields.put("TimeZone", String.valueOf(timezone));
       switch (timezone) {}
       
@@ -148,17 +148,14 @@ public class Task extends Record implements Comparable<Task> {
     return fields.toString();
   }
 
-  protected String makeString(char[] data) {
-    String str = Gsm2Iso.Gsm2Iso(data);
-    return str.substring(0, str.length() - 1);
-  }
+ 
 
   public String getTask() {
     return getField("Name");
   }
 
   public String getCategories() {
-    return getField("Categories").replaceAll(",", ";");
+    return getField("Categories");
   }
 
   public String getDue() {
