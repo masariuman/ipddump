@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public class DummyRecord extends Record {
     List<String> fields=new ArrayList<String>();
+    private boolean valuePeeking=false;
 
     //~--- constructors -------------------------------------------------------
 
@@ -32,18 +33,19 @@ public class DummyRecord extends Record {
 
     //~--- methods ------------------------------------------------------------
 
-    @Override
+
     public void addField(int type, char[] data) {
-        fields.add(type+"|"+ makeString(data));
+        //fields.add(type+"|"+ makeString(data));
+        if (valuePeeking)viewIt(type, data);
     }
 
-    @Override
-    public Map<String, String> fields() {
-        return Collections.<String, String>emptyMap();
+    public DummyRecord enableValuePeeking(){
+    valuePeeking=true;
+    return this;
     }
 
-    @Override
-    public String toString() {
-        return fields.toString();
+    public DummyRecord disableValuePeeking(){
+    valuePeeking=false;
+    return this;
     }
-}
+ }

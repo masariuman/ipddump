@@ -26,6 +26,7 @@ public class IPDParser {
     private boolean debugingEnabled=false;
     private int lastValidDBHandle=0;
     private int lastfieldLength=-1;
+    private boolean valuePeeking=false;
 
   /**
    * Specifies the state of the parser, that is, the current part of the IPD
@@ -171,6 +172,8 @@ public class IPDParser {
 
           case VERSION:
             database = new InteractivePagerBackup( input.read(), lineFeed );
+            if (debugingEnabled) {database.enableDebuging();}
+            if (valuePeeking) {database.enableValuePeeking();}
             state = ReadingState.DATABASECOUNT;
             break;
 
@@ -306,7 +309,6 @@ public class IPDParser {
       }
     } finally {
       input.close();
-        System.out.println(state);
     }
 
     if (debugingEnabled){
@@ -322,6 +324,10 @@ public class IPDParser {
 
   public void enableDebuging(){
   debugingEnabled=true;
+  }
+
+  public void enableValuePeeking() {
+  valuePeeking=true;
   }
 }
 
