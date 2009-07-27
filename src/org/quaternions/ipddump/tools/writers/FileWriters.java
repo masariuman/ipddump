@@ -1,4 +1,4 @@
-package org.quaternions.ipddump.writers;
+package org.quaternions.ipddump.tools.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
 

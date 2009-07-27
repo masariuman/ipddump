@@ -5,14 +5,14 @@
 
 
 
-package org.quaternions.ipddump.writers;
+package org.quaternions.ipddump.tools.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.dom4j.*;
 
 import org.quaternions.ipddump.data.InteractivePagerBackup;
-import org.quaternions.ipddump.data.Memo;
+import org.quaternions.ipddump.data.Records.Memo;
 
 /**
  *
@@ -33,7 +33,7 @@ public class MemosWriters extends BasicWriter {
      */
     public int getSize() {
         if (database!=null) {
-            return database.memos().size();
+            return database.getMemos().size();
         } else {
             return 0;
         }
@@ -56,8 +56,8 @@ public class MemosWriters extends BasicWriter {
         int RecordIndex=0;
         int j          =0;
 
-        for (Memo record : database.memos()) {
-            if (isSelectedRecord(RecordIndex, selectedMemos) && (selectedMemos[j]<database.memos().size())) {
+        for (Memo record : database.getMemos()) {
+            if (isSelectedRecord(RecordIndex, selectedMemos) && (selectedMemos[j]<database.getMemos().size())) {
                 temp.append(record.getTitle()+","+record.getMemo()+"\n");
                 j++;
 
@@ -89,8 +89,8 @@ public class MemosWriters extends BasicWriter {
             int RecordIndex=0;
             int j          =0;
 
-            for (Memo record : database.memos()) {
-                if (isSelectedRecord(RecordIndex, MemoselectedRows) && (MemoselectedRows[j]<database.memos().size())) {
+            for (Memo record : database.getMemos()) {
+                if (isSelectedRecord(RecordIndex, MemoselectedRows) && (MemoselectedRows[j]<database.getMemos().size())) {
                     String title=record.getTitle();
                     String memo =record.getMemo();
 
@@ -128,8 +128,8 @@ public class MemosWriters extends BasicWriter {
         int     RecordIndex=0;
         int     j          =0;
 
-        for (Memo record : database.memos()) {
-            if (isSelectedRecord(RecordIndex, selectedMemos) && (selectedMemos[j]<database.memos().size())) {
+        for (Memo record : database.getMemos()) {
+            if (isSelectedRecord(RecordIndex, selectedMemos) && (selectedMemos[j]<database.getMemos().size())) {
                 Element message=root.addElement("MemoMessage").addAttribute("UID", String.valueOf(record.getUID()));
 
                 message.addElement("Title").addText(record.getTitle());

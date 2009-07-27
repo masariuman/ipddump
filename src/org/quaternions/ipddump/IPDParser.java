@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 import org.quaternions.ipddump.data.InteractivePagerBackup;
-import org.quaternions.ipddump.data.Record;
+import org.quaternions.ipddump.data.Records.*;
 
 /**
  * Parse an IPD file and populate a {@link InteractivePagerBackup} with the
@@ -148,13 +148,13 @@ public class IPDParser {
     Record record = null;
     InteractivePagerBackup database = null;
     FileInputStream input = null;
-
+    ReadingState state = ReadingState.HEADER;
     try {
       input = new FileInputStream( fileName );
       FileChannel fc = input.getChannel();
 
       // Start reading in the header state
-      ReadingState state = ReadingState.HEADER;
+      
       while ( fc.position() < fc.size() ) {
         switch ( state ) {
           case HEADER:
@@ -205,7 +205,7 @@ public class IPDParser {
             // Eat null/separator
             input.read();
 
-            if ( database.databaseNames().size() < numberOfDatabases ) {
+            if ( database.getDatabaseNames().size() < numberOfDatabases ) {
               state = ReadingState.DATABASENAMELENGTH;
             } else {
               state = ReadingState.DATABASEID;
@@ -247,7 +247,7 @@ public class IPDParser {
             uid |= input.read() << 24;
             recordRead += 4;
 
-            if (dbID<database.databaseNames().size() && dbID>0){
+            if (dbID<database.getDatabaseNames().size() && dbID>0){
             lastValidDBid=dbID;
             lastValidDBHandle=databaseHandle;
             }
@@ -275,19 +275,21 @@ public class IPDParser {
             for ( int i = 0; i < fieldLength; i++ ) {
               dataBuffer[ i ] = (char) input.read();
             }
-            if ((dbID>database.databaseNames().size() || dbID<0) && debugingEnabled){
+            if ((dbID>database.getDatabaseNames().size() || dbID<0) && debugingEnabled){
              database.setErrorFlag();
              String dbname=String.valueOf(lastValidDBid);
-             if (lastValidDBid>0){dbname=database.databaseNames().get(lastValidDBid);}
+             if (lastValidDBid>=0){dbname=database.getDatabaseNames().get(lastValidDBid);}
              System.err.format("Problematic dbIndex: hex: %4h dec: %5d " +
                         "database Size: %3d -- Last valid DBid:%3d Name: %s -- "
-                        ,dbID,dbID,database.databaseNames().size(),
+                        ,dbID,dbID,database.getDatabaseNames().size(),
                         lastValidDBid,dbname);
              System.err.println("\n    Last Valid BD handle: "+lastValidDBHandle+" this BD handle: "+databaseHandle);
              System.err.println("    Last Valid Field length: "+lastfieldLength+" this Field length: "+fieldLength);
               //System.out.print("Field:"+fieldType+" Data: "+String.valueOf(dataBuffer));
             }else {
                 lastfieldLength=fieldLength;
+                lastValidDBid=dbID;
+                lastValidDBHandle=databaseHandle;
             }
             record.addField( fieldType, dataBuffer );
 
@@ -304,11 +306,12 @@ public class IPDParser {
       }
     } finally {
       input.close();
+        System.out.println(state);
     }
 
     if (debugingEnabled){
-    for (int i=0;i<database.databaseNames().size();i++){
-    System.out.print(i+": "+database.databaseNames().get(i)+", ");
+    for (int i=0;i<database.getDatabaseNames().size();i++){
+    System.out.print(i+": "+database.getDatabaseNames().get(i)+", ");
     }
     System.out.println("");
     }

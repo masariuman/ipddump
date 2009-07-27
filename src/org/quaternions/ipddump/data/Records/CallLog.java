@@ -1,7 +1,8 @@
-package org.quaternions.ipddump.data;
+package org.quaternions.ipddump.data.Records;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import org.quaternions.ipddump.data.*;
 import java.util.Date;
 
 /**
@@ -155,11 +156,5 @@ public class CallLog extends Record implements Comparable<CallLog> {
     @Override
     public String toString() {
         return fields.toString();
-    }
-
-    protected String makeString(char[] data) {
-        String str=Gsm2Iso.Gsm2Iso(data);
-
-        return str.substring(0, str.length()-1);
     }
 }

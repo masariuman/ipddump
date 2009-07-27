@@ -5,7 +5,11 @@
 
 
 
-package org.quaternions.ipddump.data;
+package org.quaternions.ipddump.tools;
+
+import org.quaternions.ipddump.data.Records.*;
+import org.quaternions.ipddump.data.InteractivePagerBackup;
+
 
 /**
  *
@@ -30,7 +34,7 @@ public class Finder {
         // This first loop counts the Call Logs to be found
         for (Contact record : database.contacts()) {
             if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
-                for (CallLog recordCallLog : database.callLogs()) {
+                for (CallLog recordCallLog : database.getCallLogs()) {
                     String CallLogNumber=recordCallLog.getNumber().replaceAll(" ", "");
 
                     if (CallLogNumber.equals(record.getMobilePhone().replaceAll(" ", ""))
@@ -53,8 +57,6 @@ public class Finder {
             RecordIndex++;
         }
 
-        System.out.println("Call Logs Found: "+i);
-
         int selectedCallLogs[]=new int[i];
         int pointer           =0;
 
@@ -67,7 +69,7 @@ public class Finder {
             if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
                 index=0;
 
-                for (CallLog recordCallLog : database.callLogs()) {
+                for (CallLog recordCallLog : database.getCallLogs()) {
                     String CallLogNumber=recordCallLog.getNumber().replaceAll(" ", "");
 
                     if (CallLogNumber.equals(record.getMobilePhone().replaceAll(" ", ""))
@@ -137,7 +139,7 @@ public class Finder {
 
         for (Contact record : database.contacts()) {
             if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
-                for (SMSMessage recordsms : database.smsRecords()) {
+                for (SMSMessage recordsms : database.getSMSRecords()) {
                     String SMSnumber=recordsms.getNumber().replaceAll(" ", "");
 
                     if (SMSnumber.equals(record.getMobilePhone().replaceAll(" ", ""))
@@ -170,7 +172,7 @@ public class Finder {
             if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
                 int smsindex=0;
 
-                for (SMSMessage recordsms : database.smsRecords()) {
+                for (SMSMessage recordsms : database.getSMSRecords()) {
                     String SMSnumber=recordsms.getNumber().replaceAll(" ", "");
 
                     if (SMSnumber.equals(record.getMobilePhone().replaceAll(" ", ""))
@@ -202,7 +204,7 @@ public class Finder {
         int i       =0;
         int smsindex=0;
 
-        for (SMSMessage recordsms : database.smsRecords()) {
+        for (SMSMessage recordsms : database.getSMSRecords()) {
             String SMSnumber=recordsms.getNumber();
 
             if (SMSnumber.replaceAll(" ", "").equals(phNumber.replaceAll(" ", ""))) {
@@ -213,7 +215,7 @@ public class Finder {
         int selectedSMS[]=new int[i];
         int pointer      =0;
 
-        for (SMSMessage recordsms : database.smsRecords()) {
+        for (SMSMessage recordsms : database.getSMSRecords()) {
             String SMSnumber=recordsms.getNumber();
 
             if (SMSnumber.replaceAll(" ", "").equals(phNumber.replaceAll(" ", ""))) {
@@ -227,7 +229,7 @@ public class Finder {
     }
 
     public String findTimeZoneByID(String idNumber) {
-        for (BBTimeZone record : database.timeZones()) {
+        for (BBTimeZone record : database.getTimeZones()) {
             String id=record.getTimeZoneID();
 
             if (idNumber.equals(id)) {
