@@ -81,9 +81,10 @@ public class InteractivePagerBackup {
     /**
      * Reports If there were Errors while parsing
      */
-    private boolean errorFlag      =false;
-    private boolean debugingEnabled=false;
-    private boolean valuePeeking   =false;
+    private InteractivePagerBackup database       =this;
+    private boolean                errorFlag      =false;
+    private boolean                debugingEnabled=false;
+    private boolean                valuePeeking   =false;
 
     //~--- constructors -------------------------------------------------------
 
@@ -107,10 +108,6 @@ public class InteractivePagerBackup {
     }
 
     //~--- methods ------------------------------------------------------------
-
-    public void enableValuePeeking() {
-        valuePeeking=true;
-    }
 
     /**
      * Adds a new database to the list of contained databases.
@@ -213,6 +210,10 @@ public class InteractivePagerBackup {
         debugingEnabled=true;
     }
 
+    public void enableValuePeeking() {
+        valuePeeking=true;
+    }
+
     //~--- get methods --------------------------------------------------------
 
     /**
@@ -281,21 +282,47 @@ public class InteractivePagerBackup {
     //~--- methods ------------------------------------------------------------
 
     public void organize() {
-        Collections.sort(memos);
-        Collections.sort(smsRecords);
-        Collections.sort(tasks);
-        Collections.sort(contacts);
-        Collections.sort(timeZones);
-        Collections.sort(callLogs);
-        Collections.sort(calendar);
+        Runnable r=new Runnable() {
+            public void run() {
+                Collections.sort(memos);
+                Collections.sort(smsRecords);
+                Collections.sort(tasks);
+            }
+        };
+        Thread t=new Thread(r);
 
-        Finder finder=new Finder(this);
+        t.setDaemon(false);
+        t.start();
 
-        for (Task recordt : this.tasks) {
-            String name=finder.findTimeZoneByID(recordt.getTimeZone());
+        Runnable r1=new Runnable() {
+            public void run() {
+                Collections.sort(contacts);
+                Collections.sort(timeZones);
+                Collections.sort(calendar);
+            }
+        };
+        Thread t1=new Thread(r1);
 
-            recordt.setTimeZoneName(name);
-        }
+        t1.setDaemon(false);
+        t1.start();
+
+        Runnable r2=new Runnable() {
+            public void run() {
+                Collections.sort(callLogs);
+
+                Finder finder=new Finder(database);
+
+                for (Task recordt : database.tasks) {
+                    String name=finder.findTimeZoneByID(recordt.getTimeZone());
+
+                    recordt.setTimeZoneName(name);
+                }
+            }
+        };
+        Thread t2=new Thread(r2);
+
+        t2.setDaemon(false);
+        t2.start();
     }
 
     //~--- set methods --------------------------------------------------------

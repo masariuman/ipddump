@@ -6,7 +6,6 @@
  */
 package gui;
 
-import java.awt.event.ActionEvent;
 import org.quaternions.ipddump.tools.*;
 import org.quaternions.ipddump.tools.writers.*;
 import org.quaternions.ipddump.data.Records.*;
@@ -99,6 +98,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private boolean resolveNames = true;
     private final String baseName = "gui.resources.IPDdumpAboutBox";
     private final ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
+    private String tempWelcomeMsg = welcomeMsg;
+    Thread t1smstable;
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -761,19 +762,58 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
             fillTables();
             long endTime = System.currentTimeMillis() - startTime;
-            status_label.setText(welcomeMsg + " --> Load Time: " + (endTime / 1000.0) + "sec");
+            tempWelcomeMsg = welcomeMsg + " --> Load Time: " + (endTime / 1000.0) + "sec";
+            status_label.setText(tempWelcomeMsg);
         } else {
-            status_label.setText(welcomeMsg);
+            status_label.setText(tempWelcomeMsg);
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
     private void fillTables() {
-        resolveNames = ResolveCheckBox.isSelected();
+        Runnable r1 = new Runnable() {
+            public void run() {
+                fillSMSTable();
+            }
+        };
+        t1smstable = new Thread(r1);
+        t1smstable.setDaemon(false);
+        t1smstable.start();
 
-        fillSMSTable();
-        fillContactsTable();
-        fillMemosTable();
-        fillTasksTable();
-        fillCallLogsTable();
+        Runnable r2 = new Runnable() {
+            public void run() {
+                fillContactsTable();
+            }
+        };
+        Thread t2 = new Thread(r2);
+        t2.setDaemon(false);
+        t2.start();
+
+        Runnable r3 = new Runnable() {
+            public void run() {
+                fillMemosTable();
+                fillTasksTable();
+            }
+        };
+        Thread t3 = new Thread(r3);
+        t3.setDaemon(false);
+        t3.start();
+
+//        Runnable r4 = new Runnable() {
+//            public void run() {
+//
+//            }
+//        };
+//        Thread t4 = new Thread(r4);
+//        t4.setDaemon(false);
+//        t4.start();
+
+        Runnable r5 = new Runnable() {
+            public void run() {
+                fillCallLogsTable();
+            }
+        };
+        Thread t5 = new Thread(r5);
+        t5.setDaemon(false);
+        t5.start();
 
         saveAsMenuItem.setEnabled(true);
     }
@@ -1001,7 +1041,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         }
 
         viewer.setTxt(tmp);
-
         viewer.setVisible(true);
 }//GEN-LAST:event_jMenuItemTxtActionPerformed
 
@@ -1449,7 +1488,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         SMSDataModel = jTableSMS.getModel();
     }// </editor-fold>
 
-    public static void setClipboardContents(String aString) {
+    public void setClipboardContents(String aString) {
         StringSelection stringSelection = new StringSelection(aString);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, (ClipboardOwner) null);
