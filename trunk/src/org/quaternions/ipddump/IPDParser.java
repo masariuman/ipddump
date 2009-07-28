@@ -294,7 +294,7 @@ public class IPDParser {
                 lastValidDBid=dbID;
                 lastValidDBHandle=databaseHandle;
             }
-            record.addFieldFast( fieldType, dataBuffer );
+            record.addField( fieldType, dataBuffer );
 
 
             recordRead += fieldLength;
