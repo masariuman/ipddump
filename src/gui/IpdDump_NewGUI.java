@@ -1,7 +1,6 @@
-
 /*
  * IpdDump_NewGUI.java
- *
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  * Created on 10 Ιουν 2009, 11:50:15 πμ
  */
 package gui;
@@ -29,10 +28,8 @@ import org.quaternions.ipddump.data.*;
  */
 public class IpdDump_NewGUI extends javax.swing.JFrame {
 
-    private String path;
-    private String pathString;
-    private final String welcomeMsg = "Welcome to IPDdump - http://code.google.com/p/ipddump/";
-    private String ClipBoardTemp;
+    private final String welcomeMsg =
+            "Welcome to IPDdump - http://code.google.com/p/ipddump/";
     private String ext;
     private String fileToSave;
     private InteractivePagerBackup database;
@@ -43,11 +40,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final int TaskstabINDEX;
     private final int OptionstabINDEX;
     private final int MemostabINDEX;
-    final private int SMSWasSentIndex = 0;
-    final private int SMSNumberIndex = 1;
-    final private int SMSTextIndex = 2;
-    final private int SMSSentIndex = 3;
-    final private int SMSReceivedIndex = 4;
     private int ActiveTAB;
     private int totalSMS = 0;
     private int[] SMSSelectedRows;
@@ -65,7 +57,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private int[] OptionsSelectedRows;
     private final DataViewer viewer;
     private final FileWriters fileWriter = new FileWriters();
-    Finder finder;
+    private Finder finder;
     private SmsWriters SMS;
     private ContactsWriters Contacts;
     private MemosWriters Memos;
@@ -76,6 +68,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private TableModel TasksDataModel;
     private TableModel SMSDataModel;
     private TableModel CallLogsDataModel;
+    private final int SMSWasSentIndex = 0;
+    private final int SMSNumberIndex = 1;
+    private final int SMSTextIndex = 2;
+    private final int SMSSentIndex = 3;
+    private final int SMSReceivedIndex = 4;
     private final int ContactsNameIndex = 0;
     private final int ContactsEmailIndex = 1;
     private final int ContactsMobileIndex = 2;
@@ -99,7 +96,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final String baseName = "gui.resources.IPDdumpAboutBox";
     private final ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
     private String tempWelcomeMsg = welcomeMsg;
-    Thread t1smstable;
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -728,7 +724,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         status_label.setText("WORKING...  be patient!");
         if (JFileChooser.APPROVE_OPTION == IpdChooser.showOpenDialog(null)) {
             long startTime = System.currentTimeMillis();
-
             jFileChooser1.setSelectedFile(IpdChooser.getSelectedFile());
             setTitle("IPDdump " + jFileChooser1.getSelectedFile().getPath());
 
@@ -770,15 +765,17 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_openMenuItemActionPerformed
     private void fillTables() {
         Runnable r1 = new Runnable() {
+
             public void run() {
                 fillSMSTable();
             }
         };
-        t1smstable = new Thread(r1);
-        t1smstable.setDaemon(false);
-        t1smstable.start();
+        Thread t1 = new Thread(r1);
+        t1.setDaemon(false);
+        t1.start();
 
         Runnable r2 = new Runnable() {
+
             public void run() {
                 fillContactsTable();
             }
@@ -788,6 +785,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         t2.start();
 
         Runnable r3 = new Runnable() {
+
             public void run() {
                 fillMemosTable();
                 fillTasksTable();
@@ -807,6 +805,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 //        t4.start();
 
         Runnable r5 = new Runnable() {
+
             public void run() {
                 fillCallLogsTable();
             }

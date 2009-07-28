@@ -77,7 +77,18 @@ public abstract class Record extends GeneralToolBox {
      * @param data The field data
      */
     public abstract void addField(int type, char[] data);
-    
+
+   synchronized public void addFieldFast(final int type, final char[] data){
+           Runnable r4 = new Runnable() {
+            public void run() {
+            addField(type, data.clone());
+            }
+        };
+        Thread t4 = new Thread(r4);
+        t4.setDaemon(false);
+        t4.start();
+   }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Record) {
