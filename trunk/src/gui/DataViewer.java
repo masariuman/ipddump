@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * DataViewer.java
  * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  * Created on 11 Ιουν 2009, 9:29:00 μμ
