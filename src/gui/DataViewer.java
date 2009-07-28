@@ -5,7 +5,7 @@
 
 /*
  * DataViewer.java
- *
+ * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  * Created on 11 Ιουν 2009, 9:29:00 μμ
  */
 package gui;
@@ -86,6 +86,7 @@ public class DataViewer extends javax.swing.JFrame {
         TextArea.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         TextArea.setLineWrap(true);
         TextArea.setRows(5);
+        TextArea.setWrapStyleWord(true);
         TextArea.setAutoscrolls(false);
         TextArea.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
