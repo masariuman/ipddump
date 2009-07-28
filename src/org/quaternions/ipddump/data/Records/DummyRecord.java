@@ -2,11 +2,6 @@ package org.quaternions.ipddump.data.Records;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 /**
  * This record is here for any records that this utility doesn't handle yet.
  *
@@ -14,7 +9,7 @@ import java.util.Map;
  * @date Jan 1, 2008
  */
 public class DummyRecord extends Record {
-    List<String> fields=new ArrayList<String>();
+    //List<String> fields=new ArrayList<String>();
     private boolean valuePeeking=false;
 
     //~--- constructors -------------------------------------------------------

@@ -70,8 +70,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             this.nonDecodedSms=data.clone();
             decodedSMS        =Gsm2Iso.Gsm2Iso(data);
             fields.put("text", decodedSMS);
-
-//          viewIt(type, text);
             break;
 
         case 2 :
@@ -108,12 +106,8 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
                 if (fields.containsKey("text")) {
                     fields.remove("text");
                 }
-
-                decodedSMS=Gsm2Iso.UCS2toISO(this.nonDecodedSms);
+                decodedSMS=Gsm2Iso.UCS2toISO(nonDecodedSms);
                 fields.put("text", decodedSMS);
-            } else {
-
-                // viewItInHex(type, data);//TODO: remove this on release
             }
 
             break;

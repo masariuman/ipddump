@@ -77,7 +77,7 @@ public abstract class Record extends GeneralToolBox {
      * @param data The field data
      */
     public abstract void addField(int type, char[] data);
-
+    
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Record) {

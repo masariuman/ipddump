@@ -274,7 +274,7 @@ public class IPDParser {
             break;
 
           case FIELDDATA:
-            char[] dataBuffer = new char[ fieldLength ];
+            char [] dataBuffer = new char[ fieldLength ];
             for ( int i = 0; i < fieldLength; i++ ) {
               dataBuffer[ i ] = (char) input.read();
             }

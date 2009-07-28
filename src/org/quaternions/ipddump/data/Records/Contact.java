@@ -41,19 +41,44 @@ public class Contact extends Record implements Comparable<Contact> {
     //~--- enums --------------------------------------------------------------
 
     enum Field {
-        Email(1), Fax(3), Work_Phone(6, 16), Home_Phone(7, 17), Mobile_Phone(8), Pager(9), PIN(10), Other_Number(18),
-        Name(32), Company(33), Work_Address(35, 36), Work_City(38), Work_State(39), Work_Postcode(40), Work_Country(41),
-        Job_Title(42), Webpage(54), Title(55),
+        Email(1),
+        Fax(3),
+        Work_Phone(6, 16),
+        Home_Phone(7, 17),
+        Mobile_Phone(8),
+        Pager(9),
+        PIN(10),
+        Other_Number(18),
+        Name(32), 
+        Company(33),
+        Work_Address(35, 36),
+        Work_City(38),
+        Work_State(39),
+        Work_Postcode(40),
+        Work_Country(41),
+        Job_Title(42), 
+        Webpage(54),
+        Title(55),
 
         /* These are the Category tags. Null data if no tags. */
-        Categories(59), Home_Address(61, 62), User(65, 66, 67, 68), Home_City(69), Home_State(70), Home_Postcode(71),
-        Home_Country(72), Contact_Image(77), Notes(64), Birthday(82), Anniversary(83),
+        Categories(59),
+        Home_Address(61, 62),
+        User(65, 66, 67, 68),
+        Home_City(69),
+        Home_State(70),
+        Home_Postcode(71),
+        Home_Country(72), 
+        Contact_Image(77),
+        Notes(64),
+        Birthday(82),
+        Anniversary(83),
 
         /* This is always the same 8 characters */
         Unknown_8_Chars(false, 84),
 
         /* Always 4 characters, date? */
-        Unknown_4_Chars(false, 85), Google_Talk(90);
+        Unknown_4_Chars(false, 85),
+        Google_Talk(90);
 
         int[]   indexes;
         boolean supported;
@@ -128,8 +153,6 @@ public class Contact extends Record implements Comparable<Contact> {
                     addField(field, makeString(data));
                 }
             }
-
-            // else{viewItInHex(type, data);}
         }
     }
 
