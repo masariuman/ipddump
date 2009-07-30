@@ -5,9 +5,8 @@
  */
 package gui;
 
-import org.quaternions.ipddump.tools.*;
-import org.quaternions.ipddump.tools.writers.*;
-import org.quaternions.ipddump.data.Records.*;
+import ipddump.tools.writers.*;
+import ipddump.data.Records.*;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -19,8 +18,9 @@ import java.util.ResourceBundle;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
-import org.quaternions.ipddump.*;
-import org.quaternions.ipddump.data.*;
+import ipddump.*;
+import ipddump.data.*;
+import ipddump.tools.*;
 
 /**
  *
