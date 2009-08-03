@@ -34,12 +34,12 @@ public class DummyRecord extends Record {
         if (valuePeeking)viewIt(type, data);
     }
 
-    public DummyRecord enableValuePeeking(){
+    public Record enableValuePeeking(){
     valuePeeking=true;
     return this;
     }
 
-    public DummyRecord disableValuePeeking(){
+    public Record disableValuePeeking(){
     valuePeeking=false;
     return this;
     }

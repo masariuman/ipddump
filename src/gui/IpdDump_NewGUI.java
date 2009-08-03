@@ -92,7 +92,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final int CallLogsDateIndex = 1;
     private final int CallLogsStatusIndex = 2;
     private final int CallLogsDurationIndex = 3;
-    private boolean resolveNames = true;
+    private boolean resolveContactsNames = true;
     private final String baseName = "gui.resources.IPDdumpAboutBox";
     private final ResourceBundle rb = ResourceBundle.getBundle(baseName, new Locale("en"));
     private String tempWelcomeMsg = welcomeMsg;
@@ -730,16 +730,17 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             String[] args = {IpdChooser.getSelectedFile().getPath()};
             try {
                 IPDParser parser = new IPDParser(args[0]);
-                //parser.enableDebuging(); // TODO: Comment This Line Before Publish
-                //parser.enableValuePeeking(); // TODO: Comment This Line Before Publish
+                parser.enableDebuging(); // TODO: Comment This Line Before Publish
+                parser.enableValuePeeking(); // TODO: Comment This Line Before Publish
                 database = parser.parse();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(MessageFrame, "ERROR: " + ex.getMessage());
+                ex.printStackTrace();
                 saveAsMenuItem.setEnabled(false);
             }
-            resolveNames = ResolveCheckBox.isSelected();
+            resolveContactsNames = ResolveCheckBox.isSelected();
 
-            SMS = new SmsWriters(database, resolveNames);
+            SMS = new SmsWriters(database, resolveContactsNames);
             totalSMS = SMS.getSize();
 
             Contacts = new ContactsWriters(database);
@@ -848,7 +849,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             } else {
                 sSent = "false";
             }
-            if (resolveNames) {
+            if (resolveContactsNames) {
                 Name = finder.findContactByPhoneNumber(record.getNumber());
             } else {
                 Name = record.getNumber();
@@ -1173,10 +1174,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     }
     private void ResolveCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResolveCheckBoxActionPerformed
-        resolveNames = ResolveCheckBox.isSelected();
+        resolveContactsNames = ResolveCheckBox.isSelected();
 
         if (saveAsMenuItem.isEnabled()) {
-            SMS = new SmsWriters(database, resolveNames);
+            SMS = new SmsWriters(database, resolveContactsNames);
             fillSMSTable();
         }
     }//GEN-LAST:event_ResolveCheckBoxActionPerformed

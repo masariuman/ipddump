@@ -3,6 +3,7 @@ package ipddump.data;
 //~--- non-JDK imports --------------------------------------------------------
 
 import ipddump.data.Records.*;
+
 import ipddump.tools.Finder;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -143,10 +144,12 @@ public class InteractivePagerBackup {
          * Fix for bug #2, there might be an error in parsing, but for now, this seems to fix it.
          */
         if ((dbIndex>=databases.size()) || (dbIndex<0)) {
-            if (valuePeeking || debugingEnabled) {
+            if (valuePeeking && debugingEnabled) {
                 System.out.println("-------dbID: "+dbIndex+"-------");
 
                 return new DummyRecord(dbIndex, version, uid, length).enableValuePeeking();
+            } else if (debugingEnabled) {
+                return new DummyRecord(dbIndex, version, uid, length).disableValuePeeking();
             } else {
                 return new DummyRecord(dbIndex, version, uid, length).disableValuePeeking();
             }
@@ -163,8 +166,7 @@ public class InteractivePagerBackup {
 
             return record;
         } else if ("Memos".equals(databases.get(dbIndex))) {
-            ipddump.data.Records.Memo record=new ipddump.data.Records.Memo(dbIndex,
-                                                                 version, uid, length);
+            ipddump.data.Records.Memo record=new ipddump.data.Records.Memo(dbIndex, version, uid, length);
 
             memos.add(record);
 
@@ -196,10 +198,12 @@ public class InteractivePagerBackup {
 //
 //              return record;
         } else {
-            if (valuePeeking) {
+            if (valuePeeking && debugingEnabled) {
                 distinguishRecord(dbIndex);
 
                 return new DummyRecord(dbIndex, version, uid, length).enableValuePeeking();
+            } else if (debugingEnabled) {
+                return new DummyRecord(dbIndex, version, uid, length).disableValuePeeking();
             } else {
                 return new DummyRecord(dbIndex, version, uid, length).disableValuePeeking();
             }
@@ -244,6 +248,13 @@ public class InteractivePagerBackup {
     }
 
     /**
+     * @return the lineFeed
+     */
+    public char getLineFeed() {
+        return lineFeed;
+    }
+
+    /**
      * Gets the collection of memos.
      *
      * @return An unmodifiable collection of memos
@@ -277,6 +288,13 @@ public class InteractivePagerBackup {
      */
     public Collection<BBTimeZone> getTimeZones() {
         return Collections.unmodifiableCollection(timeZones);
+    }
+
+    /**
+     * @return the version
+     */
+    public int getVersion() {
+        return version;
     }
 
     //~--- methods ------------------------------------------------------------
