@@ -27,6 +27,7 @@ public class IPDParser {
     private int lastValidDBHandle=0;
     private int lastfieldLength=-1;
     private boolean valuePeeking=false;
+    private int oldDatabaseHandle=1;;
 
   /**
    * Specifies the state of the parser, that is, the current part of the IPD
@@ -116,7 +117,7 @@ public class IPDParser {
      */
     FIELDDATA;
   }
-
+  
   /**
    * Creates a new IPDParser that will parse the file at the given path.
    *
@@ -172,7 +173,9 @@ public class IPDParser {
 
           case VERSION:
             database = new InteractivePagerBackup( input.read(), lineFeed );
-            if (debugingEnabled) {database.enableDebuging();}
+            if (debugingEnabled) {database.enableDebuging();
+            System.out.print("Version: "+database.getVersion());
+            System.out.println(String.format(" -- LineFeed: %h",database.getLineFeed()));}
             if (valuePeeking) {database.enableValuePeeking();}
             state = ReadingState.DATABASECOUNT;
             break;
@@ -186,7 +189,9 @@ public class IPDParser {
           // Just eat it because we know the terminating null will be in
           // the name anyway
           case DATABASENAMESEPARATOR:
-            input.read();
+            if (input.read()!=0 && debugingEnabled){
+                System.err.println("Nameseperator Is not ok");
+            }
             state = ReadingState.DATABASENAMELENGTH;
             break;
 
@@ -233,6 +238,7 @@ public class IPDParser {
           case RECORDDBEVERSION:
             recordRead++;
             recordDBVersion = input.read();
+            //if (debugingEnabled)System.out.println("Record Version: "+recordDBVersion);
             state = ReadingState.DATABASERECORDHANDLE;
             break;
 
@@ -241,6 +247,15 @@ public class IPDParser {
             databaseHandle |= input.read() << 8;
             recordRead += 2;
             state = ReadingState.RECORDUNIQUEID;
+            if (debugingEnabled){
+                //System.out.println("DATABASERECORDHANDLE: "+databaseHandle);
+            if (databaseHandle!=oldDatabaseHandle){
+                System.err.println("Database Handle Error! old dbHandle: "+(oldDatabaseHandle)+" new dbHandle: "+databaseHandle);
+                oldDatabaseHandle=databaseHandle;
+                oldDatabaseHandle++;
+            } else
+            oldDatabaseHandle++;
+            }
             break;
 
           case RECORDUNIQUEID:
