@@ -85,7 +85,7 @@ public class CallLogsWriters extends BasicWriter {
      */
     public String toPlainText(int[] CallLogselectedRows) {
         StringBuilder tmp=new StringBuilder();
-
+        tmp.append("");
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;

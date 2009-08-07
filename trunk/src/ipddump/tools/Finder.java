@@ -1,8 +1,13 @@
 package ipddump.tools;
 
-import ipddump.data.Records.*;
-import ipddump.data.InteractivePagerBackup;
+//~--- non-JDK imports --------------------------------------------------------
 
+import ipddump.data.InteractivePagerBackup;
+import ipddump.data.Records.*;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.Iterator;
 
 /**
  *
@@ -219,6 +224,46 @@ public class Finder {
         }
 
         return selectedSMS;
+    }
+
+    public CallLog findSpesificCallLog(int number) {
+        if ((number<0) || (number>database.getCallLogs().size())) {
+            return null;
+
+//          throw new Exception("Out of Bounds : "+number);
+        }
+
+        int i=0;
+
+        for (CallLog calllog : database.getCallLogs()) {
+            if (i++==number) {
+                return calllog;
+            }
+        }
+
+        return null;
+
+//      throw new Exception("Out of Bounds");
+    }
+
+    public SMSMessage findSpesificSms(int number) {
+        if ((number<0) || (number>database.getSMSRecords().size())) {
+            return null;
+
+//          throw new Exception("Out of Bounds: "+number);
+        }
+
+        int i=0;
+
+        for (SMSMessage sms : database.getSMSRecords()) {
+            if (i++==number) {
+                return sms;
+            }
+        }
+
+        return null;
+
+//      throw new Exception("Out of Bounds");
     }
 
     public String findTimeZoneByID(String idNumber) {
