@@ -42,7 +42,7 @@ public class HistoryMaker {
 
     //~--- methods ------------------------------------------------------------
 
-    public String makeHistory(int[] SelectedContacts) {
+    public String makeHistoryTXT(int[] SelectedContacts) {
         str           =new StringBuilder();
         historyRecords=new LinkedList<HistoryRecord>();
 
@@ -94,6 +94,76 @@ public class HistoryMaker {
 
         for (HistoryRecord his : historyRecords) {
             str.append(his.getText());
+        }
+
+        return str.toString();
+    }
+
+    public String makeHistoryXML(int[] SelectedContacts) {
+        str           =new StringBuilder();
+        historyRecords=new LinkedList<HistoryRecord>();
+
+        int[] allSMS  =finder.findSmsByContacts(SelectedContacts);
+        int[] allCalls=finder.findCallLogsByContacts(SelectedContacts);
+        int   max     =allSMS.length;
+
+        if (allSMS.length<allCalls.length) {
+            max=allCalls.length;
+        }
+
+        for (int i=0; i<max; i++) {
+            CallLog    calllog    =null;
+            SMSMessage sms        =null;
+            Date       SMSdate    =new Date(0);
+            Date       CalLogldate=new Date(0);
+
+            if (i<allSMS.length) {
+                sms=finder.findSpesificSms(allSMS[i]);
+
+                if (sms!=null) {
+                    if (sms.wasSent()) {
+                        SMSdate=sms.getSent();
+                    } else {
+                        SMSdate=sms.getReceived();
+                    }
+
+                    HistoryRecord smsrec=new HistoryRecord(SMSdate,
+                                             smsWriters.toXML(new int[] {
+                                                 allSMS[i]}).getRootElement().element("SmsMessage").asXML()+"\n\n");
+
+                    historyRecords.add(smsrec);
+                }
+            }
+
+            if (i<allCalls.length) {
+                calllog=finder.findSpesificCallLog(allCalls[i]);
+
+                if (calllog!=null) {
+                    CalLogldate=calllog.getDate();
+
+                    HistoryRecord callrec=new HistoryRecord(CalLogldate,
+                                              callLogsWriters.toXML(new int[] {
+                                                  allCalls[i]}).getRootElement().element("CallLog").asXML()+"\n\n");
+
+                    historyRecords.add(callrec);
+                }
+            }
+        }
+
+        Collections.sort(historyRecords);
+
+        if ((allCalls.length>0) || (allSMS.length>0)) {
+          str.append("<?xml version=\"1.0\" encoding=\"UNICODE\"?>\n");
+            str.append("<History TotalSMS=\""+allSMS.length+"\" ");
+            str.append("<TotalCallLogs=\""+allCalls.length+"\"\n");
+        }
+
+        for (HistoryRecord his : historyRecords) {
+            str.append(his.getText());
+        }
+
+        if ((allCalls.length>0) || (allSMS.length>0)) {
+          str.append("</History>");
         }
 
         return str.toString();
