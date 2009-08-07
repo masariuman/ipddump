@@ -54,6 +54,8 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemCSVActionPerformed"/>
           </Events>
         </MenuItem>
+        <Component class="javax.swing.JSeparator" name="jSeparator">
+        </Component>
         <Menu class="javax.swing.JMenu" name="jMenuCP">
           <Properties>
             <Property name="text" type="java.lang.String" value="Copy in--&gt;"/>
@@ -149,6 +151,14 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <MenuItem class="javax.swing.JMenuItem" name="jMenuItemViewHistory">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="View History"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemViewHistoryActionPerformed"/>
+          </Events>
+        </MenuItem>
       </SubComponents>
     </Container>
     <Menu class="javax.swing.JMenuBar" name="menuBar">

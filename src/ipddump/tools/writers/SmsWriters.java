@@ -94,7 +94,7 @@ public class SmsWriters extends BasicWriter {
      */
     public String toPlainText(int[] SMSselectedRows) {
         StringBuilder tmp=new StringBuilder();
-
+        tmp.append("");
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;

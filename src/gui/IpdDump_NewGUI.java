@@ -33,6 +33,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private String ext;
     private String fileToSave;
     private InteractivePagerBackup database;
+    private HistoryMaker historyMaker;
     private final int SMStabINDEX;
     private final int ContactstabINDEX;
     private final int CalendartabINDEX;
@@ -114,6 +115,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jMenuItemTxt = new javax.swing.JMenuItem();
         jMenuItemXML = new javax.swing.JMenuItem();
         jMenuItemCSV = new javax.swing.JMenuItem();
+        jSeparator = new javax.swing.JSeparator();
         jMenuCP = new javax.swing.JMenu();
         jMenuItemCPTXT = new javax.swing.JMenuItem();
         jMenuItemCPXML = new javax.swing.JMenuItem();
@@ -126,6 +128,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jMenuItemSelectedCallLogsText = new javax.swing.JMenuItem();
         jMenuItemSelectedCallLogsXML = new javax.swing.JMenuItem();
         jMenuItemSelectedCallLogsCSV = new javax.swing.JMenuItem();
+        jMenuItemViewHistory = new javax.swing.JMenuItem();
         mainTabbedPane = new javax.swing.JTabbedPane();
         jPanelSMS = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -192,6 +195,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         });
         jPopupMenu.add(jMenuItemCSV);
+        jPopupMenu.add(jSeparator);
 
         jMenuCP.setText("Copy in-->");
 
@@ -278,6 +282,14 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jMenuSpCallLogs.add(jMenuItemSelectedCallLogsCSV);
 
         jPopupMenu.add(jMenuSpCallLogs);
+
+        jMenuItemViewHistory.setText("View History");
+        jMenuItemViewHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemViewHistoryActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItemViewHistory);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IPDdump");
@@ -730,8 +742,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             String[] args = {IpdChooser.getSelectedFile().getPath()};
             try {
                 IPDParser parser = new IPDParser(args[0]);
-                parser.enableDebuging(); // TODO: Comment This Line Before Publish
-                parser.enableValuePeeking(); // TODO: Comment This Line Before Publish
+                //parser.enableDebuging(); // TODO: Comment This Line Before Publish
+                //parser.enableValuePeeking(); // TODO: Comment This Line Before Publish
                 database = parser.parse();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(MessageFrame, "ERROR: " + ex.getMessage());
@@ -739,6 +751,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 saveAsMenuItem.setEnabled(false);
             }
             resolveContactsNames = ResolveCheckBox.isSelected();
+            historyMaker = new HistoryMaker(database, resolveContactsNames);
 
             SMS = new SmsWriters(database, resolveContactsNames);
             totalSMS = SMS.getSize();
@@ -1129,11 +1142,14 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         if (ActiveTAB == SMStabINDEX) {
             SelectedRows = SMSSelectedRows = jTableSMS.getSelectedRows();
             evtObj = "SMS";
+            jPopupMenu.remove(jSeparator);
             jPopupMenu.remove(jMenuSpSMS);
             jPopupMenu.remove(jMenuSpCallLogs);
+            jPopupMenu.remove(jMenuItemViewHistory);
         } else if (ActiveTAB == ContactstabINDEX) {
             SelectedRows = ContactsSelectedRows = jTableContacts.getSelectedRows();
             evtObj = "Contacts";
+            jPopupMenu.add(jSeparator);
             if (totalSMS > 0) {
                 jPopupMenu.add(jMenuSpSMS);
             } else {
@@ -1144,18 +1160,25 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             } else {
                 jPopupMenu.remove(jMenuSpCallLogs);
             }
+            jPopupMenu.add(jMenuItemViewHistory);
         } else if (ActiveTAB == MemostabINDEX) {
             SelectedRows = MemosSelectedRows = jTableMemos.getSelectedRows();
             evtObj = "Memos";
+            jPopupMenu.remove(jSeparator);
+            jPopupMenu.remove(jMenuItemViewHistory);
             jPopupMenu.remove(jMenuSpSMS);
         } else if (ActiveTAB == TaskstabINDEX) {
             SelectedRows = TasksSelectedRows = jTableTasks.getSelectedRows();
             evtObj = "Tasks";
+            jPopupMenu.remove(jSeparator);
+            jPopupMenu.remove(jMenuItemViewHistory);
             jPopupMenu.remove(jMenuSpSMS);
             jPopupMenu.remove(jMenuSpCallLogs);
         } else if (ActiveTAB == CallLogstabINDEX) {
             SelectedRows = CallLogsSelectedRows = jTableCallLogs.getSelectedRows();
             evtObj = "Call Logs";
+            jPopupMenu.remove(jSeparator);
+            jPopupMenu.remove(jMenuItemViewHistory);
             jPopupMenu.remove(jMenuSpSMS);
             jPopupMenu.remove(jMenuSpCallLogs);
         }
@@ -1175,7 +1198,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }
     private void ResolveCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResolveCheckBoxActionPerformed
         resolveContactsNames = ResolveCheckBox.isSelected();
-
+        historyMaker = new HistoryMaker(database, resolveContactsNames);
         if (saveAsMenuItem.isEnabled()) {
             SMS = new SmsWriters(database, resolveContactsNames);
             fillSMSTable();
@@ -1206,7 +1229,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             viewer.setTxt(tmp);
             viewer.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found!");
+            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found for this Contact/s!");
         }
 }//GEN-LAST:event_jMenuItemSelectedSMSTxtActionPerformed
 
@@ -1218,7 +1241,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             viewer.setXml(tmp);
             viewer.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found!");
+            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found for this Contact/s!");
         }
 }//GEN-LAST:event_jMenuItemSelectedSMSXMLActionPerformed
 
@@ -1230,7 +1253,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             viewer.setTxt(tmp);
             viewer.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found for this Contact!");
+            JOptionPane.showMessageDialog(MessageFrame, "No Sms Messages were found for this Contact/s!");
         }
 }//GEN-LAST:event_jMenuItemSelectedSMSCSVActionPerformed
 
@@ -1250,7 +1273,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             viewer.setTxt(tmp);
             viewer.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(MessageFrame, "No Call Logs were found for this Contact!");
+            JOptionPane.showMessageDialog(MessageFrame, "No Call Logs were found for this Contact/s!");
         }
 }//GEN-LAST:event_jMenuItemSelectedCallLogsTextActionPerformed
 
@@ -1266,7 +1289,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             viewer.setTxt(tmp);
             viewer.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(MessageFrame, "No Call Logs were found for this Contact!");
+            JOptionPane.showMessageDialog(MessageFrame, "No Call Logs were found for this Contact/s!");
         }
 }//GEN-LAST:event_jMenuItemSelectedCallLogsXMLActionPerformed
 
@@ -1282,9 +1305,22 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             viewer.setTxt(tmp);
             viewer.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(MessageFrame, "No Call Logs were found for this Contact!");
+            JOptionPane.showMessageDialog(MessageFrame, "No Call Logs were found for this Contact/s!");
         }
 }//GEN-LAST:event_jMenuItemSelectedCallLogsCSVActionPerformed
+
+    private void jMenuItemViewHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemViewHistoryActionPerformed
+        ContactsSelectedRows = jTableContacts.getSelectedRows();
+        String tmp = historyMaker.makeHistory(ContactsSelectedRows);
+
+        if (!tmp.equals("")) {
+            viewer.setTitle("Complete History - SMS and Call Logs");
+            viewer.setTxt(tmp);
+            viewer.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(MessageFrame, "No History found for this Contact/s!");
+        }
+}//GEN-LAST:event_jMenuItemViewHistoryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1293,9 +1329,38 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
+                checkVersion(1.4);
                 new IpdDump_NewGUI().setVisible(true);
             }
         });
+    }
+
+    private static void checkVersion(double minimumVersion) {
+        String ver = System.getProperty("java.specification.version");
+        if (ver == null) {
+            ver = "Unknown";
+        }
+        String[] v = ver.split("\\.");
+        int major = 0;
+        int minor = 0;
+        try {
+            major = Integer.parseInt(v[0]);
+            minor = Integer.parseInt(v[1]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        double version = (major * 1000) + minor * 100;
+        // 1.5 -> 1005; 1.6 -> 1006; 1.7 -> 1007
+        if (version < (minimumVersion * 1000.0)) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "The used Java Runtime Environment does not meet the minimum requirements.\n" +
+                    "This Program at least Java " + minimumVersion +
+                    " or higher.\n" + "Please update your Java Runtime.\n\n" +
+                    "Detected Java Runtime Version: " + ver,
+                    "Java Runtime version problem detected", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="Table Prepair Code - - NEED TO find alternative way of doing this??">
@@ -1514,6 +1579,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemSelectedSMSTxt;
     private javax.swing.JMenuItem jMenuItemSelectedSMSXML;
     private javax.swing.JMenuItem jMenuItemTxt;
+    private javax.swing.JMenuItem jMenuItemViewHistory;
     private javax.swing.JMenuItem jMenuItemXML;
     private javax.swing.JMenu jMenuSpCallLogs;
     private javax.swing.JMenu jMenuSpSMS;
@@ -1530,6 +1596,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JSeparator jSeparator;
     private javax.swing.JTable jTableCallLogs;
     private javax.swing.JTable jTableContacts;
     private javax.swing.JTable jTableMemos;
