@@ -32,6 +32,7 @@ public class SmsWriters extends BasicWriter {
      *
      * @return
      */
+    @Override
     public int getSize() {
         if (database!=null) {
             return database.getSMSRecords().size();
@@ -48,6 +49,7 @@ public class SmsWriters extends BasicWriter {
      *
      * @return
      */
+    @Override
     public String toCSV(int[] selectedMessages) {
         StringBuilder temp=new StringBuilder();    // fast builder!!
 
@@ -92,6 +94,7 @@ public class SmsWriters extends BasicWriter {
      *
      * @return
      */
+    @Override
     public String toPlainText(int[] SMSselectedRows) {
         StringBuilder tmp=new StringBuilder();
         tmp.append("");
@@ -145,6 +148,7 @@ public class SmsWriters extends BasicWriter {
      *
      * @return
      */
+    @Override
     public Document toXML(int[] selectedMessages) {
         String   sSent   ="";
         Document document=DocumentHelper.createDocument();

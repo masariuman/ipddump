@@ -19,7 +19,7 @@ import java.io.StringWriter;
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  */
-abstract class BasicWriter {
+abstract public class BasicWriter {
     protected InteractivePagerBackup database;
 
     //~--- constructors -------------------------------------------------------
