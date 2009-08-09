@@ -149,7 +149,7 @@ public class HistoryMaker {
 
         return str.toString();
     }
-
+    
     public String makeSMSandCallHistoryXML(int[] SelectedContacts) {
         str           =new StringBuilder();
         historyRecords=new LinkedList<HistoryRecord>();
@@ -220,7 +220,7 @@ public class HistoryMaker {
         return str.toString();
     }
 
-    public String seeTheSMSCoversationTXT(int[] smsMessages) {
+    public String makeSMSCoversationTXT(int[] smsMessages) {
         str           =new StringBuilder();
         historyRecords=new LinkedList<HistoryRecord>();
 
@@ -299,7 +299,7 @@ public class HistoryMaker {
         return str.toString();
     }
 
-    public String seeTheSMSCoversationXML(int[] smsMessages) {
+    public String makeSMSCoversationXML(int[] smsMessages) {
         str           =new StringBuilder();
         historyRecords=new LinkedList<HistoryRecord>();
 
@@ -386,6 +386,168 @@ public class HistoryMaker {
             }
 
             temp+=vecSMS.get(i).length;
+        }
+
+        return str.toString();
+    }
+
+        public String makeCallLogHistoryTXT(int[] callLogs) {
+        str           =new StringBuilder();
+        historyRecords=new LinkedList<HistoryRecord>();
+
+        String[]      PhoneNumber=new String[callLogs.length];
+        CallLog    callLog        =null;
+        Date          callDate    =new Date(0);
+        int[]         allcals     =new int[0];
+        Vector<int[]> vecCalls     =new Vector<int[]>();
+
+        for (int i=0; i<callLogs.length; i++) {
+            callLog           =finder.findSpesificCallLog(callLogs[i]);
+            PhoneNumber[i]=callLog.getNumber().replaceAll(" ", "").replaceAll("!", "");
+        }
+
+        for (int i=0; i<PhoneNumber.length; i++) {
+            if (PhoneNumber[i]==null) {
+                continue;
+            }
+
+            // if you find dublicate phone numbers, skip them
+            for (int k=i+1; k<PhoneNumber.length; k++) {
+                if (PhoneNumber[i].equals(PhoneNumber[k])) {
+                    PhoneNumber[k]=null;
+                }
+            }
+
+            allcals=finder.findCallLogByNumber(PhoneNumber[i]);
+            vecCalls.add(allcals);
+
+            if (allcals.length==0) {
+                continue;
+            }
+
+            for (int j=0; j<allcals.length; j++) {
+                callLog=finder.findSpesificCallLog(allcals[j]);
+
+
+                        callDate=callLog.getDate();
+
+
+                    HistoryRecord callrec=new HistoryRecord(callDate, callLogsWriters.toPlainText(new int[] {allcals[j]}));
+
+                    historyRecords.add(callrec);
+                }
+
+        }
+
+        Collections.sort(historyRecords);
+
+        for (HistoryRecord his : historyRecords) {
+            str.append(his.getText());
+        }
+
+        int temp=0;
+
+        for (int i=0; i<vecCalls.size(); i++) {
+            temp+=vecCalls.get(i).length;
+        }
+
+        tempArrayCalls=new int[temp];
+        temp     =0;
+
+        for (int i=0; i<vecCalls.size(); i++) {
+
+//          if (temp>=smsMessages.length)break;
+            for (int j=temp; j<vecCalls.get(i).length+temp; j++) {
+                tempArrayCalls[j]=vecCalls.get(i)[j-temp];
+            }
+
+            temp+=vecCalls.get(i).length;
+        }
+
+        return str.toString();
+    }
+
+                public String makeCallLogHistoryXML(int[] callLogs) {
+        str           =new StringBuilder();
+        historyRecords=new LinkedList<HistoryRecord>();
+int           totals     =0;
+        String[]      PhoneNumber=new String[callLogs.length];
+        CallLog    callLog        =null;
+        Date          callDate    =new Date(0);
+        int[]         allCals     =new int[0];
+        Vector<int[]> vecCalls     =new Vector<int[]>();
+
+        for (int i=0; i<callLogs.length; i++) {
+            callLog           =finder.findSpesificCallLog(callLogs[i]);
+            PhoneNumber[i]=callLog.getNumber().replaceAll(" ", "").replaceAll("!", "");
+        }
+
+        for (int i=0; i<PhoneNumber.length; i++) {
+            if (PhoneNumber[i]==null) {
+                continue;
+            }
+
+            // if you find dublicate phone numbers, skip them
+            for (int k=i+1; k<PhoneNumber.length; k++) {
+                if (PhoneNumber[i].equals(PhoneNumber[k])) {
+                    PhoneNumber[k]=null;
+                }
+            }
+
+            allCals=finder.findCallLogByNumber(PhoneNumber[i]);
+            vecCalls.add(allCals);
+            totals+=allCals.length;
+            if (allCals.length==0) {
+                continue;
+            }
+
+            for (int j=0; j<allCals.length; j++) {
+                callLog=finder.findSpesificCallLog(allCals[j]);
+
+
+                        callDate=callLog.getDate();
+
+
+                    HistoryRecord callrec=new HistoryRecord(callDate, callLogsWriters.toXML(new int[] {
+                                                 allCals[i]}).getRootElement().element("CallLog").asXML()+"\n\n");
+
+                    historyRecords.add(callrec);
+                }
+
+        }
+
+        Collections.sort(historyRecords);
+
+         if ((allCals.length>0)) {
+            str.append("<?xml version=\"1.0\" encoding=\"UNICODE\"?>\n");
+            str.append("<TotalCallLogs=\""+totals+"\"\n");
+        }
+
+        for (HistoryRecord his : historyRecords) {
+            str.append(his.getText());
+        }
+
+        if ((allCals.length>0)) {
+            str.append("</History>");
+        }
+
+        int temp=0;
+
+        for (int i=0; i<vecCalls.size(); i++) {
+            temp+=vecCalls.get(i).length;
+        }
+
+        tempArrayCalls=new int[temp];
+        temp     =0;
+
+        for (int i=0; i<vecCalls.size(); i++) {
+
+//          if (temp>=smsMessages.length)break;
+            for (int j=temp; j<vecCalls.get(i).length+temp; j++) {
+                tempArrayCalls[j]=vecCalls.get(i)[j-temp];
+            }
+
+            temp+=vecCalls.get(i).length;
         }
 
         return str.toString();
