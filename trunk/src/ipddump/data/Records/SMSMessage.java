@@ -70,6 +70,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             this.nonDecodedSms=data.clone();
             decodedSMS        =Gsm2Iso.Gsm2Iso(data);
             fields.put("text", decodedSMS);
+
             break;
 
         case 2 :
@@ -106,6 +107,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
                 if (fields.containsKey("text")) {
                     fields.remove("text");
                 }
+
                 decodedSMS=Gsm2Iso.UCS2toISO(nonDecodedSms);
                 fields.put("text", decodedSMS);
             }
@@ -158,7 +160,11 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
     @Override
     public int compareTo(SMSMessage o) {
-        return received.compareTo(o.received);
+        if (wasSent) {
+            return received.compareTo(o.received);
+        } else {
+            return sent.compareTo(o.sent);
+        }
     }
 
     //~--- get methods --------------------------------------------------------

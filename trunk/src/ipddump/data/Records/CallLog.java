@@ -127,7 +127,9 @@ public class CallLog extends Record implements Comparable<CallLog> {
 
     public String getName() {
         if (getField("Name").equals("")) {
-            return getNumber();
+            if (!getField("Number").equals("")) 
+                return getNumber();
+            else return "Unknown Name";
         }
 
         return getField("Name");
@@ -142,6 +144,9 @@ public class CallLog extends Record implements Comparable<CallLog> {
     }
 
     public String getNumber() {
+         if (getField("Number").equals("")) 
+                 return "Unknown Number";
+                 else
         return getField("Number");
     }
 

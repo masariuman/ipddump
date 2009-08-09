@@ -4,9 +4,6 @@ package ipddump.data.Records;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-
-import java.io.IOException;
-
 import java.util.HashMap;
 
 /**
@@ -262,7 +259,8 @@ public class Contact extends Record implements Comparable<Contact> {
     }
 
     private Image decodeBase64(char[] sb) {
-        //maybe this is the correct way to display the image?
+
+        // maybe this is the correct way to display the image?
         byte[] buffer_decode=new byte[sb.length];
 
         for (int i=0; i<sb.length; i++) {

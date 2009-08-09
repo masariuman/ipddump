@@ -5,10 +5,6 @@ package ipddump.tools;
 import ipddump.data.InteractivePagerBackup;
 import ipddump.data.Records.*;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.Iterator;
-
 /**
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
@@ -33,14 +29,14 @@ public class Finder {
         for (Contact record : database.contacts()) {
             if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
                 for (CallLog recordCallLog : database.getCallLogs()) {
-                    String CallLogNumber=recordCallLog.getNumber().replaceAll(" ", "");
+                    String CallLogNumber=recordCallLog.getNumber().replaceAll(" ", "").replaceAll("!", "");
 
-                    if (CallLogNumber.equals(record.getMobilePhone().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getPager().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getHomePhone().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getWorkPhone().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getOtherNumber().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getPIN().replaceAll(" ", ""))) {
+                    if (CallLogNumber.equals(record.getMobilePhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getPager().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getHomePhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getWorkPhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getOtherNumber().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getPIN().replaceAll(" ", "").replaceAll("!", ""))) {
                         i++;
                     }
                 }
@@ -68,14 +64,14 @@ public class Finder {
                 index=0;
 
                 for (CallLog recordCallLog : database.getCallLogs()) {
-                    String CallLogNumber=recordCallLog.getNumber().replaceAll(" ", "");
+                    String CallLogNumber=recordCallLog.getNumber().replaceAll(" ", "").replaceAll("!", "");
 
-                    if (CallLogNumber.equals(record.getMobilePhone().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getPager().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getHomePhone().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getWorkPhone().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getOtherNumber().replaceAll(" ", ""))
-                            || CallLogNumber.equals(record.getPIN().replaceAll(" ", ""))) {
+                    if (CallLogNumber.equals(record.getMobilePhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getPager().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getHomePhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getWorkPhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getOtherNumber().replaceAll(" ", "").replaceAll("!", ""))
+                            || CallLogNumber.equals(record.getPIN().replaceAll(" ", "").replaceAll("!", ""))) {
                         selectedCallLogs[pointer++]=index;
                     }
 
@@ -110,17 +106,17 @@ public class Finder {
         for (Contact record : database.contacts()) {
             String name=record.getName();
 
-            if (phoneNumber.equalsIgnoreCase(record.getMobilePhone().replaceAll(" ", ""))) {
+            if (phoneNumber.equalsIgnoreCase(record.getMobilePhone().replaceAll(" ", "").replaceAll("!", ""))) {
                 return name+" (M)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getHomePhone().replaceAll(" ", ""))) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getHomePhone().replaceAll(" ", "").replaceAll("!", ""))) {
                 return name+" (H)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getWorkPhone().replaceAll(" ", ""))) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getWorkPhone().replaceAll(" ", "").replaceAll("!", ""))) {
                 return name+" (W)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getOtherNumber().replaceAll(" ", ""))) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getOtherNumber().replaceAll(" ", "").replaceAll("!", ""))) {
                 return name+" (O)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getPager().replaceAll(" ", ""))) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getPager().replaceAll(" ", "").replaceAll("!", ""))) {
                 return name+" (P)";
-            } else if (phoneNumber.equalsIgnoreCase(record.getPIN().replaceAll(" ", ""))) {
+            } else if (phoneNumber.equalsIgnoreCase(record.getPIN().replaceAll(" ", "").replaceAll("!", ""))) {
                 return name+" (Pin)";
             } else if (phoneNumber==null) {
                 return "";
@@ -138,14 +134,14 @@ public class Finder {
         for (Contact record : database.contacts()) {
             if ((RecordIndex==selectedContacts[j]) && (selectedContacts[j]<database.contacts().size())) {
                 for (SMSMessage recordsms : database.getSMSRecords()) {
-                    String SMSnumber=recordsms.getNumber().replaceAll(" ", "");
+                    String SMSnumber=recordsms.getNumber().replaceAll(" ", "").replaceAll("!", "");
 
-                    if (SMSnumber.equals(record.getMobilePhone().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getPager().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getHomePhone().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getWorkPhone().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getOtherNumber().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getPIN().replaceAll(" ", ""))) {
+                    if (SMSnumber.equals(record.getMobilePhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getPager().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getHomePhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getWorkPhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getOtherNumber().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getPIN().replaceAll(" ", "").replaceAll("!", ""))) {
                         i++;
                     }
                 }
@@ -171,14 +167,14 @@ public class Finder {
                 int smsindex=0;
 
                 for (SMSMessage recordsms : database.getSMSRecords()) {
-                    String SMSnumber=recordsms.getNumber().replaceAll(" ", "");
+                    String SMSnumber=recordsms.getNumber().replaceAll(" ", "").replaceAll("!", "");
 
-                    if (SMSnumber.equals(record.getMobilePhone().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getPager().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getHomePhone().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getWorkPhone().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getOtherNumber().replaceAll(" ", ""))
-                            || SMSnumber.equals(record.getPIN().replaceAll(" ", ""))) {
+                    if (SMSnumber.equals(record.getMobilePhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getPager().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getHomePhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getWorkPhone().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getOtherNumber().replaceAll(" ", "").replaceAll("!", ""))
+                            || SMSnumber.equals(record.getPIN().replaceAll(" ", "").replaceAll("!", ""))) {
                         selectedSMS[pointer++]=smsindex;
                     }
 
@@ -205,7 +201,7 @@ public class Finder {
         for (SMSMessage recordsms : database.getSMSRecords()) {
             String SMSnumber=recordsms.getNumber();
 
-            if (SMSnumber.replaceAll(" ", "").equals(phNumber.replaceAll(" ", ""))) {
+            if (SMSnumber.replaceAll(" ", "").replaceAll("!", "").equals(phNumber.replaceAll(" ", "").replaceAll("!", ""))) {
                 i++;
             }
         }
@@ -216,7 +212,7 @@ public class Finder {
         for (SMSMessage recordsms : database.getSMSRecords()) {
             String SMSnumber=recordsms.getNumber();
 
-            if (SMSnumber.replaceAll(" ", "").equals(phNumber.replaceAll(" ", ""))) {
+            if (SMSnumber.replaceAll(" ", "").replaceAll("!", "").equals(phNumber.replaceAll(" ", ""))) {
                 selectedSMS[pointer++]=smsindex;
             }
 
