@@ -1219,9 +1219,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             SelectedRows = CallLogsSelectedRows = jTableCallLogs.getSelectedRows();
             evtObj = "Call Logs";
             jPopupMenu.remove(jSeparator);
-            jPopupMenu.remove(jMenuHistory);
             jPopupMenu.remove(jMenuSpSMS);
             jPopupMenu.remove(jMenuSpCallLogs);
+            jPopupMenu.add(jMenuHistory);
+            jMenuHistory.setText("View Call History");
+            jMenuItemViewHistoryTXT.setText("View Call History - TXT");
+            jMenuItemViewHistoryXML.setText("View Call History - XML");
+            jMenuItemViewHistoryTXT.setToolTipText("View This Numbers Call Log History");
+            jMenuItemViewHistoryXML.setToolTipText("View This Numbers Call Log History");
+
         }
 
         if (evt.getButton() == MouseEvent.BUTTON3 && SelectedRows.length > 0) {
@@ -1379,11 +1385,23 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         } else if (ActiveTAB == SMStabINDEX) {
             SMSSelectedRows = jTableSMS.getSelectedRows();
-            String tmp = historyMaker.seeTheSMSCoversationTXT(SMSSelectedRows);
+            String tmp = historyMaker.makeSMSCoversationTXT(SMSSelectedRows);
             setRowsSelection(jTableSMS, historyMaker.getSelectedSMS());
 
             if (!tmp.equals("")) {
                 viewer.setTitle("Complete Conversation - SMS");
+                viewer.setTxt(tmp);
+                viewer.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(MessageFrame, "No History found!");
+            }
+        } else if (ActiveTAB == CallLogstabINDEX) {
+            CallLogsSelectedRows = jTableCallLogs.getSelectedRows();
+            String tmp = historyMaker.makeCallLogHistoryTXT(CallLogsSelectedRows);
+            setRowsSelection(jTableCallLogs, historyMaker.getSelectedCallLogs());
+
+            if (!tmp.equals("")) {
+                viewer.setTitle("Complete Call Log History");
                 viewer.setTxt(tmp);
                 viewer.setVisible(true);
             } else {
@@ -1408,10 +1426,22 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         } else if (ActiveTAB == SMStabINDEX) {
             SMSSelectedRows = jTableSMS.getSelectedRows();
-            String tmp = historyMaker.seeTheSMSCoversationXML(SMSSelectedRows);
+            String tmp = historyMaker.makeSMSCoversationXML(SMSSelectedRows);
             setRowsSelection(jTableSMS, historyMaker.getSelectedSMS());
             if (!tmp.equals("")) {
                 viewer.setTitle("Complete Conversation in XML - SMS");
+                viewer.setTxt(tmp);
+                viewer.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(MessageFrame, "No History found!");
+            }
+        } else if (ActiveTAB == CallLogstabINDEX) {
+            CallLogsSelectedRows = jTableCallLogs.getSelectedRows();
+            String tmp = historyMaker.makeCallLogHistoryXML(CallLogsSelectedRows);
+            setRowsSelection(jTableCallLogs, historyMaker.getSelectedCallLogs());
+
+            if (!tmp.equals("")) {
+                viewer.setTitle("Complete Call Log History");
                 viewer.setTxt(tmp);
                 viewer.setVisible(true);
             } else {
