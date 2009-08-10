@@ -2,19 +2,20 @@ package ipddump.tools.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.dom4j.*;
-
-import ipddump.tools.Finder;
 import ipddump.data.InteractivePagerBackup;
 import ipddump.data.Records.SMSMessage;
+
+import ipddump.tools.Finder;
+
+import org.dom4j.*;
 
 /**
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@yahoo.gr
  */
 public class SmsWriters extends BasicWriter {
-    private boolean       resolveNames=false;
-    private Finder contactFinder;
+    private boolean resolveNames=false;
+    private Finder  contactFinder;
 
     //~--- constructors -------------------------------------------------------
 
@@ -60,7 +61,8 @@ public class SmsWriters extends BasicWriter {
         int j          =0;
 
         for (SMSMessage record : database.getSMSRecords()) {
-            if (isSelectedRecord(RecordIndex, selectedMessages) && (selectedMessages[j]<database.getSMSRecords().size())) {
+            if (isSelectedRecord(RecordIndex, selectedMessages)
+                    && (selectedMessages[j]<database.getSMSRecords().size())) {
                 String Name="";
 
                 if (resolveNames) {
@@ -97,13 +99,16 @@ public class SmsWriters extends BasicWriter {
     @Override
     public String toPlainText(int[] SMSselectedRows) {
         StringBuilder tmp=new StringBuilder();
+
         tmp.append("");
+
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;
 
             for (SMSMessage record : database.getSMSRecords()) {
-                if (isSelectedRecord(RecordIndex, SMSselectedRows) && (SMSselectedRows[j]<database.getSMSRecords().size())) {
+                if (isSelectedRecord(RecordIndex, SMSselectedRows)
+                        && (SMSselectedRows[j]<database.getSMSRecords().size())) {
                     String number  =record.getNumber();
                     String text    =record.getText();
                     String sent    =record.getSent().toString();
@@ -160,7 +165,8 @@ public class SmsWriters extends BasicWriter {
         int j          =0;
 
         for (SMSMessage record : database.getSMSRecords()) {
-            if (isSelectedRecord(RecordIndex, selectedMessages) && (selectedMessages[j]<database.getSMSRecords().size())) {
+            if (isSelectedRecord(RecordIndex, selectedMessages)
+                    && (selectedMessages[j]<database.getSMSRecords().size())) {
                 if (record.wasSent()) {
                     sSent="true";
                 } else {

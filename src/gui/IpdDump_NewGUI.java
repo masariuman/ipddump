@@ -15,8 +15,6 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -99,6 +97,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private final String welcomeMsg =
             rb.getString("welcomeMsg");
     private String tempWelcomeMsg = welcomeMsg;
+    private String numOfSelectedRows = "";
+    private int hoveredRow = -2;
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -157,9 +157,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
-        ResolveCheckBox = new javax.swing.JCheckBoxMenuItem();
         saveAsMenuItem = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JSeparator();
         exitMenuItem = new javax.swing.JMenuItem();
+        jMenuSettings = new javax.swing.JMenu();
+        ResolveCheckBox = new javax.swing.JCheckBoxMenuItem();
+        TollTipsBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuItemAbout = new javax.swing.JMenuItem();
 
@@ -334,6 +337,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableSMS.setToolTipText("null");
         jTableSMS.setName("SMS"); // NOI18N
         jTableSMS.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jTableSMS.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -341,8 +345,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 jTableSMSMouseClicked(evt);
             }
         });
+        jTableSMS.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jTableSMSMouseMoved(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableSMS);
-        jTableSMS.getColumnModel().getColumn(0).setMinWidth(40);
         jTableSMS.getColumnModel().getColumn(0).setPreferredWidth(40);
         jTableSMS.getColumnModel().getColumn(0).setMaxWidth(40);
         jTableSMS.getColumnModel().getColumn(1).setMaxWidth(150);
@@ -358,7 +366,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelSMSLayout.setVerticalGroup(
             jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("SMS", jPanelSMS);
@@ -393,6 +401,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 jTableContactsMouseClicked(evt);
             }
         });
+        jTableContacts.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jTableContactsMouseMoved(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTableContacts);
         jTableContacts.getColumnModel().getColumn(0).setMinWidth(100);
         jTableContacts.getColumnModel().getColumn(0).setPreferredWidth(150);
@@ -418,7 +431,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelContactsLayout.setVerticalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("Contacts", jPanelContacts);
@@ -453,6 +466,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 jTableMemosMouseClicked(evt);
             }
         });
+        jTableMemos.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jTableMemosMouseMoved(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTableMemos);
         jTableMemos.getColumnModel().getColumn(0).setMinWidth(100);
         jTableMemos.getColumnModel().getColumn(0).setPreferredWidth(150);
@@ -467,7 +485,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelMemoLayout.setVerticalGroup(
             jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("Memos", jPanelMemo);
@@ -501,6 +519,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 jTableTasksMouseClicked(evt);
             }
         });
+        jTableTasks.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jTableTasksMouseMoved(evt);
+            }
+        });
         jScrollPane4.setViewportView(jTableTasks);
         jTableTasks.getColumnModel().getColumn(0).setMinWidth(70);
         jTableTasks.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -520,7 +543,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelTasksLayout.setVerticalGroup(
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("Tasks", jPanelTasks);
@@ -548,10 +571,16 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableCallLogs.setToolTipText("");
         jTableCallLogs.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jTableCallLogs.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableCallLogsMouseClicked(evt);
+            }
+        });
+        jTableCallLogs.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jTableCallLogsMouseMoved(evt);
             }
         });
         jScrollPane5.setViewportView(jTableCallLogs);
@@ -576,7 +605,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         );
         jPanelCallLogsLayout.setVerticalGroup(
             jPanelCallLogsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("Call Logs", jPanelCallLogs);
@@ -625,7 +654,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         mainTabbedPane.addTab("Options", jPanelOptions);
 
-        status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
+        status_label.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         status_label.setText("Welcome to IPDdump - http://code.google.com/p/ipddump/");
 
         fileMenu.setText("File");
@@ -639,16 +668,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         });
         fileMenu.add(openMenuItem);
 
-        ResolveCheckBox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        ResolveCheckBox.setSelected(true);
-        ResolveCheckBox.setText("Resolve Names?");
-        ResolveCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ResolveCheckBoxActionPerformed(evt);
-            }
-        });
-        fileMenu.add(ResolveCheckBox);
-
         saveAsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveAsMenuItem.setText("Save Selected As ...");
         saveAsMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -657,6 +676,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         });
         fileMenu.add(saveAsMenuItem);
+        fileMenu.add(jSeparator1);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         exitMenuItem.setText("Exit");
@@ -668,6 +688,24 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
+
+        jMenuSettings.setText("Options");
+
+        ResolveCheckBox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        ResolveCheckBox.setSelected(true);
+        ResolveCheckBox.setText("Resolve Names?");
+        ResolveCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ResolveCheckBoxActionPerformed(evt);
+            }
+        });
+        jMenuSettings.add(ResolveCheckBox);
+
+        TollTipsBoxMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        TollTipsBoxMenuItem.setText("Tool Tips");
+        jMenuSettings.add(TollTipsBoxMenuItem);
+
+        menuBar.add(jMenuSettings);
 
         jMenuHelp.setText("Help");
 
@@ -688,15 +726,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(status_label, javax.swing.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+                .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(status_label)
                 .addContainerGap())
@@ -711,7 +749,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     public IpdDump_NewGUI() {
         initComponents();
         setTitle("IPDdump v" + rb.getString("version"));
-        jPopupMenu.remove(jMenuItemCSV);//No need to see the output.. Still works under the Copy popup menu.
+        jPopupMenu.remove(jMenuItemCSV);//No need to see the CSV output.. Still works under the Copy popup menu.
+        jMenuSpSMS.remove(jMenuItemSelectedSMSCSV);
+        jMenuSpCallLogs.remove(jMenuItemSelectedCallLogsCSV);
         viewer = new DataViewer();
         IpdChooser.setAcceptAllFileFilterUsed(false);
         IpdChooser.setFileHidingEnabled(false);
@@ -746,6 +786,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         MemostabINDEX = mainTabbedPane.indexOfTab("Memos");
         CallLogstabINDEX = mainTabbedPane.indexOfTab("Call Logs");
         ActiveTAB = mainTabbedPane.getSelectedIndex();
+
+//        jLabel1.setText("");
 
         status_label.setText(welcomeMsg);
         saveAsMenuItem.setEnabled(false);
@@ -1019,6 +1061,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_saveAsMenuItemActionPerformed
+
     private boolean saveDialog() {
         if (JFileChooser.APPROVE_OPTION == jFileChooser1.showSaveDialog(null)) {
 
@@ -1173,8 +1216,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPopupMenu.remove(jMenuSpSMS);
             jPopupMenu.remove(jMenuSpCallLogs);
             jPopupMenu.add(jMenuHistory);
-            jMenuItemViewHistoryTXT.setToolTipText("View the Conversation only of the selected  phone number/s");
-            jMenuItemViewHistoryXML.setToolTipText("View the Conversation only of the selected phone number/s");
+            jMenuItemViewHistoryTXT.setToolTipText("View the Conversation only of " +
+                    "the selected  phone number/s");
+            jMenuItemViewHistoryXML.setToolTipText("View the Conversation only of " +
+                    "the selected phone number/s");
 
             jMenuHistory.setText("View Conversation");
             jMenuItemViewHistoryTXT.setText("View Conversation - TXT");
@@ -1198,8 +1243,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 jMenuHistory.setText("View History");
                 jMenuItemViewHistoryTXT.setText("View Contact/s History - TXT");
                 jMenuItemViewHistoryXML.setText("View Contact/s History - XML");
-                jMenuItemViewHistoryTXT.setToolTipText("View the Call Log and Sms History of the selected Contact/s");
-                jMenuItemViewHistoryXML.setToolTipText("View the Call Log and Sms History of the selected Contact/s");
+                jMenuItemViewHistoryTXT.setToolTipText("View the Call Log and Sms " +
+                        "History of the selected Contact/s");
+                jMenuItemViewHistoryXML.setToolTipText("View the Call Log and Sms " +
+                        "History of the selected Contact/s");
             }
         } else if (ActiveTAB == MemostabINDEX) {
             SelectedRows = MemosSelectedRows = jTableMemos.getSelectedRows();
@@ -1234,7 +1281,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             ShowPopup(evt);
         } else {
             if (evt.getButton() == MouseEvent.BUTTON3 && SelectedRows.length == 0) {
-                JOptionPane.showMessageDialog(MessageFrame, "Select the " + evtObj + " you want to View");
+                JOptionPane.showMessageDialog(MessageFrame,
+                        "Select the " + evtObj + " you want to View");
             }
         }
 
@@ -1398,9 +1446,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == CallLogstabINDEX) {
             CallLogsSelectedRows = jTableCallLogs.getSelectedRows();
             String tmp = historyMaker.makeCallLogHistoryTXT(CallLogsSelectedRows);
-            setRowsSelection(jTableCallLogs, historyMaker.getSelectedCallLogs());
 
             if (!tmp.equals("")) {
+                setRowsSelection(jTableCallLogs, historyMaker.getSelectedCallLogs());
                 viewer.setTitle("Complete Call Log History");
                 viewer.setTxt(tmp);
                 viewer.setVisible(true);
@@ -1438,9 +1486,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == CallLogstabINDEX) {
             CallLogsSelectedRows = jTableCallLogs.getSelectedRows();
             String tmp = historyMaker.makeCallLogHistoryXML(CallLogsSelectedRows);
-            setRowsSelection(jTableCallLogs, historyMaker.getSelectedCallLogs());
+
 
             if (!tmp.equals("")) {
+                setRowsSelection(jTableCallLogs, historyMaker.getSelectedCallLogs());
                 viewer.setTitle("Complete Call Log History");
                 viewer.setTxt(tmp);
                 viewer.setVisible(true);
@@ -1449,6 +1498,69 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jMenuItemViewHistoryXMLActionPerformed
+
+    private void mouseMoved(java.awt.event.MouseEvent evt) {
+        int[] SelectedRows = new int[0];
+        String evtObj = null;
+        String tollTipText = null;
+        ActiveTAB = mainTabbedPane.getSelectedIndex();
+        javax.swing.JTable jTableTemp = null;
+
+
+        if (ActiveTAB == SMStabINDEX) {
+            jTableTemp = jTableSMS;
+        } else if (ActiveTAB == ContactstabINDEX) {
+            jTableTemp = jTableContacts;
+        } else if (ActiveTAB == MemostabINDEX) {
+            jTableTemp = jTableMemos;
+        } else if (ActiveTAB == TaskstabINDEX) {
+            jTableTemp = jTableTasks;
+        } else if (ActiveTAB == CallLogstabINDEX) {
+            jTableTemp = jTableCallLogs;
+        }
+
+        if (TollTipsBoxMenuItem.isSelected()) {
+
+            if (jTableTemp.rowAtPoint(evt.getPoint()) != hoveredRow) {
+                hoveredRow = jTableTemp.rowAtPoint(evt.getPoint());
+            }
+            if (ActiveTAB == SMStabINDEX) {
+                tollTipText = SMS.toPlainText(new int[]{hoveredRow});
+            } else if (ActiveTAB == ContactstabINDEX) {
+                tollTipText = Contacts.toPlainText(new int[]{hoveredRow});
+            } else if (ActiveTAB == MemostabINDEX) {
+                tollTipText = Memos.toPlainText(new int[]{hoveredRow});
+            } else if (ActiveTAB == TaskstabINDEX) {
+                tollTipText = Tasks.toPlainText(new int[]{hoveredRow});
+            } else if (ActiveTAB == CallLogstabINDEX) {
+                tollTipText = CallLogs.toPlainText(new int[]{hoveredRow});
+            }
+            tollTipText = tollTipText.substring(0, tollTipText.length() - 1);
+            jTableTemp.setToolTipText("<html>" + tollTipText.replace("\n", "<br>") + "</html>");
+        } else {
+            jTableTemp.setToolTipText(null);
+        }
+    }
+
+    private void jTableSMSMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableSMSMouseMoved
+        mouseMoved(evt);
+    }//GEN-LAST:event_jTableSMSMouseMoved
+
+    private void jTableContactsMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableContactsMouseMoved
+        mouseMoved(evt);
+    }//GEN-LAST:event_jTableContactsMouseMoved
+
+    private void jTableMemosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMemosMouseMoved
+        mouseMoved(evt);
+    }//GEN-LAST:event_jTableMemosMouseMoved
+
+    private void jTableTasksMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableTasksMouseMoved
+        mouseMoved(evt);
+    }//GEN-LAST:event_jTableTasksMouseMoved
+
+    private void jTableCallLogsMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableCallLogsMouseMoved
+        mouseMoved(evt);
+    }//GEN-LAST:event_jTableCallLogsMouseMoved
 
     private void setRowsSelection(final javax.swing.JTable jTable, final int[] selectedRows) {
 
@@ -1471,6 +1583,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 }
                 //select and the last entry
                 jTable.addRowSelectionInterval(selectedRows[selectedRows.length - 1], selectedRows[selectedRows.length - 1]);
+            // jLabelSelectedRows.setText(String.valueOf(jTable.getSelectedRowCount()));
             }
         };
         Thread t1 = new Thread(r1);
@@ -1723,6 +1836,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JFileChooser IpdChooser;
     private javax.swing.JFrame MessageFrame;
     private javax.swing.JCheckBoxMenuItem ResolveCheckBox;
+    private javax.swing.JCheckBoxMenuItem TollTipsBoxMenuItem;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JFileChooser jFileChooser1;
@@ -1744,6 +1858,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemViewHistoryTXT;
     private javax.swing.JMenuItem jMenuItemViewHistoryXML;
     private javax.swing.JMenuItem jMenuItemXML;
+    private javax.swing.JMenu jMenuSettings;
     private javax.swing.JMenu jMenuSpCallLogs;
     private javax.swing.JMenu jMenuSpSMS;
     private javax.swing.JPanel jPanelCalendar;
@@ -1760,6 +1875,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTableCallLogs;
     private javax.swing.JTable jTableContacts;
     private javax.swing.JTable jTableMemos;

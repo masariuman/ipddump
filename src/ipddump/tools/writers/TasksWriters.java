@@ -2,10 +2,10 @@ package ipddump.tools.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.dom4j.*;
-
 import ipddump.data.InteractivePagerBackup;
 import ipddump.data.Records.Task;
+
+import org.dom4j.*;
 
 //~--- JDK imports ------------------------------------------------------------
 

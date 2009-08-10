@@ -20,6 +20,35 @@ public class Finder {
 
     //~--- methods ------------------------------------------------------------
 
+    public int[] findCallLogByNumber(String phNumber) {
+        int i        =0;
+        int callIndex=0;
+
+        for (CallLog recordCallLog : database.getCallLogs()) {
+            String CallLognumber=recordCallLog.getNumber();
+
+            if (CallLognumber.replaceAll(" ", "").replaceAll("!",
+                                         "").equals(phNumber.replaceAll(" ", "").replaceAll("!", ""))) {
+                i++;
+            }
+        }
+
+        int selectedCalls[]=new int[i];
+        int pointer        =0;
+
+        for (CallLog recordCallLog : database.getCallLogs()) {
+            String CallNumber=recordCallLog.getNumber();
+
+            if (CallNumber.replaceAll(" ", "").replaceAll("!", "").equals(phNumber.replaceAll(" ", ""))) {
+                selectedCalls[pointer++]=callIndex;
+            }
+
+            callIndex++;
+        }
+
+        return selectedCalls;
+    }
+
     public int[] findCallLogsByContacts(int[] selectedContacts) {
         int RecordIndex=0;
         int j          =0;
@@ -201,7 +230,8 @@ public class Finder {
         for (SMSMessage recordsms : database.getSMSRecords()) {
             String SMSnumber=recordsms.getNumber();
 
-            if (SMSnumber.replaceAll(" ", "").replaceAll("!", "").equals(phNumber.replaceAll(" ", "").replaceAll("!", ""))) {
+            if (SMSnumber.replaceAll(" ", "").replaceAll("!",
+                                     "").equals(phNumber.replaceAll(" ", "").replaceAll("!", ""))) {
                 i++;
             }
         }
@@ -245,7 +275,6 @@ public class Finder {
     public SMSMessage findSpesificSms(int number) {
         if ((number<0) || (number>database.getSMSRecords().size())) {
             return null;
-
         }
 
         int i=0;
@@ -260,7 +289,7 @@ public class Finder {
 
 //      throw new Exception("Out of Bounds");
     }
-    
+
     public String findTimeZoneByID(String idNumber) {
         for (BBTimeZone record : database.getTimeZones()) {
             String id=record.getTimeZoneID();
@@ -271,33 +300,5 @@ public class Finder {
         }
 
         return "TimeZ db not present ID:"+idNumber;
-    }
-
-        public int[] findCallLogByNumber(String phNumber) {
-        int i       =0;
-        int callIndex=0;
-
-        for (CallLog recordCallLog : database.getCallLogs()) {
-            String CallLognumber=recordCallLog.getNumber();
-
-            if (CallLognumber.replaceAll(" ", "").replaceAll("!", "").equals(phNumber.replaceAll(" ", "").replaceAll("!", ""))) {
-                i++;
-            }
-        }
-
-        int selectedCalls[]=new int[i];
-        int pointer      =0;
-
-        for (CallLog recordCallLog : database.getCallLogs()) {
-            String CallNumber=recordCallLog.getNumber();
-
-            if (CallNumber.replaceAll(" ", "").replaceAll("!", "").equals(phNumber.replaceAll(" ", ""))) {
-                selectedCalls[pointer++]=callIndex;
-            }
-
-            callIndex++;
-        }
-
-        return selectedCalls;
     }
 }

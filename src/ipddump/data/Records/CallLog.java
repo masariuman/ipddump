@@ -37,34 +37,27 @@ public class CallLog extends Record implements Comparable<CallLog> {
         switch (type) {
         case 1 :
             break;    // always the same
-
         case 6 :
             break;    // always the same
-
         case 8 :
             break;    // always the same
-
         case 16 :
             break;    // always the same
-
         case 10 :
 
             // viewItInInt(type, data);
             // Probably nothing special
             break;
-
         case 11 :
 
             // viewItInInt(type, data);
             // Probably nothing special
             break;
-
         case 13 :
 
             // viewItInInt(type, data);
             // Probably nothing special
             break;
-
         case 2 :
             if (makeInt(data)==0) {
                 fields.put("Status", "Received Call");
@@ -77,12 +70,10 @@ public class CallLog extends Record implements Comparable<CallLog> {
             }
 
             break;
-
         case 31 :
             fields.put("Name", makeString(data));
 
             break;
-
         case 3 : {
             String duration=makeDuration(makeInt(data));
 
@@ -90,20 +81,17 @@ public class CallLog extends Record implements Comparable<CallLog> {
 
             break;
         }
-
         case 4 : {
             date=makeDate2(data);
             fields.put("Date", date.toString());
 
             break;
         }
-
         case 12 : {
             fields.put("Number", makeString(data));
 
             break;
         }
-
         default :
 
         // viewItInInt(type, data);
@@ -127,9 +115,11 @@ public class CallLog extends Record implements Comparable<CallLog> {
 
     public String getName() {
         if (getField("Name").equals("")) {
-            if (!getField("Number").equals("")) 
+            if (!getField("Number").equals("")) {
                 return getNumber();
-            else return "Unknown Name";
+            } else {
+                return "Unknown Name";
+            }
         }
 
         return getField("Name");
@@ -144,10 +134,11 @@ public class CallLog extends Record implements Comparable<CallLog> {
     }
 
     public String getNumber() {
-         if (getField("Number").equals("")) 
-                 return "Unknown Number";
-                 else
-        return getField("Number");
+        if (getField("Number").equals("")) {
+            return "Unknown Number";
+        } else {
+            return getField("Number");
+        }
     }
 
     public String getStatus() {

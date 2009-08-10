@@ -72,7 +72,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             fields.put("text", decodedSMS);
 
             break;
-
         case 2 :
             builder=new StringBuilder();
 
@@ -87,7 +86,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             fields.put("number", number);
 
             break;
-
         case 9 : {
 
 //          viewIt(type, data);
@@ -96,7 +94,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             // phone in the IPD.
             break;
         }
-
         case 7 : {
 
             // This marks a USC2 text field
@@ -114,7 +111,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
             break;
         }
-
         case 11 : {
 
 //          viewIt(type, data);
@@ -122,7 +118,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             // 1000 for all the rest
             break;
         }
-
         case 1 :
             long val0=0;
 
@@ -151,7 +146,6 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             fields.put("sent?", wasSent.toString());
 
             break;
-
         default :
 
 //      viewIt(type, data);
@@ -160,11 +154,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
 
     @Override
     public int compareTo(SMSMessage o) {
-        if (wasSent) {
-            return received.compareTo(o.received);
-        } else {
-            return sent.compareTo(o.sent);
-        }
+        return getSentReceivedDate().compareTo(o.getSentReceivedDate());
     }
 
     //~--- get methods --------------------------------------------------------
@@ -194,6 +184,14 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
      */
     public Date getSent() {
         return sent;
+    }
+
+    public Date getSentReceivedDate() {
+        if (wasSent) {
+            return sent;
+        } else {
+            return received;
+        }
     }
 
     /**

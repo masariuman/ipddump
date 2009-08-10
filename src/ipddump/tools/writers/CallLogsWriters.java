@@ -9,10 +9,10 @@ package ipddump.tools.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.dom4j.*;
-
-import ipddump.data.Records.CallLog;
 import ipddump.data.InteractivePagerBackup;
+import ipddump.data.Records.CallLog;
+
+import org.dom4j.*;
 
 /**
  *
@@ -57,7 +57,8 @@ public class CallLogsWriters extends BasicWriter {
         int j          =0;
 
         for (CallLog record : database.getCallLogs()) {
-            if (isSelectedRecord(RecordIndex, selectedCallLogs) && (selectedCallLogs[j]<database.getCallLogs().size())) {
+            if (isSelectedRecord(RecordIndex, selectedCallLogs)
+                    && (selectedCallLogs[j]<database.getCallLogs().size())) {
                 temp.append(record.getName()+","+record.getDuration()+","+record.getStatus()+","
                             +record.getDate().toString()+","+record.getNumber()+"\n");
                 j++;
@@ -85,13 +86,16 @@ public class CallLogsWriters extends BasicWriter {
      */
     public String toPlainText(int[] CallLogselectedRows) {
         StringBuilder tmp=new StringBuilder();
+
         tmp.append("");
+
         if (database!=null) {
             int RecordIndex=0;
             int j          =0;
 
             for (CallLog record : database.getCallLogs()) {
-                if (isSelectedRecord(RecordIndex, CallLogselectedRows) && (CallLogselectedRows[j]<database.getCallLogs().size())) {
+                if (isSelectedRecord(RecordIndex, CallLogselectedRows)
+                        && (CallLogselectedRows[j]<database.getCallLogs().size())) {
                     tmp.append(record.getNameAndNumber()+"\nStatus: "+record.getStatus()+"\nDate: "+record.getDate()
                                +"\nDuration: "+record.getDuration().toString()+"\n\n");
                     j++;
@@ -128,7 +132,8 @@ public class CallLogsWriters extends BasicWriter {
         int j          =0;
 
         for (CallLog record : database.getCallLogs()) {
-            if (isSelectedRecord(RecordIndex, selectedCallLogs) && (selectedCallLogs[j]<database.getCallLogs().size())) {
+            if (isSelectedRecord(RecordIndex, selectedCallLogs)
+                    && (selectedCallLogs[j]<database.getCallLogs().size())) {
                 Element message=root.addElement("CallLog").addAttribute("UID", String.valueOf(record.getUID()));
 
                 message.addElement("Name").addText(record.getName());

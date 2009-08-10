@@ -42,7 +42,6 @@ public class Calendar extends Record implements Comparable<Calendar> {
                 fields.put("Reacurance", "Yearly");
 
                 break;
-
             case 0x61 :
                 fields.put("Reacurance", "None");
 
@@ -52,13 +51,11 @@ public class Calendar extends Record implements Comparable<Calendar> {
             System.out.println(getField("Reacurance"));
 
             break;
-
         case 2 :
             fields.put("Name", makeString(data));
             System.out.println(getField("Name"));
 
             break;
-
         case 42 :
             break;
 
@@ -80,7 +77,6 @@ public class Calendar extends Record implements Comparable<Calendar> {
             System.out.println(getField("StartDate"));
 
             break;
-
         case 7 :
             fields.put("EndDate",
                        new Date((long) (makeInt(data)) * 60 * 1000-2208970740000L-28 * 61 * 60 * 1000).toString());
@@ -88,16 +84,12 @@ public class Calendar extends Record implements Comparable<Calendar> {
             System.out.println(getField("EndDate"));
 
             break;
-
         case 255 :
             break;
-
         case 18 :
             break;
-
         case 40 :
             break;
-
         default :
             viewItInHex(type, data);
         }
