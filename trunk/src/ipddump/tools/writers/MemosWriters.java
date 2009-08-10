@@ -9,10 +9,10 @@ package ipddump.tools.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.dom4j.*;
-
 import ipddump.data.InteractivePagerBackup;
 import ipddump.data.Records.Memo;
+
+import org.dom4j.*;
 
 /**
  *
@@ -90,7 +90,8 @@ public class MemosWriters extends BasicWriter {
             int j          =0;
 
             for (Memo record : database.getMemos()) {
-                if (isSelectedRecord(RecordIndex, MemoselectedRows) && (MemoselectedRows[j]<database.getMemos().size())) {
+                if (isSelectedRecord(RecordIndex, MemoselectedRows)
+                        && (MemoselectedRows[j]<database.getMemos().size())) {
                     String title=record.getTitle();
                     String memo =record.getMemo();
 

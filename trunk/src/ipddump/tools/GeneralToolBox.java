@@ -10,6 +10,11 @@ import java.util.TimeZone;
  * @author Jimmys Daskalakis
  */
 public class GeneralToolBox {
+    public String makeString(char[] data) {
+        String str=Gsm2Iso.Gsm2Iso(data);
+
+        return str.substring(0, str.length()-1);
+    }
 
     /**
      *  Displays the type and the value of the given
@@ -132,9 +137,4 @@ public class GeneralToolBox {
 
         return temp;
     }
-
-    public String makeString(char[] data) {
-    String str = Gsm2Iso.Gsm2Iso(data);
-    return str.substring(0, str.length() - 1);
-  }
 }

@@ -1,7 +1,5 @@
 package ipddump.data.Records;
 
-//~--- JDK imports ------------------------------------------------------------
-
 /**
  * This record is here for any records that this utility doesn't handle yet.
  *
@@ -9,7 +7,8 @@ package ipddump.data.Records;
  * @date Jan 1, 2008
  */
 public class DummyRecord extends Record {
-    //List<String> fields=new ArrayList<String>();
+
+    // List<String> fields=new ArrayList<String>();
     private boolean valuePeeking=false;
 
     //~--- constructors -------------------------------------------------------
@@ -28,19 +27,23 @@ public class DummyRecord extends Record {
 
     //~--- methods ------------------------------------------------------------
 
-
     public void addField(int type, char[] data) {
-        //fields.add(type+"|"+ makeString(data));
-        if (valuePeeking)viewIt(type, data);
+
+        // fields.add(type+"|"+ makeString(data));
+        if (valuePeeking) {
+            viewIt(type, data);
+        }
     }
 
-    public Record enableValuePeeking(){
-    valuePeeking=true;
-    return this;
+    public Record disableValuePeeking() {
+        valuePeeking=false;
+
+        return this;
     }
 
-    public Record disableValuePeeking(){
-    valuePeeking=false;
-    return this;
+    public Record enableValuePeeking() {
+        valuePeeking=true;
+
+        return this;
     }
- }
+}

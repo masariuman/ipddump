@@ -38,12 +38,10 @@ public class BBTimeZone extends Record implements Comparable<BBTimeZone> {
         }
 
         break;
-
         case 2 :
             fields.put("PlaceName", String.valueOf(data));
 
             break;
-
         case 3 : {
             timezoneOfset=makeInt(data);
             fields.put("TimeZoneOffset", String.valueOf(timezoneOfset));

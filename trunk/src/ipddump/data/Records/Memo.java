@@ -34,16 +34,13 @@ public class Memo extends Record implements Comparable<Memo> {
             fields.put("Title", title);
 
             break;
-
         case 2 :
             text=makeString(data);
             fields.put("Memo", text);
 
             break;
-
         case 3 :
             break;
-
         default :
         }
     }

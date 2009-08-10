@@ -2,10 +2,10 @@ package ipddump.tools.writers;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.dom4j.*;
-
-import ipddump.data.Records.Contact;
 import ipddump.data.InteractivePagerBackup;
+import ipddump.data.Records.Contact;
+
+import org.dom4j.*;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -131,7 +131,8 @@ public class ContactsWriters extends BasicWriter {
             int j          =0;
 
             for (Contact record : database.contacts()) {
-                if (isSelectedRecord(RecordIndex, selectedContacts) && (selectedContacts[j]<database.contacts().size())) {
+                if (isSelectedRecord(RecordIndex, selectedContacts)
+                        && (selectedContacts[j]<database.contacts().size())) {
                     Iterator iterator2=record.fields().entrySet().iterator();
 
                     for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
