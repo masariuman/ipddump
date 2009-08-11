@@ -338,7 +338,6 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTableSMS.setToolTipText("null");
         jTableSMS.setName("SMS"); // NOI18N
         jTableSMS.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jTableSMS.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -655,7 +654,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         mainTabbedPane.addTab("Options", jPanelOptions);
 
-        status_label.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
         status_label.setText("Welcome to IPDdump - http://code.google.com/p/ipddump/");
 
         fileMenu.setText("File");
@@ -789,6 +788,18 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         ActiveTAB = mainTabbedPane.getSelectedIndex();
 
 //        jLabel1.setText("");
+
+        if (rb.getString("ResolveNames").equalsIgnoreCase("true")) {
+        ResolveCheckBox.setSelected(true);}
+        else if(rb.getString("ResolveNames").equalsIgnoreCase("false"))
+        {ResolveCheckBox.setSelected(false);
+        }
+
+        if (rb.getString("toolTips").equalsIgnoreCase("true")) {
+        TollTipsBoxMenuItem.setSelected(true);}
+        else if(rb.getString("toolTips").equalsIgnoreCase("false"))
+        {TollTipsBoxMenuItem.setSelected(false);
+        }
 
         status_label.setText(welcomeMsg);
         saveAsMenuItem.setEnabled(false);
@@ -1501,8 +1512,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemViewHistoryXMLActionPerformed
 
     private void mouseMoved(java.awt.event.MouseEvent evt) {
-        int[] SelectedRows = new int[0];
-        String evtObj = null;
+        int SelectedRows=0;
         String tollTipText = null;
         ActiveTAB = mainTabbedPane.getSelectedIndex();
         javax.swing.JTable jTableTemp = null;
@@ -1519,7 +1529,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         } else if (ActiveTAB == CallLogstabINDEX) {
             jTableTemp = jTableCallLogs;
         }
-
+//        SelectedRows=jTableTemp.getSelectedRowCount();
         if (TollTipsBoxMenuItem.isSelected()) {
 
             if (jTableTemp.rowAtPoint(evt.getPoint()) != hoveredRow) {
@@ -1537,7 +1547,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 tollTipText = CallLogs.toPlainText(new int[]{hoveredRow});
             }
             tollTipText = tollTipText.substring(0, tollTipText.length() - 1);
-            tollTipText=wrap("<html>" + tollTipText.replace("\n", "<br>") + "</html>", 50);
+            tollTipText = wrap("<html>" + tollTipText.replace("\n", "<br>") + "</html>", 50);
             jTableTemp.setToolTipText(tollTipText);
         } else {
             jTableTemp.setToolTipText(null);
@@ -1629,7 +1639,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(
                     null,
                     "The used Java Runtime Environment does not meet the minimum requirements.\n" +
-                    "This Program at least Java " + minimumVersion +
+                    "This Program needs at least Java " + minimumVersion +
                     " or higher.\n" + "Please update your Java Runtime.\n\n" +
                     "Detected Java Runtime Version: " + ver,
                     "Java Runtime version problem detected", JOptionPane.ERROR_MESSAGE);
@@ -1853,66 +1863,62 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }
 
     /**
-   *
-   * <pre>
-   * StringUtil.wrap("Hello World!, "<br>", 9) = Hello<br>World!
-   * StringUtil.wrap("1234512345", "<br>", 5) = 1234512345
-   * StringUtil.wrap("12345", 10) = 12345
-   *</pre>
-   *
-   * @param string The String
-   * @param lineSeparator Line break
-   * @param wrapLength The position to create a line break
-   *
-   * @return String
-   */
-  public static String wrap(String string, String lineSeparator, int wrapLength) {
-    //string = "Das ist ein ganz stink-normaler demo-text, mit dem ich das Verhalten dieses Wrapper testen moechte, ohne dass ein Langes Wort wie Schifffahrtsmeistereiangestelltenbeauftragter irgendwie Aerger machen koennte";
-
-    // Null or blank string should return an empty ("") string
-    if (isBlank(string)) {
-      return "";
-    }
-
-    int stringLength = string.length();
-
-    if (stringLength > wrapLength) {
-      //Ensure.ensureArrayIndex(wrapLength, 1, Integer.MAX_VALUE);
-
-      // Default to HTML line break since web app is  client
-      if (isBlank(lineSeparator)) {
-        lineSeparator = "<br>";
-      }
-
-      StringBuffer sb = new StringBuffer(stringLength
-          + ((stringLength / wrapLength) * 2 * lineSeparator.length()));
-      BreakIterator lineIterator = BreakIterator.getLineInstance();
-      lineIterator.setText(string);
-      int start = lineIterator.first();
-      int lineStart = start;
-
-      for (int end = lineIterator.next(); end != BreakIterator.DONE; start = end, end = lineIterator.next()) {
-        if (end - lineStart < wrapLength) {
-          sb.append(string.substring(start, end));
+     *
+     * <pre>
+     * StringUtil.wrap("Hello World!, "<br>", 9) = Hello<br>World!
+     * StringUtil.wrap("1234512345", "<br>", 5) = 1234512345
+     * StringUtil.wrap("12345", 10) = 12345
+     *</pre>
+     *
+     * @param string The String
+     * @param lineSeparator Line break
+     * @param wrapLength The position to create a line break
+     *
+     * @return String
+     */
+    public static String wrap(String string, String lineSeparator, int wrapLength) {
+   
+        // Null or blank string should return an empty ("") string
+        if (isBlank(string)) {
+            return "";
         }
-        else {
-          // wrap
-          if (true || end - start < wrapLength) {
-            sb.append(lineSeparator);
-            sb.append(string.substring(start, end));
-          }
-          else {
-            // TODO
-            // truncate
-          }
-          lineStart = end;
-        }
-      }
-      string = sb.toString();
-    }
 
-    return string;
-  }
+        int stringLength = string.length();
+
+        if (stringLength > wrapLength) {
+            //Ensure.ensureArrayIndex(wrapLength, 1, Integer.MAX_VALUE);
+
+            // Default to HTML line break since web app is  client
+            if (isBlank(lineSeparator)) {
+                lineSeparator = "<br>";
+            }
+
+            StringBuffer sb = new StringBuffer(stringLength + ((stringLength / wrapLength) * 2 * lineSeparator.length()));
+            BreakIterator lineIterator = BreakIterator.getLineInstance();
+            lineIterator.setText(string);
+            int start = lineIterator.first();
+            int lineStart = start;
+
+            for (int end = lineIterator.next(); end != BreakIterator.DONE; start = end, end = lineIterator.next()) {
+                if (end - lineStart < wrapLength) {
+                    sb.append(string.substring(start, end));
+                } else {
+                    // wrap
+                    if (true || end - start < wrapLength) {
+                        sb.append(lineSeparator);
+                        sb.append(string.substring(start, end));
+                    } else {
+                        // TODO
+                        // truncate
+                    }
+                    lineStart = end;
+                }
+            }
+            string = sb.toString();
+        }
+
+        return string;
+    }
 
     /**
      * Check to see if the string has no value
