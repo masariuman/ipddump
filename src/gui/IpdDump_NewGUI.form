@@ -363,7 +363,6 @@
                         <Column editable="false" title="Received Date" type="java.lang.String"/>
                       </Table>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="null"/>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
                         <Column maxWidth="40" minWidth="-1" prefWidth="40" resizable="true">
