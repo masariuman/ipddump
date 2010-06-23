@@ -71,7 +71,7 @@ public class CallLog extends Record implements Comparable<CallLog> {
 
             break;
         case 31 :
-            fields.put("Name", makeString(data));
+            fields.put("Name", makeStringCropLast(data));
 
             break;
         case 3 : {
@@ -88,7 +88,7 @@ public class CallLog extends Record implements Comparable<CallLog> {
             break;
         }
         case 12 : {
-            fields.put("Number", makeString(data));
+            fields.put("Number", makeStringCropLast(data));
 
             break;
         }

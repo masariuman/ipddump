@@ -10,12 +10,17 @@ import java.util.TimeZone;
  * @author Jimmys Daskalakis
  */
 public class GeneralToolBox {
-    public String makeString(char[] data) {
+    public String makeStringCropLast(char[] data) {
         String str=Gsm2Iso.Gsm2Iso(data);
 
         return str.substring(0, str.length()-1);
     }
 
+     public String makeStringCropFirst(char[] data) {
+        String str=Gsm2Iso.Gsm2Iso(data);
+
+        return str.substring(1, str.length());
+    }
     /**
      *  Displays the type and the value of the given
      *   unknown field
@@ -118,12 +123,12 @@ public class GeneralToolBox {
         int temp=-1000;
 
         if (data.length==4) {
-            temp=data[0] << 0;
+            temp=data[0];
             temp|=data[1] << 8;
             temp|=data[2] << 16;
             temp|=data[3] << 24;
         } else if (data.length==8) {
-            temp=data[0] << 0;
+            temp=data[0];
             temp|=data[1] << 8;
             temp|=data[2] << 16;
             temp|=data[3] << 24;

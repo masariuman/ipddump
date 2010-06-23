@@ -421,7 +421,10 @@ public class IPDParser {
                     recordRead+=fieldLength;
                     //System.out.println("read: "+recordRead+" length: "+recordLength);
                     if (recordRead>recordLength){
+                        if (recordLength-recordRead-fc.position()>0){
                         input.skip(recordLength-recordRead);
+                        }
+                        
                         //System.out.println("Record Length Error Found");
                     }
                     if (recordRead<recordLength) {

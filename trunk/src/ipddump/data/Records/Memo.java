@@ -30,12 +30,12 @@ public class Memo extends Record implements Comparable<Memo> {
     public void addField(int type, char[] data) {
         switch (type) {
         case 1 :
-            title=makeString(data);
+            title=makeStringCropLast(data);
             fields.put("Title", title);
 
             break;
         case 2 :
-            text=makeString(data);
+            text=makeStringCropLast(data);
             fields.put("Memo", text);
 
             break;
