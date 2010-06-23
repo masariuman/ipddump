@@ -30,11 +30,11 @@ public class Task extends Record implements Comparable<Task> {
       break;
 
     case 2:
-      fields.put("Name", makeString(data));
+      fields.put("Name", makeStringCropLast(data));
       break;
 
     case 3:
-      fields.put("Notes", makeString(data));
+      fields.put("Notes", makeStringCropLast(data));
       break;
 
     case 5:
@@ -121,7 +121,7 @@ public class Task extends Record implements Comparable<Task> {
         existing += ";";
       }
 
-      fields.put("Categories", existing + makeString(data));
+      fields.put("Categories", existing + makeStringCropLast(data));
       break;
 
     case 18:

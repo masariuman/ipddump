@@ -4,7 +4,6 @@ package ipddump.data.Records;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-
 import java.util.HashMap;
 
 /**
@@ -16,6 +15,7 @@ import java.util.HashMap;
  */
 public class Contact extends Record implements Comparable<Contact> {
     private Image image;
+    private boolean enableAdrressBookAllType=false;
 
     //~--- constructors -------------------------------------------------------
 
@@ -34,6 +34,10 @@ public class Contact extends Record implements Comparable<Contact> {
     public Contact(int dbID, int dbVersion, int uid, int recordLength) {
         super(dbID, dbVersion, uid, recordLength);
         fields=new HashMap<String, String>();
+    }
+
+    public void enableAdrressBookAllType() {
+        enableAdrressBookAllType=true;
     }
 
     //~--- enums --------------------------------------------------------------
@@ -114,6 +118,7 @@ public class Contact extends Record implements Comparable<Contact> {
 
     @Override
     public void addField(int type, char[] data) {
+        if (!enableAdrressBookAllType){
         for (Field field : Field.values()) {
             if (field.accept(type)) {
                 if (field==Field.Contact_Image) {
@@ -121,11 +126,51 @@ public class Contact extends Record implements Comparable<Contact> {
                 } else if (field==Field.Categories) {
 
                     // Microsoft Outlook Style. If sepated by commas then the CSV brakes.
-                    addField(field, makeString(data).replace(',', ';'));
+                    addField(field, makeStringCropLast(data).replace(',', ';'));
                 } else {
-                    addField(field, makeString(data));
+                    addField(field, makeStringCropLast(data));
                 }
             }
+        }
+        }else {
+             switch (type) {
+        case 2 :{break;}
+        case 3 :{break;}
+        case 5 :{break;}
+        case 10:{
+            type  =10;
+            length=0;
+//            StringBuilder string = new StringBuilder();
+
+            System.out.println(" \n--Data: "+makeStringCropLast(data.clone()));
+
+           for (int pointer =0; pointer<data.length-3;  pointer+=0){
+           length=data[pointer];
+           System.out.format("\ntype: %h Length: %h Data: \n",type,length);
+           System.out.print(String.valueOf(data.clone()).substring(pointer+2, length+pointer+2));
+
+
+                       switch (type){
+                            case 10 :{
+                                System.out.println(" - Name: "+makeStringCropFirst(String.valueOf(data.clone()).substring(pointer+2, length+pointer+2).toCharArray()));
+                            pointer+=21;
+                            break;}
+                             case 8 :{
+                                 System.out.println(" - Mobile: "+makeStringCropFirst(String.valueOf(data.clone()).substring(pointer+2, length+pointer+2).toCharArray()));
+
+                            break;}
+            }
+
+            pointer+=length;
+            type = data[pointer+2];
+            
+
+            }
+
+            
+}
+            
+        }
         }
     }
 

@@ -52,7 +52,7 @@ public class Calendar extends Record implements Comparable<Calendar> {
 
             break;
         case 2 :
-            fields.put("Name", makeString(data));
+            fields.put("Name", makeStringCropLast(data));
             System.out.println(getField("Name"));
 
             break;

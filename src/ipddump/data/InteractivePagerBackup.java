@@ -85,7 +85,7 @@ public class InteractivePagerBackup {
     private InteractivePagerBackup database       =this;
     private boolean                errorFlag      =false;
     private boolean                debugingEnabled=false;
-    private boolean                valuePeeking   =false;
+    private boolean                valuePeeking   =true;
 
     //~--- constructors -------------------------------------------------------
 
@@ -165,6 +165,12 @@ public class InteractivePagerBackup {
             contacts.add(record);
 
             return record;
+//        }else if ("Address Book - All".equals(databases.get(dbIndex))) {
+//            Contact record=new Contact(dbIndex, version, uid, length);
+//            record.enableAdrressBookAllType();
+//            contacts.add(record);
+//
+//            return record;
         } else if ("Memos".equals(databases.get(dbIndex))) {
             ipddump.data.Records.Memo record=new ipddump.data.Records.Memo(dbIndex, version, uid, length);
 
