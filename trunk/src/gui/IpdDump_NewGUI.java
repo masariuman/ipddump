@@ -15,6 +15,8 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -33,6 +35,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private String fileToSave;
     private InteractivePagerBackup database;
     private HistoryMaker historyMaker;
+    IPDParser parser;
     private final int SMStabINDEX;
     private final int ContactstabINDEX;
     private final int CalendartabINDEX;
@@ -155,6 +158,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelOptions = new javax.swing.JPanel();
         status_label6 = new javax.swing.JLabel();
         status_label = new javax.swing.JLabel();
+        jProgressBar1 = new javax.swing.JProgressBar();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -164,6 +168,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jMenuSettings = new javax.swing.JMenu();
         ResolveCheckBox = new javax.swing.JCheckBoxMenuItem();
         TollTipsBoxMenuItem = new javax.swing.JCheckBoxMenuItem();
+        AdrrBookAllCheckBox = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuItemAbout = new javax.swing.JMenuItem();
 
@@ -657,6 +662,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         status_label.setFont(new java.awt.Font("Tahoma", 0, 12));
         status_label.setText("Welcome to IPDdump - http://code.google.com/p/ipddump/");
 
+        jProgressBar1.setFocusable(false);
+
         fileMenu.setText("File");
 
         openMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
@@ -702,8 +709,17 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jMenuSettings.add(ResolveCheckBox);
 
         TollTipsBoxMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        TollTipsBoxMenuItem.setSelected(true);
         TollTipsBoxMenuItem.setText("Tool Tips");
         jMenuSettings.add(TollTipsBoxMenuItem);
+
+        AdrrBookAllCheckBox.setText("Use Adrress Book-All DB");
+        AdrrBookAllCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AdrrBookAllCheckBoxActionPerformed(evt);
+            }
+        });
+        jMenuSettings.add(AdrrBookAllCheckBox);
 
         menuBar.add(jMenuSettings);
 
@@ -728,7 +744,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(status_label, javax.swing.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE)
+                .addComponent(status_label, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -736,7 +754,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(status_label)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(status_label)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -801,8 +821,15 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         {TollTipsBoxMenuItem.setSelected(false);
         }
 
+        if (rb.getString("UseAdrrBook").equalsIgnoreCase("true")) {
+        AdrrBookAllCheckBox.setSelected(true);}
+        else if(rb.getString("UseAdrrBook").equalsIgnoreCase("false"))
+        {AdrrBookAllCheckBox.setSelected(false);
+        }
+
         status_label.setText(welcomeMsg);
         saveAsMenuItem.setEnabled(false);
+        jProgressBar1.setVisible(false);
     }
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
@@ -815,11 +842,14 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jFileChooser1.setSelectedFile(IpdChooser.getSelectedFile());
             setTitle("IPDdump " + jFileChooser1.getSelectedFile().getPath());
 
-            String[] args = {IpdChooser.getSelectedFile().getPath()};
             try {
-                IPDParser parser = new IPDParser(args[0]);
-                //parser.enableDebuging(); // TODO: Comment This Line Before Publish
+                 String[] args = {IpdChooser.getSelectedFile().getPath()};
+                 parser = new IPDParser(args[0]);
+//                parser.enableDebuging(); // TODO: Comment This Line Before Publish
                 //parser.enableValuePeeking(); // TODO: Comment This Line Before Publish
+                if (database!=null){
+                    database.contacts().iterator().next().setAdrrBookAllrecordsToZero();
+                }
                 database = parser.parse();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(MessageFrame, "ERROR: " + ex.getMessage());
@@ -834,14 +864,29 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             totalSMS = SMS.getSize();
 
             Contacts = new ContactsWriters(database);
-            totalContacts = Contacts.getSize();
+           if (database.contacts().
+                     iterator().hasNext()){
+               if (AdrrBookAllCheckBox.isSelected())
+                 {
+            totalContacts = database.contacts().iterator().next().
+                    getAdrrBookAllrecordsCount();
+             } else {
+             totalContacts = Math.abs(database.contacts().size()-database.contacts().
+                     iterator().next().getAdrrBookAllrecordsCount());
+               }
+
+             AdrrBookAllCheckBox.setToolTipText(database.contacts().
+                     iterator().next().getAdrrBookAllrecordsCount()+" records");
+            }
             finder = new Finder(database);
+
 
             Memos = new MemosWriters(database);
             totalMemos = Memos.getSize();
 
             CallLogs = new CallLogsWriters(database);
             totalCallLogs = CallLogs.getSize();
+
 
             Tasks = new TasksWriters(database);
             totalTasks = Tasks.getSize();
@@ -944,6 +989,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
                 sSent = "false";
             }
             if (resolveContactsNames) {
+                finder.useAdrrBookAll(AdrrBookAllCheckBox.isSelected());
+
                 Name = finder.findContactByPhoneNumber(record.getNumber());
             } else {
                 Name = record.getNumber();
@@ -959,12 +1006,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void fillContactsTable() {
 
+        if (AdrrBookAllCheckBox.isSelected() && database.contacts().iterator().hasNext())
+        {
+        totalContacts = database.contacts().iterator().next().getAdrrBookAllrecordsCount();
+        } else if (database.contacts().iterator().hasNext()){
+        totalContacts = Math.abs(database.contacts().size()-database.contacts().iterator().next().getAdrrBookAllrecordsCount());
+        }
         ContactsTablePrepair();
         mainTabbedPane.setTitleAt(ContactstabINDEX, "Contacts (" + totalContacts + ")");
         int i = 0;
-
+//        System.out.println("TOTAL CONTACS FOUND: "+database.contacts().size());
+//        System.out.println("TOTAL ALL CONTACS FOUND: "+database.contacts().iterator().next().getAdrrBookAllrecordsCount());
         for (Contact record : database.contacts()) {
-
+            if (record.isAdrrBookAllDB()==AdrrBookAllCheckBox.isSelected()){
             ContactsDataModel.setValueAt(record.getName(), i, ContactsNameIndex);
             ContactsDataModel.setValueAt(record.getEmail(), i, ContactsEmailIndex);
             ContactsDataModel.setValueAt(record.getMobilePhone(), i, ContactsMobileIndex);
@@ -972,6 +1026,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             ContactsDataModel.setValueAt(record.getWorkPhone(), i, ContactsWorkIndex);
             ContactsDataModel.setValueAt(record.getNotes(), i, ContactsNotesIndex);
             i++;//Go to next Line in the table
+            }
+
         }
     }
 
@@ -1304,13 +1360,19 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     }
     private void ResolveCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResolveCheckBoxActionPerformed
-        resolveContactsNames = ResolveCheckBox.isSelected();
-        historyMaker = new HistoryMaker(database, resolveContactsNames);
+       resolveNames();
+    }//GEN-LAST:event_ResolveCheckBoxActionPerformed
+
+    private void resolveNames(){
+
         if (saveAsMenuItem.isEnabled()) {
+            resolveContactsNames = ResolveCheckBox.isSelected();
+             historyMaker = new HistoryMaker(database, resolveContactsNames);
+             finder.useAdrrBookAll(AdrrBookAllCheckBox.isSelected());
             SMS = new SmsWriters(database, resolveContactsNames);
             fillSMSTable();
         }
-    }//GEN-LAST:event_ResolveCheckBoxActionPerformed
+    }
 
     private void jTableMemosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMemosMouseClicked
         tableClick(evt);
@@ -1546,9 +1608,10 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             } else if (ActiveTAB == CallLogstabINDEX) {
                 tollTipText = CallLogs.toPlainText(new int[]{hoveredRow});
             }
+            if (tollTipText.length()>1){
             tollTipText = tollTipText.substring(0, tollTipText.length() - 1);
             tollTipText = wrap("<html>" + tollTipText.replace("\n", "<br>") + "</html>", 50);
-            jTableTemp.setToolTipText(tollTipText);
+            jTableTemp.setToolTipText(tollTipText);}
         } else {
             jTableTemp.setToolTipText(null);
         }
@@ -1573,6 +1636,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private void jTableCallLogsMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableCallLogsMouseMoved
         mouseMoved(evt);
     }//GEN-LAST:event_jTableCallLogsMouseMoved
+
+    private void AdrrBookAllCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdrrBookAllCheckBoxActionPerformed
+             if (parser!=null){
+            fillContactsTable();
+            resolveNames();
+        }
+    }//GEN-LAST:event_AdrrBookAllCheckBoxActionPerformed
 
     private void setRowsSelection(final javax.swing.JTable jTable, final int[] selectedRows) {
 
@@ -1877,7 +1947,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
      * @return String
      */
     public static String wrap(String string, String lineSeparator, int wrapLength) {
-   
+        if (string.length()>500)string=string.substring(0, 500);
         // Null or blank string should return an empty ("") string
         if (isBlank(string)) {
             return "";
@@ -1932,6 +2002,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBoxMenuItem AdrrBookAllCheckBox;
     private javax.swing.JFileChooser IpdChooser;
     private javax.swing.JFrame MessageFrame;
     private javax.swing.JCheckBoxMenuItem ResolveCheckBox;
@@ -1968,6 +2039,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelSMS;
     private javax.swing.JPanel jPanelTasks;
     private javax.swing.JPopupMenu jPopupMenu;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

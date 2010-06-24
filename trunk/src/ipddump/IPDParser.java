@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import java.nio.channels.FileChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Parse an IPD file and populate a {@link InteractivePagerBackup} with the
@@ -37,6 +39,8 @@ public class IPDParser {
     private int     oldDatabaseHandle=1;
     private FileInputStream  input;
     private StringBuilder stringBuilder = new StringBuilder();
+    private boolean useAdrrBookAllDB=true;
+    private InteractivePagerBackup database         =null;
 
     //~--- constant enums -----------------------------------------------------
 
@@ -137,20 +141,20 @@ public class IPDParser {
         this.endOfOffset=endOfOffset;
         }
 
-//        public long[] getOffset(){
-//            long[] j= {this.startOfOffset, this.endOfOffset};
-//        return j;
-//        }
-//
-//        public void setOffset(long startOfOffset, long endOfOffset){
-//            if (startOfOffset!=-1){
-//            this.startOfOffset=startOfOffset;}
-//
-//                    if (endOfOffset!=-1){
-//            this.endOfOffset=endOfOffset-1;
-//            System.out.println(super.name()+": "+this.startOfOffset+" "+this.endOfOffset);
-//            }
-//        }
+        public long[] getOffset(){
+            long[] j= {this.startOfOffset, this.endOfOffset};
+        return j;
+        }
+
+        public void setOffset(long startOfOffset, long endOfOffset){
+            if (startOfOffset!=-1){
+            this.startOfOffset=startOfOffset;}
+
+                    if (endOfOffset!=-1){
+            this.endOfOffset=endOfOffset-1;
+           //System.out.format("%17s: %9d  %9d\n",super.name(),this.startOfOffset,this.endOfOffset);
+            }
+        }
         
     }
 
@@ -164,7 +168,6 @@ public class IPDParser {
     public IPDParser(String fileName) {
         this.fileName=fileName;
          try {
-        input=new FileInputStream(fileName);
          }
         catch (Exception ex) {
             
@@ -181,6 +184,7 @@ public class IPDParser {
     }
         int                    recordRead       =0;
         int                    fieldLength      =0;
+        FileChannel fc;
     /**
      * Parses the provided IPD file into an {@link InteractivePagerBackup}.
      *
@@ -200,10 +204,11 @@ public class IPDParser {
         int                    recordLength     =0;
         int                    uid              =0;
         Record                 record           =null;
-        InteractivePagerBackup database         =null;
+        
         ReadingState           state            =ReadingState.HEADER;
-
-               FileChannel fc=input.getChannel();
+        
+        input=new FileInputStream(fileName);
+        fc=input.getChannel();
 
             // Start reading in the header state
             while (fc.position()<fc.size()) {
@@ -211,21 +216,20 @@ public class IPDParser {
                 case HEADER :
                     //ReadingState.HEADER.setOffset(fc.position(),-1);
                     for (int i=0; i<"Inter@ctive Pager Backup/Restore File".length(); i++) {
-                        getNextByte();
+                        input.read();
                     }
                     state=ReadingState.LINEFEED;
-                    //ReadingState.HEADER.setOffset(-1,fc.position());
+                    ReadingState.HEADER.setOffset(-1,fc.position());
                     break;
                 case LINEFEED :
-                    //ReadingState.LINEFEED.setOffset(fc.position(),-1);
-                    lineFeed=(char) getNextByte();
+                    ReadingState.LINEFEED.setOffset(fc.position(),-1);
+                    lineFeed=(char) input.read();
                     state   =ReadingState.VERSION;
-                    //ReadingState.LINEFEED.setOffset(-1,fc.position());
+                    ReadingState.LINEFEED.setOffset(-1,fc.position());
                     break;
                 case VERSION :
-                    //ReadingState.VERSION.setOffset(fc.position(),-1);
-                    database=new InteractivePagerBackup(getNextByte(), lineFeed);
-                    
+                    ReadingState.VERSION.setOffset(fc.position(),-1);
+                    database=new InteractivePagerBackup(input.read(), lineFeed);
                     if (debugingEnabled) {
                         database.enableDebuging();
                         System.out.print("Version: "+database.getVersion());
@@ -237,50 +241,50 @@ public class IPDParser {
                     }
 
                     state=ReadingState.DATA_BASE_COUNT;
-                    //ReadingState.VERSION.setOffset(-1,fc.position());
+                    ReadingState.VERSION.setOffset(-1,fc.position());
                     break;
                 case DATA_BASE_COUNT :
-                    //ReadingState.DATA_BASE_COUNT.setOffset(fc.position(),-1);
-                    numberOfDatabases=getNextByte() << 8;
-                    numberOfDatabases|=getNextByte();
+                    ReadingState.DATA_BASE_COUNT.setOffset(fc.position(),-1);
+                    numberOfDatabases=input.read() << 8;
+                    numberOfDatabases|=input.read();
                     
                     state            =ReadingState.DATA_BASE_NAME_SEPARATOR;
-                    //ReadingState.DATA_BASE_COUNT.setOffset(-1,fc.position());
+                    ReadingState.DATA_BASE_COUNT.setOffset(-1,fc.position());
                     break;
 
                 // Just eat it because we know the terminating null will be in
                 // the name anyway
                 case DATA_BASE_NAME_SEPARATOR :
-                    //ReadingState.DATA_BASE_NAME_SEPARATOR.setOffset(fc.position(),-1);
-                        getNextByte();
+                    ReadingState.DATA_BASE_NAME_SEPARATOR.setOffset(fc.position(),-1);
+                        input.read();
                         
 
 
                     state=ReadingState.DATA_BASE_NAME_LENGTH;
-                    //ReadingState.DATA_BASE_NAME_SEPARATOR.setOffset(-1,fc.position());
+                    ReadingState.DATA_BASE_NAME_SEPARATOR.setOffset(-1,fc.position());
                     break;
                 case DATA_BASE_NAME_LENGTH :
-                    //ReadingState.DATA_BASE_NAME_LENGTH.setOffset(fc.position(),-1);
-                    dbNameLength=getNextByte();
-                    dbNameLength|=getNextByte() << 8;
+                    ReadingState.DATA_BASE_NAME_LENGTH.setOffset(fc.position(),-1);
+                    dbNameLength=input.read();
+                    dbNameLength|=input.read() << 8;
                     
                     state       =ReadingState.DATA_BASE_NAME;
-                    //ReadingState.DATA_BASE_NAME_LENGTH.setOffset(-1,fc.position());
+                    ReadingState.DATA_BASE_NAME_LENGTH.setOffset(-1,fc.position());
                     break;
                 case DATA_BASE_NAME :
-                    //ReadingState.DATA_BASE_NAME.setOffset(fc.position(),-1);
+                    ReadingState.DATA_BASE_NAME.setOffset(fc.position(),-1);
                     StringBuilder buffer=new StringBuilder();
 
-                    // Read everything but the terminating null
+//                     Read everything but the terminating null
                     for (int i=0; i<dbNameLength-1; i++) {
-                        buffer.append((char) getNextByte());
+                        buffer.append((char) input.read());
                         
                     }
 
                     database.addDatabase(buffer.toString());
 
                     // Eat null/separator
-                    getNextByte();
+                    input.read();
                     
 
                     if (database.getDatabaseNames().size()<numberOfDatabases) {
@@ -288,50 +292,50 @@ public class IPDParser {
                     } else {
                         state=ReadingState.DATA_BASE_ID;
                     }
-                    //ReadingState.DATA_BASE_NAME.setOffset(-1,fc.position());
+                    ReadingState.DATA_BASE_NAME.setOffset(-1,fc.position());
                     break;
                 case DATA_BASE_ID :
-                   //ReadingState.DATA_BASE_ID.setOffset(fc.position(),-1);
+                   ReadingState.DATA_BASE_ID.setOffset(fc.position(),-1);
                     int temp;
                     temp=dbID;
-                    dbID =getNextByte();
-                    dbID |=getNextByte() << 8;
-                    
+                    dbID =input.read();
+                    dbID |=input.read() << 8;
+
+                    if (dbID==65535)dbID=database.getDatabaseNames().size()-1;
                    if (((dbID>database.getDatabaseNames().size()) || dbID<0)&& debugingEnabled)
                    {
-                       System.out.println(String.format("----- GOT ERROR -----dbID: hex: %4h dec: %5d --Old DBid: hex: %4h dec: %5d",dbID,dbID,temp,temp));
+//                       System.out.println(String.format("----- GOT ERROR -----dbID: hex: %4h dec: %5d --Old DBid: hex: %4h dec: %5d",dbID,dbID,temp,temp));
                        //input.skip(-tries);
                        //state=ReadingState.DATA_BASE_ID;
                        //break;
                    }
                    
                     state=ReadingState.RECORD_LENGTH;
-                    //ReadingState.DATA_BASE_ID.setOffset(-1,fc.position());
+                    ReadingState.DATA_BASE_ID.setOffset(-1,fc.position());
                     break;
                 case RECORD_LENGTH :
-                    //ReadingState.RECORD_LENGTH.setOffset(fc.position(),-1);
-                    recordLength=getNextByte();
-                    recordLength|=getNextByte() << 8;
-                    recordLength|=getNextByte() << 16;
-                    recordLength|=getNextByte() << 24;
+                    ReadingState.RECORD_LENGTH.setOffset(fc.position(),-1);
+                    recordLength=input.read();
+                    recordLength|=input.read() << 8;
+                    recordLength|=input.read() << 16;
+                    recordLength|=input.read() << 24;
                    
                     recordRead  =0;
                     state       =ReadingState.RECORD_DB_VERSION;
-                    //ReadingState.RECORD_LENGTH.setOffset(-1,fc.position());
+                    ReadingState.RECORD_LENGTH.setOffset(-1,fc.position());
                     break;
                 case RECORD_DB_VERSION :
-                   // ReadingState.RECORD_DB_VERSION.setOffset(fc.position(),-1);
+                    ReadingState.RECORD_DB_VERSION.setOffset(fc.position(),-1);
                     recordRead++;
-                    recordDBVersion=getNextByte();
+                    recordDBVersion=input.read();
                     
-                    // if (debugingEnabled)System.out.println("Record Version: "+recordDBVersion);
                     state=ReadingState.DATA_BASE_RECORD_HANDLE;
-                    //ReadingState.RECORD_DB_VERSION.setOffset(-1,fc.position());
+                    ReadingState.RECORD_DB_VERSION.setOffset(-1,fc.position());
                     break;
                 case DATA_BASE_RECORD_HANDLE :
-                    //ReadingState.DATA_BASE_RECORD_HANDLE.setOffset(fc.position(),-1);
-                    databaseHandle=getNextByte();
-                    databaseHandle|=getNextByte() << 8;
+                    ReadingState.DATA_BASE_RECORD_HANDLE.setOffset(fc.position(),-1);
+                    databaseHandle=input.read();
+                    databaseHandle|=input.read() << 8;
                     
                     recordRead    +=2;
                     state         =ReadingState.RECORD_UNIQUE_ID;
@@ -340,22 +344,23 @@ public class IPDParser {
 
                         // System.out.println("DATABASERECORDHANDLE: "+databaseHandle);
                         if (databaseHandle!=oldDatabaseHandle) {
-                            System.out.println("Database Handle outor! old dbHandle: "+(oldDatabaseHandle)
+                            System.out.println("Database Handle Error! old dbHandle: "+(oldDatabaseHandle)
                                                +" new dbHandle: "+databaseHandle);
                             oldDatabaseHandle=databaseHandle+1;      
                         } else {
                             oldDatabaseHandle+=1;
                         }
                     }
-                    //ReadingState.DATA_BASE_RECORD_HANDLE.setOffset(-1,fc.position());
+                    ReadingState.DATA_BASE_RECORD_HANDLE.setOffset(-1,fc.position());
                     break;
                 case RECORD_UNIQUE_ID :
-                    //ReadingState.RECORD_UNIQUE_ID.setOffset(fc.position(),-1);
-                    uid       =getNextByte();
-                    uid       |=getNextByte() << 8;
-                    uid       |=getNextByte() << 16;
-                    uid       |=getNextByte() << 24;
-                    
+                    ReadingState.RECORD_UNIQUE_ID.setOffset(fc.position(),-1);
+                    //Uid is ussles for this apps perpose
+//                    uid       =input.read();
+//                    uid       |=input.read() << 8;
+//                    uid       |=input.read() << 16;
+//                    uid       |=input.read() << 24;
+                    input.skip(4);
                     recordRead+=4;
 
                     if (dbID<database.getDatabaseNames().size() && dbID>0) {
@@ -363,36 +368,46 @@ public class IPDParser {
                         lastValidDBHandle=databaseHandle;
                     }
 
-                    record=database.createRecord(dbID, recordDBVersion, uid, recordLength);
+                    record=database.createRecord(dbID, recordDBVersion, recordLength);
                     record.setRecordDBHandle(databaseHandle);
                     state=ReadingState.FIELD_LENGTH;
-                    //ReadingState.RECORD_UNIQUE_ID.setOffset(-1,fc.position());
+                    ReadingState.RECORD_UNIQUE_ID.setOffset(-1,fc.position());
                     break;
                 case FIELD_LENGTH :
-                    //ReadingState.FIELD_LENGTH.setOffset(fc.position(),-1);
-                    fieldLength=getNextByte();
-                    fieldLength|=getNextByte() << 8;
+                    ReadingState.FIELD_LENGTH.setOffset(fc.position(),-1);
+                    fieldLength=input.read();
+                    fieldLength|=input.read() << 8;
                     
                     recordRead +=2;
                     state      =ReadingState.FIELD_TYPE;
-//                    ReadingState.FIELD_LENGTH.setOffset(-1,fc.position());
+                    ReadingState.FIELD_LENGTH.setOffset(-1,fc.position());
                     break;
                 case FIELD_TYPE :
-//                    ReadingState.FIELD_TYPE.setOffset(fc.position(),-1);
-                    fieldType=getNextByte();
+                    ReadingState.FIELD_TYPE.setOffset(fc.position(),-1);
+                    fieldType=input.read();
 
                     recordRead++;
                     state=ReadingState.FIELD_DATA;
-//                    ReadingState.FIELD_TYPE.setOffset(-1,fc.position());
+                    ReadingState.FIELD_TYPE.setOffset(-1,fc.position());
                     break;
                 case FIELD_DATA :
-//                    ReadingState.FIELD_DATA.setOffset(fc.position(),-1);
+                    ReadingState.FIELD_DATA.setOffset(fc.position(),-1);
 
 
+                    
+                     if (fieldLength>recordLength){
+//                        System.out.println("\n------------read: "+recordRead+" length: "+recordLength);
+
+                        long prevPos=fc.position();
+
+                        if (fc.position()-recordLength-recordRead>0){
+                        fieldLength=fieldLength-recordRead;
+//                            System.out.println("field Length Error Found");
+                        }}
+                    
                     char[] dataBuffer=new char[fieldLength];
-
                     for (int i=0; i<fieldLength; i++) {
-                        dataBuffer[i]=(char) getNextByte();
+                        dataBuffer[i]=(char) input.read();
                     }
 
                     if ((dbID>database.getDatabaseNames().size() || dbID<0) && debugingEnabled) {
@@ -419,12 +434,25 @@ public class IPDParser {
 
                     record.addField(fieldType, dataBuffer);
                     recordRead+=fieldLength;
-                    //System.out.println("read: "+recordRead+" length: "+recordLength);
+
                     if (recordRead>recordLength){
-                        if (recordLength-recordRead-fc.position()>0){
+
+                        //System.out.println("\n------------read: "+recordRead+" length: "+recordLength);
+
+                        long prevPos=fc.position();
+
+                        if (fc.position()-recordLength-recordRead>0){
+
                         input.skip(recordLength-recordRead);
+//                            System.out.println("------Skiped: "+(recordLength-recordRead));
+//                        int nextvalidid=input.read(); input.skip(-1);
+//                            System.out.println(nextvalidid);
+//                        if (lastValidDBid!=nextvalidid || lastValidDBid!=nextvalidid+1){
+//                            input.skip(-recordLength+recordRead);
+//                            System.out.println("------NEXT valid Found");
+//                        }
                         }
-                        
+
                         //System.out.println("Record Length Error Found");
                     }
                     if (recordRead<recordLength) {
@@ -432,7 +460,7 @@ public class IPDParser {
                     } else {
                         state=ReadingState.DATA_BASE_ID;
                     }
-                    //ReadingState.FIELD_DATA.setOffset(-1,fc.position());
+                    ReadingState.FIELD_DATA.setOffset(-1,fc.position());
                     break;
                 }
             }
@@ -448,22 +476,20 @@ public class IPDParser {
 
         database.organize();
         
+        
         input.close();
         return database;
     }
 
     
-    private int getNextByte(){
-    int i =-1;
-        try {
-             i = input.read();
-
-            //System.out.printf("%02X ", j);
-            stringBuilder.append(Integer.toHexString(i).toUpperCase());
-
+    public int getCompletedPersentage(){
+        try{
+                if (fc.isOpen())
+            return (int) (fc.position() / fc.size()*100.0);
+                else return 0;
         } catch (Exception ex) {
-            
+            Logger.getLogger(IPDParser.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
         }
-    return i;
     }
 }

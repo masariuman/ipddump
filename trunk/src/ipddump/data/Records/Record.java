@@ -137,9 +137,9 @@ public abstract class Record extends GeneralToolBox {
     /**
      * Gets the unique identifier of this record.
      */
-    public int getUID() {
-        return uniqueID;
-    }
+//    public int getUID() {
+//        return uniqueID;
+//    }
 
     //~--- methods ------------------------------------------------------------
 

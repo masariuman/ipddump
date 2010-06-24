@@ -134,7 +134,7 @@ public class CallLogsWriters extends BasicWriter {
         for (CallLog record : database.getCallLogs()) {
             if (isSelectedRecord(RecordIndex, selectedCallLogs)
                     && (selectedCallLogs[j]<database.getCallLogs().size())) {
-                Element message=root.addElement("CallLog").addAttribute("UID", String.valueOf(record.getUID()));
+                Element message=root.addElement("CallLog");
 
                 message.addElement("Name").addText(record.getName());
                 message.addElement("Date").addText(record.getDate().toString());
