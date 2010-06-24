@@ -13,13 +13,13 @@ public class GeneralToolBox {
     public String makeStringCropLast(char[] data) {
         String str=Gsm2Iso.Gsm2Iso(data);
 
+        if (str.length()<=0) return "";
         return str.substring(0, str.length()-1);
     }
 
-     public String makeStringCropFirst(char[] data) {
-        String str=Gsm2Iso.Gsm2Iso(data);
+     public String makeString(char[] data) {
 
-        return str.substring(1, str.length());
+        return Gsm2Iso.Gsm2Iso(data);
     }
     /**
      *  Displays the type and the value of the given
@@ -29,11 +29,11 @@ public class GeneralToolBox {
      *   @param data The field data
      */
     public void viewIt(int type, char[] data) {
-        System.out.format("Type:%d Data String:%s length:%d\n", type, String.valueOf(data), data.length);
+        //System.out.format("Type:%d Data String:%s length:%d\n", type, String.valueOf(data), data.length);
     }
 
     public void viewIt(int type, String string) {
-        System.out.format("Type %d Data String:%s\n", type, string);
+        //System.out.format("Type %d Data String:%s\n", type, string);
     }
 
     public void viewItInHex(int type, char[] data) {

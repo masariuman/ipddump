@@ -353,6 +353,7 @@ public class Gsm2Iso {
      * @return
      */
     public static String UCS2toISO(char[] data) {
+        if (data!=null){
         byte[] d=new byte[data.length];
 
         for (int i=0; i<data.length; i++) {
@@ -367,8 +368,8 @@ public class Gsm2Iso {
         } catch (Exception error) {
             error.printStackTrace();
             return "ERROR";
-        }
-
+        }}
+            return "ERROR";
     }
 
     /**

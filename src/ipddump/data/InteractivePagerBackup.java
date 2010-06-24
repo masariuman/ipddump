@@ -30,29 +30,13 @@ import java.util.List;
 public class InteractivePagerBackup {
 
     /**
-     * The character used as the line feed.
+     * Reports If there were Errors while parsing
      */
-    private char lineFeed;
-
-    /**
-     * The version of the IPD.
-     */
-    private final int version;
-
-    /**
-     * The list of databases, or rather the names of the databases.
-     */
-    private final List<String> databases;
-
-    /**
-     * The set of SMS messages.
-     */
-    private final List<SMSMessage> smsRecords;
-
-    /**
-     * The set of contacts.
-     */
-    private final List<Contact> contacts;
+    private InteractivePagerBackup database         = this;
+    private boolean                errorFlag        = false;
+    private boolean                debugingEnabled  = false;
+    private boolean                valuePeeking     = false;
+    private boolean                useAdrrBookAllDB = true;
 
     /**
      * The set of contacts.
@@ -60,9 +44,24 @@ public class InteractivePagerBackup {
     private final List<Calendar> calendar;
 
     /**
-     * The set of Tasks Entries.
+     * The set of Phone Call Logs.
      */
-    private final List<Task> tasks;
+    private final List<CallLog> callLogs;
+
+    /**
+     * The set of contacts.
+     */
+    private final List<Contact> contacts;
+
+    /**
+     * The list of databases, or rather the names of the databases.
+     */
+    private final List<String> databases;
+
+    /**
+     * The character used as the line feed.
+     */
+    private char lineFeed;
 
     /**
      * The set of Memos.
@@ -70,24 +69,24 @@ public class InteractivePagerBackup {
     private final List<Memo> memos;
 
     /**
+     * The set of SMS messages.
+     */
+    private final List<SMSMessage> smsRecords;
+
+    /**
+     * The set of Tasks Entries.
+     */
+    private final List<Task> tasks;
+
+    /**
      * The set of TimeZones.
      */
     private final List<BBTimeZone> timeZones;
 
     /**
-     * The set of Phone Call Logs.
+     * The version of the IPD.
      */
-    private final List<CallLog> callLogs;
-
-    /**
-     * Reports If there were Errors while parsing
-     */
-    private InteractivePagerBackup database       =this;
-    private boolean                errorFlag      =false;
-    private boolean                debugingEnabled=false;
-    private boolean                valuePeeking   =true;
-
-    //~--- constructors -------------------------------------------------------
+    private final int version;
 
     /**
      * Creates a new database.
@@ -96,19 +95,17 @@ public class InteractivePagerBackup {
      * @param lineFeed The line feed character
      */
     public InteractivePagerBackup(int version, char lineFeed) {
-        this.version =version;
-        this.lineFeed=lineFeed;
-        databases    =new ArrayList<String>();
-        smsRecords   =new ArrayList<SMSMessage>();
-        contacts     =new ArrayList<Contact>();
-        tasks        =new ArrayList<Task>();
-        memos        =new ArrayList<Memo>();
-        timeZones    =new ArrayList<BBTimeZone>();
-        callLogs     =new ArrayList<CallLog>();
-        calendar     =new ArrayList<Calendar>();
+        this.version  = version;
+        this.lineFeed = lineFeed;
+        databases     = new ArrayList<String>();
+        smsRecords    = new ArrayList<SMSMessage>();
+        contacts      = new ArrayList<Contact>();
+        tasks         = new ArrayList<Task>();
+        memos         = new ArrayList<Memo>();
+        timeZones     = new ArrayList<BBTimeZone>();
+        callLogs      = new ArrayList<CallLog>();
+        calendar      = new ArrayList<Calendar>();
     }
-
-    //~--- methods ------------------------------------------------------------
 
     /**
      * Adds a new database to the list of contained databases.
@@ -138,14 +135,12 @@ public class InteractivePagerBackup {
      * @param length The length of the Record in the data
      * @return A new Record
      */
-    public Record createRecord(int dbIndex, int version, int uid, int length) {
+    public Record createRecord(int dbIndex, int version, int length) {
+        int uid = 0;
 
-        /*
-         * Fix for bug #2, there might be an error in parsing, but for now, this seems to fix it.
-         */
-        if ((dbIndex>=databases.size()) || (dbIndex<0)) {
+        if ((dbIndex >= databases.size()) || (dbIndex < 0)) {
             if (valuePeeking && debugingEnabled) {
-                System.out.println("-------dbID: "+dbIndex+"-------");
+                System.out.println("-------dbID: " + dbIndex + "-------");
 
                 return new DummyRecord(dbIndex, version, uid, length).enableValuePeeking();
             } else if (debugingEnabled) {
@@ -154,43 +149,44 @@ public class InteractivePagerBackup {
                 return new DummyRecord(dbIndex, version, uid, length).disableValuePeeking();
             }
         } else if ("SMS Messages".equals(databases.get(dbIndex))) {
-            SMSMessage record=new SMSMessage(dbIndex, version, uid, length);
+            SMSMessage record = new SMSMessage(dbIndex, version, uid, length);
 
             smsRecords.add(record);
 
             return record;
         } else if ("Address Book".equals(databases.get(dbIndex))) {
-            Contact record=new Contact(dbIndex, version, uid, length);
+            Contact record = new Contact(dbIndex, version, uid, length);
 
             contacts.add(record);
 
             return record;
-//        }else if ("Address Book - All".equals(databases.get(dbIndex))) {
-//            Contact record=new Contact(dbIndex, version, uid, length);
-//            record.enableAdrressBookAllType();
-//            contacts.add(record);
-//
-//            return record;
+        } else if ("Address Book - All".equals(databases.get(dbIndex))) {
+            Contact record = new Contact(dbIndex, version, uid, length);
+
+            record.enableAdrressBookAllType();
+            contacts.add(record);
+
+            return record;
         } else if ("Memos".equals(databases.get(dbIndex))) {
-            ipddump.data.Records.Memo record=new ipddump.data.Records.Memo(dbIndex, version, uid, length);
+            ipddump.data.Records.Memo record = new ipddump.data.Records.Memo(dbIndex, version, uid, length);
 
             memos.add(record);
 
             return record;
         } else if ("Tasks".equals(databases.get(dbIndex))) {
-            Task record=new Task(dbIndex, version, uid, length);
+            Task record = new Task(dbIndex, version, uid, length);
 
             tasks.add(record);
 
             return record;
         } else if ("Time Zones".equals(databases.get(dbIndex))) {
-            BBTimeZone record=new BBTimeZone(dbIndex, version, uid, length);
+            BBTimeZone record = new BBTimeZone(dbIndex, version, uid, length);
 
             timeZones.add(record);
 
             return record;
         } else if ("Phone Call Logs".equals(databases.get(dbIndex))) {
-            CallLog record=new CallLog(dbIndex, version, uid, length);
+            CallLog record = new CallLog(dbIndex, version, uid, length);
 
             callLogs.add(record);
 
@@ -217,14 +213,12 @@ public class InteractivePagerBackup {
     }
 
     public void enableDebuging() {
-        debugingEnabled=true;
+        debugingEnabled = true;
     }
 
     public void enableValuePeeking() {
-        valuePeeking=true;
+        valuePeeking = true;
     }
-
-    //~--- get methods --------------------------------------------------------
 
     /**
      * Gets the collection of the Calendar.
@@ -303,10 +297,8 @@ public class InteractivePagerBackup {
         return version;
     }
 
-    //~--- methods ------------------------------------------------------------
-
     public void organize() {
-        Runnable r=new Runnable() {
+        Runnable r = new Runnable() {
             @Override
             public void run() {
                 Collections.sort(memos);
@@ -314,12 +306,12 @@ public class InteractivePagerBackup {
                 Collections.sort(tasks);
             }
         };
-        Thread t=new Thread(r);
+        Thread t = new Thread(r);
 
         t.setDaemon(false);
         t.start();
 
-        Runnable r1=new Runnable() {
+        Runnable r1 = new Runnable() {
             @Override
             public void run() {
                 Collections.sort(contacts);
@@ -327,44 +319,43 @@ public class InteractivePagerBackup {
                 Collections.sort(calendar);
             }
         };
-        Thread t1=new Thread(r1);
+        Thread t1 = new Thread(r1);
 
         t1.setDaemon(false);
         t1.start();
 
-        Runnable r2=new Runnable() {
+        Runnable r2 = new Runnable() {
             @Override
             public void run() {
                 Collections.sort(callLogs);
 
-                Finder finder=new Finder(database);
+                Finder finder = new Finder(database);
 
                 for (Task recordt : database.tasks) {
-                    String name=finder.findTimeZoneByID(recordt.getTimeZone());
+                    String name = finder.findTimeZoneByID(recordt.getTimeZone());
 
                     recordt.setTimeZoneName(name);
                 }
             }
         };
-        Thread t2=new Thread(r2);
+        Thread t2 = new Thread(r2);
 
         t2.setDaemon(false);
         t2.start();
     }
 
-    //~--- set methods --------------------------------------------------------
-
     public void setErrorFlag() {
-        errorFlag=true;
+        errorFlag = true;
     }
-
-    //~--- methods ------------------------------------------------------------
 
     public boolean wereErrors() {
         return errorFlag;
     }
 
     private void distinguishRecord(int dbIndex) {
-        System.out.println("----New "+getDatabaseNames().get(dbIndex)+"----");
+        System.out.println("----New " + getDatabaseNames().get(dbIndex) + "----");
     }
 }
+
+
+//~ Formatted by Jindent --- http://www.jindent.com

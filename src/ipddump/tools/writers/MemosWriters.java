@@ -131,7 +131,7 @@ public class MemosWriters extends BasicWriter {
 
         for (Memo record : database.getMemos()) {
             if (isSelectedRecord(RecordIndex, selectedMemos) && (selectedMemos[j]<database.getMemos().size())) {
-                Element message=root.addElement("MemoMessage").addAttribute("UID", String.valueOf(record.getUID()));
+                Element message=root.addElement("MemoMessage");
 
                 message.addElement("Title").addText(record.getTitle());
                 message.addElement("Memo").addText(record.getMemo());

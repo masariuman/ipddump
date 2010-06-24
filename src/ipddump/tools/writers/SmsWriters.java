@@ -55,7 +55,7 @@ public class SmsWriters extends BasicWriter {
         StringBuilder temp=new StringBuilder();    // fast builder!!
 
         temp.delete(0, temp.capacity());
-        temp.append("uid,sent,received,sent?,far number,text\n");
+        temp.append("sent,received,sent?,far number,text\n");
 
         int RecordIndex=0;
         int j          =0;
@@ -71,7 +71,7 @@ public class SmsWriters extends BasicWriter {
                     Name=record.getNumber();
                 }
 
-                temp.append(record.getUID()+","+record.getSent().toString()+","+record.getReceived().toString()+","
+                temp.append(record.getSent().toString()+","+record.getReceived().toString()+","
                             +record.wasSent()+","+Name+",\""+record.getText()+"\"\n");
                 j++;
 
@@ -183,7 +183,7 @@ public class SmsWriters extends BasicWriter {
 
 //              System.out.println(record.getUID()+","+record.getSent()+","+record.getReceived()+","+record.wasSent()+","
 //              +record.getNumber()+",\""+record.getText()+"\"");
-                Element message=root.addElement("SmsMessage").addAttribute("UID", String.valueOf(record.getUID()));
+                Element message=root.addElement("SmsMessage");
 
                 // Create the document
                 // Add the "sentDate" element

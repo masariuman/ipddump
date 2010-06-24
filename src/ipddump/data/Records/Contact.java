@@ -4,6 +4,7 @@ package ipddump.data.Records;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+
 import java.util.HashMap;
 
 /**
@@ -14,10 +15,9 @@ import java.util.HashMap;
  * @date Jun 6, 2009
  */
 public class Contact extends Record implements Comparable<Contact> {
-    private Image image;
     private boolean enableAdrressBookAllType=false;
-
-    //~--- constructors -------------------------------------------------------
+    private Image   image;
+    private static int countAdrrBookAllrecords=0;
 
     /**
      * Creates a new record with all provided data.
@@ -33,19 +33,13 @@ public class Contact extends Record implements Comparable<Contact> {
      */
     public Contact(int dbID, int dbVersion, int uid, int recordLength) {
         super(dbID, dbVersion, uid, recordLength);
-        fields=new HashMap<String, String>();
+        fields = new HashMap<String, String>();
     }
-
-    public void enableAdrressBookAllType() {
-        enableAdrressBookAllType=true;
-    }
-
-    //~--- enums --------------------------------------------------------------
 
     enum Field {
-        Email(1), Fax(3), Work_Phone(6, 16), Home_Phone(7, 17), Mobile_Phone(8), Pager(9), PIN(10), Other_Number(18),
-        Name(32), Company(33), Work_Address(35, 36), Work_City(38), Work_State(39), Work_Postcode(40), Work_Country(41),
-        Job_Title(42), Webpage(54), Title(55),
+        Last(-1), Nick(86), Email(1), WorkFax(3), HomeFax(20), Work_Phone(6), Work_Phone2(16), Home_Phone(17),Home_Phone2(17), Mobile_Phone(8),Mobile_Phone2(19),
+        Pager(9), PIN(10), Other_Number(18), Name(32), Company(33), Work_Address(35, 36), Work_City(38), Work_State(39),
+        Work_Postcode(40), Work_Country(41), Job_Title(42), Webpage(54), Title(55),
 
         /* These are the Category tags. Null data if no tags. */
         Categories(59), Home_Address(61, 62), User(65, 66, 67, 68), Home_City(69), Home_State(70), Home_Postcode(71),
@@ -55,27 +49,24 @@ public class Contact extends Record implements Comparable<Contact> {
         Unknown_8_Chars(false, 84),
 
         /* Always 4 characters, date? */
-        Unknown_4_Chars(false, 85), Google_Talk(90);
+        Unknown_4_Chars(false, 85), Google_Talk(90),Yahoo(91);
 
         int[]   indexes;
         boolean supported;
 
-        //~--- constructors ---------------------------------------------------
-
         Field(int... indexes) {
             this(true, indexes);
         }
-        Field(boolean supported, int... indexes) {
-            this.indexes  =indexes;
-            this.supported=supported;
-        }
 
-        //~--- methods --------------------------------------------------------
+        Field(boolean supported, int... indexes) {
+            this.indexes   = indexes;
+            this.supported = supported;
+        }
 
         public boolean accept(int code) {
             if (supported) {
                 for (int index : indexes) {
-                    if (index==code) {
+                    if (index == code) {
                         return true;
                     }
                 }
@@ -90,27 +81,58 @@ public class Contact extends Record implements Comparable<Contact> {
         }
     }
 
-    //~--- methods ------------------------------------------------------------
+    private void doFields(int type, char[] data) {
+        for (Field field : Field.values()) {
+            if (field.accept(type)) {
+                if (field == Field.Contact_Image) {
+                    image = decodeBase64(data);
+                } else if (field == Field.Categories) {
+
+                    // Microsoft Outlook Style. If sepated by commas then the CSV brakes.
+                    addField(field, makeStringCropLast(data).replace(',', ';'));
+                } else if (field == Field.Name && enableAdrressBookAllType) {
+
+                    // Microsoft Outlook Style. If sepated by commas then the CSV brakes.
+                    addField(field, makeString(data));
+                } else {
+                    addField(field, makeStringCropLast(data));
+                }
+            }
+        }
+    }
+
+    public void enableAdrressBookAllType() {
+        countAdrrBookAllrecords++;
+        enableAdrressBookAllType = true;
+    }
+
+     public int getAdrrBookAllrecordsCount(){
+    return countAdrrBookAllrecords;
+    }
+
+      public void setAdrrBookAllrecordsToZero(){
+     countAdrrBookAllrecords=0;
+    }
 
     public void addField(Field key, String value) {
-        String keyName=key.toString();
+        String keyName = key.toString();
 
-        if (key==Field.Name) {
-            String name=fields.get(keyName);
+        if (key == Field.Name) {
+            String name = fields.get(keyName);
 
-            if (name==null) {
+            if (name == null) {
                 fields.put(keyName, value);
             } else {
-                fields.put(keyName, name+" "+value);
+                fields.put(keyName, name + " " + value);
             }
         } else if (fields.containsKey(keyName)) {
-            int index=2;
+            int index = 2;
 
-            while (fields.containsKey(keyName+index)) {
+            while (fields.containsKey(keyName + index)) {
                 index++;
             }
 
-            fields.put(keyName+index, value);
+            fields.put(keyName + index, value);
         } else {
             fields.put(keyName, value);
         }
@@ -118,58 +140,82 @@ public class Contact extends Record implements Comparable<Contact> {
 
     @Override
     public void addField(int type, char[] data) {
-        if (!enableAdrressBookAllType){
-        for (Field field : Field.values()) {
-            if (field.accept(type)) {
-                if (field==Field.Contact_Image) {
-                    image=decodeBase64(data);
-                } else if (field==Field.Categories) {
+        if (!enableAdrressBookAllType) {
+            doFields(type, data);
+        } else {
+            switch (type) {
+            case 2 : {
+//                System.out.println("Type: " + type + " --Data: " + makeString(data.clone()) + " size: " + data.length);
 
-                    // Microsoft Outlook Style. If sepated by commas then the CSV brakes.
-                    addField(field, makeStringCropLast(data).replace(',', ';'));
-                } else {
-                    addField(field, makeStringCropLast(data));
+                break;
+            }
+
+            case 3 : {
+
+                // Seems Always to be Default
+//                System.out.println("Type: " + type + " --Data: " + makeString(data.clone()) + " size: " + data.length);
+
+                break;
+            }
+
+            case 5 : {
+//                System.out.println("Type: " + type + " --Data: " + makeString(data.clone()) + " size: " + data.length);
+
+                break;
+            }
+
+            case 10 : {
+                type   = 32;
+                length = data[0];
+
+                int pointer = 2;
+
+                for (pointer = 2; pointer + length < data.length; pointer += 0) {
+//                    System.out.format("\n--type: %h - %d Length: %h - %d Data: ", type, type, length, length);
+//                    System.out.print(String.valueOf(data.clone()).substring(pointer, length + pointer));
+                    pointer += 0;
+                    parseTypes(type, data.clone(), pointer, length);
+                    pointer += length;
+
+                    // System.out.println("--pointer: "+pointer);
+                    if (data[pointer] == 0) {
+                        length = data[pointer + 1];
+
+                        // System.out.println("pointer data=0 , getting length "+length);
+                        type    = -1;
+                        pointer += 4;
+                    } else {
+                        length  = data[pointer];
+                        type    = data[pointer + 2];
+                        pointer += 3;
+                    }
                 }
+
+                parseTypes(type, data.clone(), pointer, length);
+            }
             }
         }
-        }else {
-             switch (type) {
-        case 2 :{break;}
-        case 3 :{break;}
-        case 5 :{break;}
-        case 10:{
-            type  =10;
-            length=0;
-//            StringBuilder string = new StringBuilder();
+    }
 
-            System.out.println(" \n--Data: "+makeStringCropLast(data.clone()));
+    private void parseTypes(int type, char[] data, int pointer, int length) {
+        switch (type) {
+        case -1 : {
+            if (((length + pointer) < data.length) && (length + pointer>0)) {
 
-           for (int pointer =0; pointer<data.length-3;  pointer+=0){
-           length=data[pointer];
-           System.out.format("\ntype: %h Length: %h Data: \n",type,length);
-           System.out.print(String.valueOf(data.clone()).substring(pointer+2, length+pointer+2));
-
-
-                       switch (type){
-                            case 10 :{
-                                System.out.println(" - Name: "+makeStringCropFirst(String.valueOf(data.clone()).substring(pointer+2, length+pointer+2).toCharArray()));
-                            pointer+=21;
-                            break;}
-                             case 8 :{
-                                 System.out.println(" - Mobile: "+makeStringCropFirst(String.valueOf(data.clone()).substring(pointer+2, length+pointer+2).toCharArray()));
-
-                            break;}
+                if (!(String.valueOf(data).substring(pointer, length + pointer)).equals("ÿÿÿÿÿÿÿÿ"))
+                doFields(type,(String.valueOf(data).substring(pointer, length + pointer)).toCharArray());
             }
 
-            pointer+=length;
-            type = data[pointer+2];
-            
+            // do nothing??
+            break;
+        }
 
+        default : {
+            if (length + pointer < data.length) {    // unknown Error-Bug?
+                doFields(type, (String.valueOf(data).substring(pointer, length + pointer).toCharArray()));
             }
 
-            
-}
-            
+            break;
         }
         }
     }
@@ -178,8 +224,6 @@ public class Contact extends Record implements Comparable<Contact> {
     public int compareTo(Contact o) {
         return getName().compareTo(o.getName());
     }
-
-    //~--- get methods --------------------------------------------------------
 
     public String getAnniversary() {
         return getField(Field.Anniversary);
@@ -213,12 +257,22 @@ public class Contact extends Record implements Comparable<Contact> {
         return getField(Field.Home_City);
     }
 
+    public String getLastName() {
+        return getField(Field.Last); 
+    }
+
     public String getHomeCountry() {
         return getField(Field.Home_Country);
     }
 
     public String getHomePhone() {
+        if (!getField(Field.Home_Phone).equals(""))
         return getField(Field.Home_Phone);
+        else return getField(Field.Home_Phone2);
+    }
+
+    public String getHomePhone2() {
+        return getField(Field.Home_Phone2);
     }
 
     public String getHomePostcode() {
@@ -237,12 +291,23 @@ public class Contact extends Record implements Comparable<Contact> {
         return getField(Field.Job_Title);
     }
 
-    public String getMobilePhone() {
+        public String getMobilePhone() {
+        if (!getField(Field.Mobile_Phone).equals(""))
         return getField(Field.Mobile_Phone);
+        else return getField(Field.Mobile_Phone2);
+    }
+
+        public String getMobilePhone2() {
+        return getField(Field.Mobile_Phone2);
+    }
+
+        public String getYahoo() {
+        return getField(Field.Yahoo);
     }
 
     public String getName() {
-        return getField(Field.Name);
+
+        return getField(Field.Name)+" "+getField(Field.Last);
     }
 
     public String getNotes() {
@@ -285,7 +350,23 @@ public class Contact extends Record implements Comparable<Contact> {
         return getField(Field.Work_Country);
     }
 
-    public String getWorkPhone() {
+    public String getWorkFax() {
+        return getField(Field.WorkFax);
+    }
+
+    public String getHomeFax() {
+        return getField(Field.HomeFax);
+    }
+
+
+        public String getWorkPhone() {
+        if (!getField(Field.Work_Phone).equals(""))
+        return getField(Field.Work_Phone);
+        else return getField(Field.Work_Phone2);
+    }
+
+
+    public String getWorkPhone2() {
         return getField(Field.Work_Phone);
     }
 
@@ -297,8 +378,6 @@ public class Contact extends Record implements Comparable<Contact> {
         return getField(Field.Work_State);
     }
 
-    //~--- methods ------------------------------------------------------------
-
     @Override
     public String toString() {
         return getName();
@@ -307,24 +386,25 @@ public class Contact extends Record implements Comparable<Contact> {
     private Image decodeBase64(char[] sb) {
 
         // maybe this is the correct way to display the image?
-        byte[] buffer_decode=new byte[sb.length];
+        byte[] buffer_decode = new byte[sb.length];
 
-        for (int i=0; i<sb.length; i++) {
-            buffer_decode[i]=(byte) sb[i];
+        for (int i = 0; i < sb.length; i++) {
+            buffer_decode[i] = (byte) sb[i];
         }
 
         return Toolkit.getDefaultToolkit().createImage(buffer_decode);
     }
 
-    //~--- get methods --------------------------------------------------------
-
     private String getField(Field field) {
-        String key=field.toString();
+        String key = field.toString();
 
         if (fields.containsKey(key)) {
             return fields.get(key);
         } else {
             return "";
         }
+    }
+            public boolean isAdrrBookAllDB() {
+       return enableAdrressBookAllType;
     }
 }

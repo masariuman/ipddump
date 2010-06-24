@@ -177,7 +177,7 @@ public class ContactsWriters extends BasicWriter {
 
         for (Contact record : database.contacts()) {
             if (isSelectedRecord(RecordIndex, selectedMessages) && (selectedMessages[j]<database.contacts().size())) {
-                Element  message  =root.addElement("Contact").addAttribute("UID", String.valueOf(record.getUID()));
+                Element  message  =root.addElement("Contact");
                 Iterator iterator2=record.fields().entrySet().iterator();
 
                 for (Iterator iterator=iterator2; iterator2.hasNext(); ) {

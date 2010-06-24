@@ -183,7 +183,7 @@ public class TasksWriters extends BasicWriter {
 
         for (Task record : database.getTasks()) {
             if (isSelectedRecord(RecordIndex, SelectedRecords) && (SelectedRecords[j]<database.getTasks().size())) {
-                Element  message  =root.addElement("Task").addAttribute("UID", String.valueOf(record.getUID()));
+                Element  message  =root.addElement("Task");
                 Iterator iterator2=record.fields().entrySet().iterator();
 
                 for (Iterator iterator=iterator2; iterator2.hasNext(); ) {
