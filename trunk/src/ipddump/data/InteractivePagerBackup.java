@@ -27,7 +27,7 @@ import java.util.List;
  * @author borkholder
  * @date Jan 1, 2008
  */
-public class InteractivePagerBackup {
+ public class InteractivePagerBackup {
 
     /**
      * Reports If there were Errors while parsing
@@ -94,7 +94,7 @@ public class InteractivePagerBackup {
      * @param version The IPD version
      * @param lineFeed The line feed character
      */
-    public InteractivePagerBackup(int version, char lineFeed) {
+     public InteractivePagerBackup(int version, char lineFeed) {
         this.version  = version;
         this.lineFeed = lineFeed;
         databases     = new ArrayList<String>();

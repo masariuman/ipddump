@@ -4,7 +4,12 @@
  * Created on 10 Ιουν 2009, 11:50:15 πμ
  */
 package gui;
+import java.awt.Component;
 
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import com.sun.corba.se.impl.orbutil.threadpool.ThreadPoolImpl;
 import ipddump.tools.writers.*;
 import ipddump.data.Records.*;
 import java.awt.Toolkit;
@@ -24,13 +29,16 @@ import ipddump.*;
 import ipddump.data.*;
 import ipddump.tools.*;
 import java.text.BreakIterator;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
  * @author Jimmys Daskalakis - jimdaskalakis01@gmail.com
  */
 public class IpdDump_NewGUI extends javax.swing.JFrame {
-
+    private boolean letgo=false;
     private String ext;
     private String fileToSave;
     private InteractivePagerBackup database;
@@ -103,6 +111,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private String tempWelcomeMsg = welcomeMsg;
     private String numOfSelectedRows = "";
     private int hoveredRow = -2;
+    private long startTime;
+//    private SMSRenderer renderer=new SMSRenderer();
 
     /** Creates new form IpdDump_NewGUI */
     /** This method is called from within the constructor to
@@ -797,6 +807,12 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         MemosDataModel = jTableMemos.getModel();
         TasksDataModel = jTableTasks.getModel();
         CallLogsDataModel = jTableCallLogs.getModel();
+        
+//        jTableCallLogs.setAutoCreateRowSorter(true);
+//        jTableTasks.setAutoCreateRowSorter(true);
+//        jTableMemos.setAutoCreateRowSorter(true);
+//        jTableSMS.setAutoCreateRowSorter(true);
+//        jTableContacts.setAutoCreateRowSorter(true);
 
         SMStabINDEX = mainTabbedPane.indexOfTab("SMS");
         ContactstabINDEX = mainTabbedPane.indexOfTab("Contacts");
@@ -830,32 +846,61 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         status_label.setText(welcomeMsg);
         saveAsMenuItem.setEnabled(false);
         jProgressBar1.setVisible(false);
+        jProgressBar1.setStringPainted(true);
     }
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
+
         status_label.setText("WORKING...  be patient!");
         if (JFileChooser.APPROVE_OPTION == IpdChooser.showOpenDialog(null)) {
-            long startTime = System.currentTimeMillis();
+             startTime = System.currentTimeMillis();
             jFileChooser1.setSelectedFile(IpdChooser.getSelectedFile());
             setTitle("IPDdump " + jFileChooser1.getSelectedFile().getPath());
 
-            try {
+//            try {
                  String[] args = {IpdChooser.getSelectedFile().getPath()};
                  parser = new IPDParser(args[0]);
-//                parser.enableDebuging(); // TODO: Comment This Line Before Publish
+                parser.enableDebuging(); // TODO: Comment This Line Before Publish
                 //parser.enableValuePeeking(); // TODO: Comment This Line Before Publish
-                if (database!=null){
+                if (database!=null&&  database.contacts().iterator().hasNext()){
                     database.contacts().iterator().next().setAdrrBookAllrecordsToZero();
                 }
+
+
+           Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                jProgressBar1.setVisible(true);
+                int percentage=0;
+                do{
+
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(IpdDump_NewGUI.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+             percentage=parser.getCompletedPersentage();
+             jProgressBar1.setValue(percentage);
+             
+            }while ( percentage<100 && percentage!=-1 && percentage!=-2);
+            jProgressBar1.setVisible(false);}
+        };
+        
+
+        Thread t = new Thread(r);
+
+        t.setDaemon(true);
+        t.start();
+
+            Runnable r1 = new Runnable() {
+            @Override
+            public void run() {
+try {
                 database = parser.parse();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(MessageFrame, "ERROR: " + ex.getMessage());
-                ex.printStackTrace();
-                saveAsMenuItem.setEnabled(false);
-            }
+
 
             resolveContactsNames = ResolveCheckBox.isSelected();
             historyMaker = new HistoryMaker(database, resolveContactsNames);
@@ -895,6 +940,26 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             long endTime = System.currentTimeMillis() - startTime;
             tempWelcomeMsg = welcomeMsg + " --> Load Time: " + (endTime / 1000.0) + "sec";
             status_label.setText(tempWelcomeMsg);
+
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(MessageFrame, "ERROR: " + ex.getMessage());
+                ex.printStackTrace();
+                saveAsMenuItem.setEnabled(false);
+            }
+            }
+        };
+
+
+        Thread t1 = new Thread(r1);
+        t1.setDaemon(true);
+        t1.start();
+
+        jProgressBar1.setVisible(true);
+
+
+            
+
+
         } else {
             status_label.setText(tempWelcomeMsg);
         }
@@ -984,10 +1049,13 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
         for (SMSMessage record : database.getSMSRecords()) {
             if (record.wasSent()) {
-                sSent = "true";
+                sSent = "true";                
             } else {
                 sSent = "false";
             }
+//            renderer.setWasSent(record.wasSent());
+//            jTableSMS.getColumnModel().getColumn(0).setCellRenderer(renderer);
+//            
             if (resolveContactsNames) {
                 finder.useAdrrBookAll(AdrrBookAllCheckBox.isSelected());
 
@@ -1907,6 +1975,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jTableSMS.getColumnModel().getColumn(4).setMaxWidth(200);
         jTableSMS.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         SMSDataModel = jTableSMS.getModel();
+//        jTableSMS.getColumnModel().getColumn(0).setCellRenderer(renderer);
     }// </editor-fold>
 
     public void setClipboardContents(String aString) {
@@ -2060,4 +2129,32 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
     private javax.swing.JLabel status_label6;
     private javax.swing.JLabel status_label7;
     // End of variables declaration//GEN-END:variables
+}
+
+
+ class SMSRenderer extends DefaultTableCellRenderer {
+
+    private boolean wasSent=false;
+
+     public void setWasSent(boolean wasSent){
+     this.wasSent=wasSent;
+     }
+
+  /*
+   * @see TableCellRenderer#getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)
+   */
+  public Component getTableCellRendererComponent(JTable table, Object value,
+                                                 boolean isSelected, boolean hasFocus,
+                                                 int row, int column) {
+                                                 ImageIcon icon;
+    if (wasSent) {
+        icon = new ImageIcon(getClass().getResource("/gui/resources/receive.png"));
+        } else
+        {
+       icon = new ImageIcon(getClass().getResource("/gui/resources/sent.png"));
+        }
+    setText((String)value);
+    setIcon(icon);
+    return this;
+  }
 }
