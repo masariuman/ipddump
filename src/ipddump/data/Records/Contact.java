@@ -4,7 +4,13 @@ package ipddump.data.Records;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import java.nio.Buffer;
 import java.util.HashMap;
 
 /**
@@ -37,7 +43,7 @@ public class Contact extends Record implements Comparable<Contact> {
     }
 
     enum Field {
-        Last(-1), Nick(86), Email(1), WorkFax(3), HomeFax(20), Work_Phone(6), Work_Phone2(16), Home_Phone(17),Home_Phone2(17), Mobile_Phone(8),Mobile_Phone2(19),
+        Last(111), Nick(86), Email(1), WorkFax(3), HomeFax(20), Work_Phone(6), Work_Phone2(16), Home_Phone(17),Home_Phone2(17), Mobile_Phone(8),Mobile_Phone2(19),
         Pager(9), PIN(10), Other_Number(18), Name(32), Company(33), Work_Address(35, 36), Work_City(38), Work_State(39),
         Work_Postcode(40), Work_Country(41), Job_Title(42), Webpage(54), Title(55),
 
@@ -97,8 +103,9 @@ public class Contact extends Record implements Comparable<Contact> {
                 } else {
                     addField(field, makeStringCropLast(data));
                 }
-            }
+            } 
         }
+
     }
 
     public void enableAdrressBookAllType() {
@@ -145,7 +152,7 @@ public class Contact extends Record implements Comparable<Contact> {
         } else {
             switch (type) {
             case 2 : {
-//                System.out.println("Type: " + type + " --Data: " + makeString(data.clone()) + " size: " + data.length);
+                System.out.println("Type: " + type + " --Data: " + makeString(data.clone()) + " size: " + data.length);
 
                 break;
             }
@@ -153,13 +160,13 @@ public class Contact extends Record implements Comparable<Contact> {
             case 3 : {
 
                 // Seems Always to be Default
-//                System.out.println("Type: " + type + " --Data: " + makeString(data.clone()) + " size: " + data.length);
+                System.out.println("Type: " + type + " --Data: " + makeString(data.clone()) + " size: " + data.length);
 
                 break;
             }
 
             case 5 : {
-//                System.out.println("Type: " + type + " --Data: " + makeString(data.clone()) + " size: " + data.length);
+                System.out.println("Type: " + type + " --Data: " + makeString(data.clone()) + " size: " + data.length);
 
                 break;
             }
@@ -171,42 +178,55 @@ public class Contact extends Record implements Comparable<Contact> {
                 int pointer = 2;
 
                 for (pointer = 2; pointer + length < data.length; pointer += 0) {
-//                    System.out.format("\n--type: %h - %d Length: %h - %d Data: ", type, type, length, length);
-//                    System.out.print(String.valueOf(data.clone()).substring(pointer, length + pointer));
+                    System.out.format("\n--type: %h - %d Length: %h - %d Data: ", type, type, length, length);
+                    System.out.print(String.valueOf(data.clone()).substring(pointer, length + pointer));
                     pointer += 0;
                     parseTypes(type, data.clone(), pointer, length);
                     pointer += length;
 
-                    // System.out.println("--pointer: "+pointer);
+                     System.out.println("--pointer: "+pointer);
                     if (data[pointer] == 0) {
-                        length = data[pointer + 1];
 
-                        // System.out.println("pointer data=0 , getting length "+length);
-                        type    = -1;
+                        length = data[pointer + 1];
+                        length |= data[pointer + 2] << 8;
+                        System.out.println("pointer data=0 , getting length "+length);
+                        System.out.println("--pointer: "+pointer);
+                        if (length <255) {
+                            type=111;
+                        } else {type    = -1;}
                         pointer += 4;
                     } else {
                         length  = data[pointer];
                         type    = data[pointer + 2];
                         pointer += 3;
+                        System.out.println("--pointer: "+pointer);
                     }
                 }
 
                 parseTypes(type, data.clone(), pointer, length);
+                System.out.println((pointer + length) +" "+ data.length);
             }
+            
             }
         }
     }
 
     private void parseTypes(int type, char[] data, int pointer, int length) {
         switch (type) {
-        case -1 : {
+
+            
+            case -1 : {
+            //Image type
+                break;
+            }
+
+        case 111 : {
             if (((length + pointer) < data.length) && (length + pointer>0)) {
 
                 if (!(String.valueOf(data).substring(pointer, length + pointer)).equals("ÿÿÿÿÿÿÿÿ"))
                 doFields(type,(String.valueOf(data).substring(pointer, length + pointer)).toCharArray());
             }
 
-            // do nothing??
             break;
         }
 

@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 /**
  * Parse an IPD file and populate a {@link InteractivePagerBackup} with the
  * records.
@@ -41,6 +40,8 @@ public class IPDParser {
     private StringBuilder stringBuilder = new StringBuilder();
     private boolean useAdrrBookAllDB=true;
     private InteractivePagerBackup database         =null;
+    float fcsize=0;
+    float fcposition=0;
 
     //~--- constant enums -----------------------------------------------------
 
@@ -184,7 +185,8 @@ public class IPDParser {
     }
         int                    recordRead       =0;
         int                    fieldLength      =0;
-        FileChannel fc;
+        int                    sumfieldLength   =0;
+        FileChannel fc=null;
     /**
      * Parses the provided IPD file into an {@link InteractivePagerBackup}.
      *
@@ -202,13 +204,14 @@ public class IPDParser {
         int                    fieldType        =0;
         int                    dbID             =0;
         int                    recordLength     =0;
-        int                    uid              =0;
+//        int                    uid              =0;
         Record                 record           =null;
         
         ReadingState           state            =ReadingState.HEADER;
         
         input=new FileInputStream(fileName);
         fc=input.getChannel();
+        fcsize=fc.size();
 
             // Start reading in the header state
             while (fc.position()<fc.size()) {
@@ -377,7 +380,7 @@ public class IPDParser {
                     ReadingState.FIELD_LENGTH.setOffset(fc.position(),-1);
                     fieldLength=input.read();
                     fieldLength|=input.read() << 8;
-                    
+                    sumfieldLength+=fieldLength;
                     recordRead +=2;
                     state      =ReadingState.FIELD_TYPE;
                     ReadingState.FIELD_LENGTH.setOffset(-1,fc.position());
@@ -394,17 +397,15 @@ public class IPDParser {
                     ReadingState.FIELD_DATA.setOffset(fc.position(),-1);
 
 
-                    
+//                    good
                      if (fieldLength>recordLength){
 //                        System.out.println("\n------------read: "+recordRead+" length: "+recordLength);
-
-                        long prevPos=fc.position();
 
                         if (fc.position()-recordLength-recordRead>0){
                         fieldLength=fieldLength-recordRead;
 //                            System.out.println("field Length Error Found");
                         }}
-                    
+
                     char[] dataBuffer=new char[fieldLength];
                     for (int i=0; i<fieldLength; i++) {
                         dataBuffer[i]=(char) input.read();
@@ -435,6 +436,9 @@ public class IPDParser {
                     record.addField(fieldType, dataBuffer);
                     recordRead+=fieldLength;
 
+
+
+//                    good
                     if (recordRead>recordLength){
 
                         //System.out.println("\n------------read: "+recordRead+" length: "+recordLength);
@@ -455,9 +459,13 @@ public class IPDParser {
 
                         //System.out.println("Record Length Error Found");
                     }
+
+                    fcposition=fc.position();
                     if (recordRead<recordLength) {
                         state=ReadingState.FIELD_LENGTH;
-                    } else {
+                    } else 
+//                        if (recordRead==recordLength)
+                        {
                         state=ReadingState.DATA_BASE_ID;
                     }
                     ReadingState.FIELD_DATA.setOffset(-1,fc.position());
@@ -476,20 +484,20 @@ public class IPDParser {
 
         database.organize();
         
-        
+        fcsize=0;
         input.close();
         return database;
     }
 
     
-    public int getCompletedPersentage(){
+   synchronized public int getCompletedPersentage(){
         try{
-                if (fc.isOpen())
-            return (int) (fc.position() / fc.size()*100.0);
-                else return 0;
+                if (fcsize!=0){
+            return (int)((float)fcposition / fcsize*100.0);}
+                else return -1;
         } catch (Exception ex) {
             Logger.getLogger(IPDParser.class.getName()).log(Level.SEVERE, null, ex);
-            return 0;
+            return -2;
         }
     }
 }
