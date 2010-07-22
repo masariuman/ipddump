@@ -40,6 +40,7 @@ public class IPDParser {
     private StringBuilder stringBuilder = new StringBuilder();
     private boolean useAdrrBookAllDB=true;
     private InteractivePagerBackup database         =null;
+    private boolean                isDatabaseEncrypded   = false;
     float fcsize=0;
     float fcposition=0;
 
@@ -221,6 +222,16 @@ public class IPDParser {
                     for (int i=0; i<"Inter@ctive Pager Backup/Restore File".length(); i++) {
                         input.read();
                     }
+                    
+                    if (input.read()==' '){
+                    isDatabaseEncrypded=true;
+                    input.skip(10);
+                    //decrypting code goes here
+                    }
+                    else {
+                        input.skip(-1);
+                    }
+
                     state=ReadingState.LINEFEED;
                     ReadingState.HEADER.setOffset(-1,fc.position());
                     break;
@@ -232,7 +243,8 @@ public class IPDParser {
                     break;
                 case VERSION :
                     ReadingState.VERSION.setOffset(fc.position(),-1);
-                    database=new InteractivePagerBackup(input.read(), lineFeed);
+                    database=new InteractivePagerBackup(input.read(), lineFeed, isDatabaseEncrypded);
+
                     if (debugingEnabled) {
                         database.enableDebuging();
                         System.out.print("Version: "+database.getVersion());

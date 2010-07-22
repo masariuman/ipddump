@@ -32,11 +32,16 @@ import java.util.List;
     /**
      * Reports If there were Errors while parsing
      */
-    private InteractivePagerBackup database         = this;
-    private boolean                errorFlag        = false;
-    private boolean                debugingEnabled  = false;
-    private boolean                valuePeeking     = false;
-    private boolean                useAdrrBookAllDB = true;
+    private InteractivePagerBackup database              = this;
+    private boolean                errorFlag             = false;
+    private boolean                debugingEnabled       = false;
+    private boolean                valuePeeking          = false;
+    private boolean                useAdrrBookAllDB      = true;
+    private boolean                isDatabaseEncrypded   = false;
+
+    public boolean isIsDatabaseEncrypded() {
+        return isDatabaseEncrypded;
+    }
 
     /**
      * The set of contacts.
@@ -94,9 +99,10 @@ import java.util.List;
      * @param version The IPD version
      * @param lineFeed The line feed character
      */
-     public InteractivePagerBackup(int version, char lineFeed) {
+     public InteractivePagerBackup(int version, char lineFeed, boolean isDatabaseEncrypded) {
         this.version  = version;
         this.lineFeed = lineFeed;
+        this.isDatabaseEncrypded = isDatabaseEncrypded;
         databases     = new ArrayList<String>();
         smsRecords    = new ArrayList<SMSMessage>();
         contacts      = new ArrayList<Contact>();
