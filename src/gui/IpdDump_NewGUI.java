@@ -936,6 +936,7 @@ try {
             Tasks = new TasksWriters(database);
             totalTasks = Tasks.getSize();
 
+
             fillTables();
             long endTime = System.currentTimeMillis() - startTime;
             tempWelcomeMsg = welcomeMsg + " --> Load Time: " + (endTime / 1000.0) + "sec";
@@ -965,6 +966,10 @@ try {
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
     private void fillTables() {
+
+        if (database.isIsDatabaseEncrypded()){
+        JOptionPane.showMessageDialog(MessageFrame, "Encrypded Database");}
+
         Runnable r1 = new Runnable() {
 
             @Override
