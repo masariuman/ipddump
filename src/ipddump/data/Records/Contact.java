@@ -327,7 +327,11 @@ public class Contact extends Record implements Comparable<Contact> {
 
     public String getName() {
 
+        if (enableAdrressBookAllType){
+        return getField(Field.Name).substring(1)+" "+getField(Field.Last);
+        }else{
         return getField(Field.Name)+" "+getField(Field.Last);
+    }
     }
 
     public String getNotes() {

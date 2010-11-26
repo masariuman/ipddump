@@ -169,11 +169,6 @@ public class IPDParser {
      */
     public IPDParser(String fileName) {
         this.fileName=fileName;
-         try {
-         }
-        catch (Exception ex) {
-            
-        }
     }
     //~--- methods ------------------------------------------------------------
 
@@ -195,7 +190,7 @@ public class IPDParser {
      * @throws IOException Any outor in reading the IPD file
      */
     public InteractivePagerBackup parse() throws IOException {
-
+try{
         // Temporary variables used in parsing
         char                   lineFeed         =0;
         int                    numberOfDatabases=0;
@@ -209,7 +204,12 @@ public class IPDParser {
         Record                 record           =null;
         
         ReadingState           state            =ReadingState.HEADER;
-        
+
+
+        if (fileName.endsWith(".bbb")){
+        //do unziping actions here
+        }
+
         input=new FileInputStream(fileName);
         fc=input.getChannel();
         fcsize=fc.size();
@@ -499,6 +499,14 @@ public class IPDParser {
         fcsize=0;
         input.close();
         return database;
+        } catch (Exception ex){
+                ex.printStackTrace();
+                fcposition = fcsize;
+                input.close();
+                return database;
+        }
+
+
     }
 
     

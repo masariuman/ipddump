@@ -38,6 +38,7 @@ import java.util.List;
     private boolean                valuePeeking          = false;
     private boolean                useAdrrBookAllDB      = true;
     private boolean                isDatabaseEncrypded   = false;
+    private boolean                otherLibsFlag         = false;
 
     public boolean isIsDatabaseEncrypded() {
         return isDatabaseEncrypded;
@@ -206,15 +207,20 @@ import java.util.List;
 //
 //              return record;
         } else {
-            if (valuePeeking && debugingEnabled) {
+
+            
+
+            if (valuePeeking && debugingEnabled &&!otherLibsFlag) {
                 distinguishRecord(dbIndex);
 
                 return new DummyRecord(dbIndex, version, uid, length).enableValuePeeking();
-            } else if (debugingEnabled) {
+            } else if (debugingEnabled && !otherLibsFlag) {
                 return new DummyRecord(dbIndex, version, uid, length).disableValuePeeking();
-            } else {
+            }else {
                 return new DummyRecord(dbIndex, version, uid, length).disableValuePeeking();
             }
+
+
         }
     }
 
