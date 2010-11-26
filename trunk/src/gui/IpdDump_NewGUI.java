@@ -6,10 +6,7 @@
 package gui;
 import java.awt.Component;
 
-import javax.swing.ImageIcon;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import com.sun.corba.se.impl.orbutil.threadpool.ThreadPoolImpl;
 import ipddump.tools.writers.*;
 import ipddump.data.Records.*;
 import java.awt.Toolkit;
@@ -968,7 +965,7 @@ try {
     private void fillTables() {
 
         if (database.isIsDatabaseEncrypded()){
-        JOptionPane.showMessageDialog(MessageFrame, "Encrypded Database");}
+        JOptionPane.showMessageDialog(MessageFrame, "Encrypded Database Found\nError");}
 
         Runnable r1 = new Runnable() {
 
@@ -1755,7 +1752,7 @@ try {
 
             @Override
             public void run() {
-                checkVersion(1.4);
+                checkVersion(1.6);
                 new IpdDump_NewGUI().setVisible(true);
             }
         });

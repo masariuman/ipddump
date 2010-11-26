@@ -95,10 +95,20 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             break;
         }
         case 7 : {
-
+            System.out.println(String.format("%h", String.valueOf(data)));
             // This marks a USC2 text field
-            if (String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")
-                    || String.format("%h", String.valueOf(data)).equalsIgnoreCase("fbcca65e")) {
+            if (
+                    String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f") //greek
+                    || String.format("%h", String.valueOf(data)).equalsIgnoreCase("fbcca65e")
+                || String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c86de") //czech
+                || String.format("%h", String.valueOf(data)).equalsIgnoreCase("b3c56062")
+                || String.format("%h", String.valueOf(data)).equalsIgnoreCase("b3c56423")//Simplified Shineze
+
+//                || 
+                //("8785b61d")english?
+                //("614f7719")english?
+                )
+            {
 
                 // System.out.print("UCS2: ");viewItInHex(type, data);
                 if (fields.containsKey("text")) {
@@ -148,7 +158,7 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             break;
         default :
 
-//      viewIt(type, data);
+      viewIt(type, data);
         }
     }
 
