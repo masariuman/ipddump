@@ -43,6 +43,7 @@ public class IPDParser {
     private boolean                isDatabaseEncrypded   = false;
     float fcsize=0;
     float fcposition=0;
+    private long FcPosAtRecordLength;
 
     //~--- constant enums -----------------------------------------------------
 
@@ -154,7 +155,7 @@ public class IPDParser {
 
                     if (endOfOffset!=-1){
             this.endOfOffset=endOfOffset-1;
-           //System.out.format("%17s: %9d  %9d\n",super.name(),this.startOfOffset,this.endOfOffset);
+       //    System.out.format("%25s: %9d  %9d\n",super.name(),this.startOfOffset,this.endOfOffset);
             }
         }
         
@@ -245,15 +246,15 @@ try{
                     ReadingState.VERSION.setOffset(fc.position(),-1);
                     database=new InteractivePagerBackup(input.read(), lineFeed, isDatabaseEncrypded);
 
-                    if (debugingEnabled) {
-                        database.enableDebuging();
-                        System.out.print("Version: "+database.getVersion());
-                        System.out.println(String.format(" -- LineFeed: %h", database.getLineFeed()));
-                    }
+                                if (debugingEnabled) {
+                                    database.enableDebuging();
+                                    System.out.print("Version: "+database.getVersion());
+                                    System.out.println(String.format(" -- LineFeed: %h", database.getLineFeed()));
+                                }
 
-                    if (valuePeeking) {
-                        database.enableValuePeeking();
-                    }
+                                if (valuePeeking) {
+                                    database.enableValuePeeking();
+                                }
 
                     state=ReadingState.DATA_BASE_COUNT;
                     ReadingState.VERSION.setOffset(-1,fc.position());
@@ -317,13 +318,13 @@ try{
                     dbID |=input.read() << 8;
 
                     if (dbID==65535)dbID=database.getDatabaseNames().size()-1;
-                   if (((dbID>database.getDatabaseNames().size()) || dbID<0)&& debugingEnabled)
-                   {
-//                       System.out.println(String.format("----- GOT ERROR -----dbID: hex: %4h dec: %5d --Old DBid: hex: %4h dec: %5d",dbID,dbID,temp,temp));
-                       //input.skip(-tries);
-                       //state=ReadingState.DATA_BASE_ID;
-                       //break;
-                   }
+                                           if (((dbID>database.getDatabaseNames().size()) || dbID<0)&& debugingEnabled)
+                                           {
+                        //                       System.out.println(String.format("----- GOT ERROR -----dbID: hex: %4h dec: %5d --Old DBid: hex: %4h dec: %5d",dbID,dbID,temp,temp));
+                                               //input.skip(-tries);
+                                               //state=ReadingState.DATA_BASE_ID;
+                                               //break;
+                                           }
                    
                     state=ReadingState.RECORD_LENGTH;
                     ReadingState.DATA_BASE_ID.setOffset(-1,fc.position());
@@ -334,8 +335,10 @@ try{
                     recordLength|=input.read() << 8;
                     recordLength|=input.read() << 16;
                     recordLength|=input.read() << 24;
-                   
+
+
                     recordRead  =0;
+                    FcPosAtRecordLength= fc.position();
                     state       =ReadingState.RECORD_DB_VERSION;
                     ReadingState.RECORD_LENGTH.setOffset(-1,fc.position());
                     break;
@@ -355,17 +358,17 @@ try{
                     recordRead    +=2;
                     state         =ReadingState.RECORD_UNIQUE_ID;
 
-                    if (debugingEnabled) {
+                                        if (debugingEnabled) {
 
-                        // System.out.println("DATABASERECORDHANDLE: "+databaseHandle);
-                        if (databaseHandle!=oldDatabaseHandle) {
-                            System.out.println("Database Handle Error! old dbHandle: "+(oldDatabaseHandle)
-                                               +" new dbHandle: "+databaseHandle);
-                            oldDatabaseHandle=databaseHandle+1;      
-                        } else {
-                            oldDatabaseHandle+=1;
-                        }
-                    }
+                                            // System.out.println("DATABASERECORDHANDLE: "+databaseHandle);
+                                            if (databaseHandle!=oldDatabaseHandle) {
+                                                System.out.println("Database Handle Error! old dbHandle: "+(oldDatabaseHandle)
+                                                                   +" new dbHandle: "+databaseHandle);
+                                                oldDatabaseHandle=databaseHandle+1;
+                                            } else {
+                                                oldDatabaseHandle+=1;
+                                            }
+                                        }
                     ReadingState.DATA_BASE_RECORD_HANDLE.setOffset(-1,fc.position());
                     break;
                 case RECORD_UNIQUE_ID :
@@ -409,41 +412,42 @@ try{
                     ReadingState.FIELD_DATA.setOffset(fc.position(),-1);
 
 
-//                    good
-                     if (fieldLength>recordLength){
-//                        System.out.println("\n------------read: "+recordRead+" length: "+recordLength);
+            //                    good
+                                 if (fieldLength>recordLength){
+            //                        System.out.println("\n------------read: "+recordRead+" length: "+recordLength);
 
-                        if (fc.position()-recordLength-recordRead>0){
-                        fieldLength=fieldLength-recordRead;
-//                            System.out.println("field Length Error Found");
-                        }}
+                                    if (fc.position()-recordLength-recordRead>0){
+                                    fieldLength=fieldLength-recordRead;
+            //                            System.out.println("field Length Error Found");
+                                    }
+                                 }
 
                     char[] dataBuffer=new char[fieldLength];
                     for (int i=0; i<fieldLength; i++) {
                         dataBuffer[i]=(char) input.read();
                     }
 
-                    if ((dbID>database.getDatabaseNames().size() || dbID<0) && debugingEnabled) {
-                        database.setErrorFlag();
+                                if ((dbID>database.getDatabaseNames().size() || dbID<0) && debugingEnabled) {
+                                    database.setErrorFlag();
 
-                        String dbname=String.valueOf(lastValidDBid);
+                                    String dbname=String.valueOf(lastValidDBid);
 
-                        if (lastValidDBid>=0) {
-                            dbname=database.getDatabaseNames().get(lastValidDBid);
-                        }
-                        System.out.format(fieldLength+"Problematic dbIndex: hex: %4h dec: %5d "
-                                          +"database Size: %3d -- Last valid DBid:%3d Name: %s -- ", dbID, dbID,
-                                              database.getDatabaseNames().size(), lastValidDBid, dbname);
-                        System.out.println("\n    Last Valid BD handle: "+lastValidDBHandle+" this BD handle: "
-                                           +databaseHandle);
-                        System.out.println("    Last Valid Field length: "+lastfieldLength+" this Field length: "
-                                           +fieldLength);
+                                    if (lastValidDBid>=0) {
+                                        dbname=database.getDatabaseNames().get(lastValidDBid);
+                                    }
+                                    System.out.format(fieldLength+"Problematic dbIndex: hex: %4h dec: %5d "
+                                                      +"database Size: %3d -- Last valid DBid:%3d Name: %s -- ", dbID, dbID,
+                                                          database.getDatabaseNames().size(), lastValidDBid, dbname);
+                                    System.out.println("\n    Last Valid BD handle: "+lastValidDBHandle+" this BD handle: "
+                                                       +databaseHandle);
+                                    System.out.println("    Last Valid Field length: "+lastfieldLength+" this Field length: "
+                                                       +fieldLength);
 
-                    } else {
-                        lastfieldLength  =fieldLength;
-                        lastValidDBid    =dbID;
-                        lastValidDBHandle=databaseHandle;
-                    }
+                                } else {
+                                    lastfieldLength  =fieldLength;
+                                    lastValidDBid    =dbID;
+                                    lastValidDBHandle=databaseHandle;
+                                }
 
                     record.addField(fieldType, dataBuffer);
                     recordRead+=fieldLength;
@@ -460,13 +464,6 @@ try{
                         if (fc.position()-recordLength-recordRead>0){
 
                         input.skip(recordLength-recordRead);
-//                            System.out.println("------Skiped: "+(recordLength-recordRead));
-//                        int nextvalidid=input.read(); input.skip(-1);
-//                            System.out.println(nextvalidid);
-//                        if (lastValidDBid!=nextvalidid || lastValidDBid!=nextvalidid+1){
-//                            input.skip(-recordLength+recordRead);
-//                            System.out.println("------NEXT valid Found");
-//                        }
                         }
 
                         //System.out.println("Record Length Error Found");
@@ -478,6 +475,8 @@ try{
                     } else 
 //                        if (recordRead==recordLength)
                         {
+
+                        input.skip(FcPosAtRecordLength+recordLength-fc.position());
                         state=ReadingState.DATA_BASE_ID;
                     }
                     ReadingState.FIELD_DATA.setOffset(-1,fc.position());

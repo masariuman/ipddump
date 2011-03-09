@@ -8,6 +8,7 @@ import ipddump.tools.Gsm2Iso;
 
 import java.util.Date;
 import java.util.HashMap;
+import javax.naming.BinaryRefAddr;
 
 /**
  * An SMS message is a record representing an SMS sent or received from the
@@ -98,13 +99,13 @@ public class SMSMessage extends Record implements Comparable<SMSMessage> {
             System.out.println(String.format("%h", String.valueOf(data)));
             // This marks a USC2 text field
             if (
-                    String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f") //greek
-                    || String.format("%h", String.valueOf(data)).equalsIgnoreCase("fbcca65e")
-                || String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c86de") //czech
+                   String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c8a9f")//greek
+                || String.format("%h", String.valueOf(data)).equalsIgnoreCase("fbcca65e")// english - Chineze?
+                || String.format("%h", String.valueOf(data)).equalsIgnoreCase("3b3c86de")//czech
                 || String.format("%h", String.valueOf(data)).equalsIgnoreCase("b3c56062")
-                || String.format("%h", String.valueOf(data)).equalsIgnoreCase("b3c56423")//Simplified Shineze
-
-//                || 
+                || String.format("%h", String.valueOf(data)).equalsIgnoreCase("b3c56423")//Simplified Chineze
+                || String.format("%h", String.valueOf(data)).equalsIgnoreCase("1ec6995c")//??
+                //
                 //("8785b61d")english?
                 //("614f7719")english?
                 )
