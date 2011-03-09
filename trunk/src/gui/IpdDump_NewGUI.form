@@ -306,9 +306,9 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="mainTabbedPane" alignment="0" pref="754" max="32767" attributes="0"/>
+          <Component id="mainTabbedPane" alignment="0" pref="746" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
-              <Component id="status_label" pref="594" max="32767" attributes="0"/>
+              <Component id="status_label" pref="586" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jProgressBar1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -349,7 +349,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="1" pref="749" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="1" pref="741" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -438,7 +438,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane2" alignment="1" pref="749" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" alignment="1" pref="741" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -533,7 +533,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane3" alignment="0" pref="749" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" alignment="0" pref="741" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -601,7 +601,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane4" alignment="0" pref="749" max="32767" attributes="0"/>
+                  <Component id="jScrollPane4" alignment="0" pref="741" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -698,7 +698,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane5" alignment="0" pref="749" max="32767" attributes="0"/>
+                  <Component id="jScrollPane5" alignment="0" pref="741" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -780,7 +780,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
-                      <Component id="status_label7" pref="137" max="32767" attributes="0"/>
+                      <Component id="status_label7" pref="129" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -820,7 +820,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
-                      <Component id="status_label6" pref="137" max="32767" attributes="0"/>
+                      <Component id="status_label6" pref="129" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
                   </Group>
               </Group>
