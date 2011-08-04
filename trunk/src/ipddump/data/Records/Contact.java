@@ -177,7 +177,7 @@ public class Contact extends Record implements Comparable<Contact> {
 
                 int pointer = 2;
 
-                for (pointer = 2; pointer + length < data.length; pointer += 0) {
+                for (pointer = 2; pointer + length <= data.length; pointer += 0) {
                     System.out.format("\n--type: %h - %d Length: %h - %d Data: ", type, type, length, length);
                     System.out.print(String.valueOf(data.clone()).substring(pointer, length + pointer));
                     pointer += 0;
@@ -185,7 +185,7 @@ public class Contact extends Record implements Comparable<Contact> {
                     pointer += length;
 
                      System.out.println("--pointer: "+pointer);
-                    if (data[pointer] == 0) {
+                    if (pointer + length < data.length && data[pointer] == 0) {
 
                         length = data[pointer + 1];
                         length |= data[pointer + 2] << 8;
@@ -195,7 +195,7 @@ public class Contact extends Record implements Comparable<Contact> {
                             type=111;
                         } else {type    = -1;}
                         pointer += 4;
-                    } else {
+                    } else if (pointer < data.length-3) {
                         length  = data[pointer];
                         type    = data[pointer + 2];
                         pointer += 3;
@@ -231,7 +231,7 @@ public class Contact extends Record implements Comparable<Contact> {
         }
 
         default : {
-            if (length + pointer < data.length) {    // unknown Error-Bug?
+            if (length + pointer <= data.length) {    // unknown Error-Bug?
                 doFields(type, (String.valueOf(data).substring(pointer, length + pointer).toCharArray()));
             }
 
