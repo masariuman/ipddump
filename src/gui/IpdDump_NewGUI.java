@@ -363,8 +363,8 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTableSMS);
-        jTableSMS.getColumnModel().getColumn(0).setPreferredWidth(40);
-        jTableSMS.getColumnModel().getColumn(0).setMaxWidth(40);
+        jTableSMS.getColumnModel().getColumn(0).setPreferredWidth(60);
+        jTableSMS.getColumnModel().getColumn(0).setMaxWidth(60);
         jTableSMS.getColumnModel().getColumn(1).setMaxWidth(150);
         jTableSMS.getColumnModel().getColumn(2).setMinWidth(150);
         jTableSMS.getColumnModel().getColumn(3).setMaxWidth(200);
@@ -374,11 +374,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelSMS.setLayout(jPanelSMSLayout);
         jPanelSMSLayout.setHorizontalGroup(
             jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         );
         jPanelSMSLayout.setVerticalGroup(
             jPanelSMSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("SMS", jPanelSMS);
@@ -439,11 +439,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelContacts.setLayout(jPanelContactsLayout);
         jPanelContactsLayout.setHorizontalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         );
         jPanelContactsLayout.setVerticalGroup(
             jPanelContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("Contacts", jPanelContacts);
@@ -493,11 +493,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelMemo.setLayout(jPanelMemoLayout);
         jPanelMemoLayout.setHorizontalGroup(
             jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         );
         jPanelMemoLayout.setVerticalGroup(
             jPanelMemoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("Memos", jPanelMemo);
@@ -551,11 +551,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelTasks.setLayout(jPanelTasksLayout);
         jPanelTasksLayout.setHorizontalGroup(
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         );
         jPanelTasksLayout.setVerticalGroup(
             jPanelTasksLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("Tasks", jPanelTasks);
@@ -613,11 +613,11 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         jPanelCallLogs.setLayout(jPanelCallLogsLayout);
         jPanelCallLogsLayout.setHorizontalGroup(
             jPanelCallLogsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 749, Short.MAX_VALUE)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         );
         jPanelCallLogsLayout.setVerticalGroup(
             jPanelCallLogsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
         );
 
         mainTabbedPane.addTab("Call Logs", jPanelCallLogs);
@@ -631,7 +631,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPanelCalendarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCalendarLayout.createSequentialGroup()
                 .addGap(306, 306, 306)
-                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addComponent(status_label7, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                 .addGap(306, 306, 306))
         );
         jPanelCalendarLayout.setVerticalGroup(
@@ -653,7 +653,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
             jPanelOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelOptionsLayout.createSequentialGroup()
                 .addGap(306, 306, 306)
-                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addComponent(status_label6, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                 .addGap(306, 306, 306))
         );
         jPanelOptionsLayout.setVerticalGroup(
@@ -749,9 +749,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE)
+            .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 746, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(status_label, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
+                .addComponent(status_label, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -759,7 +759,7 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+                .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(status_label)
@@ -851,6 +851,9 @@ public class IpdDump_NewGUI extends javax.swing.JFrame {
 
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
 
+        JOptionPane.showMessageDialog(MessageFrame, "If your language in not yet supported please consider sending me your ipd file\n"
+                + "I will use this file ONLY for the purpose of making this application better!\n\n"
+                + "This message will be removed when the application reaches version 1.0");
         status_label.setText("WORKING...  be patient!");
         if (JFileChooser.APPROVE_OPTION == IpdChooser.showOpenDialog(null)) {
              startTime = System.currentTimeMillis();
@@ -962,6 +965,7 @@ try {
             status_label.setText(tempWelcomeMsg);
         }
     }//GEN-LAST:event_openMenuItemActionPerformed
+
     private void fillTables() {
 
         if (database.isIsDatabaseEncrypded()){
@@ -1051,9 +1055,9 @@ try {
 
         for (SMSMessage record : database.getSMSRecords()) {
             if (record.wasSent()) {
-                sSent = "true";                
+                sSent = "sent";
             } else {
-                sSent = "false";
+                sSent = "received";
             }
 //            renderer.setWasSent(record.wasSent());
 //            jTableSMS.getColumnModel().getColumn(0).setCellRenderer(renderer);
@@ -1968,8 +1972,8 @@ try {
         });
 
         jScrollPane1.setViewportView(jTableSMS);
-        jTableSMS.getColumnModel().getColumn(0).setMinWidth(40);
-        jTableSMS.getColumnModel().getColumn(0).setPreferredWidth(40);
+        jTableSMS.getColumnModel().getColumn(0).setMinWidth(60);
+        jTableSMS.getColumnModel().getColumn(0).setPreferredWidth(60);
         jTableSMS.getColumnModel().getColumn(0).setMaxWidth(40);
         jTableSMS.getColumnModel().getColumn(1).setMaxWidth(150);
         jTableSMS.getColumnModel().getColumn(2).setMinWidth(150);
